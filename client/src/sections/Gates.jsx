@@ -131,7 +131,7 @@ function Gates({ env }) {
           short viewports. */}
       <div
         ref={content}
-        className="relative mx-auto w-full max-w-3xl px-6 pb-20 text-center sm:pb-24"
+        className="relative mx-auto w-full max-w-3xl px-6 pt-16 sm:pt-24 lg:pt-28 pb-20 text-center sm:pb-24"
       >
         <div className="overflow-hidden">
           <p className="gate-rise font-blackletter text-brimstone/85 text-base sm:text-xl">
@@ -205,8 +205,11 @@ function Gates({ env }) {
           <MoltenButton
             className="justify-center"
             variant="ghost"
+            showArrow={false}
+            href={gates.secondary.href || "/resume.pdf"}
+            target="_blank"
+            rel="noopener noreferrer"
             reducedMotion={env.reducedMotion}
-            onClick={() => scrollToSection(gates.secondary.target)}
           >
             {gates.secondary.label}
           </MoltenButton>

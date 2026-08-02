@@ -78,6 +78,7 @@ function MoltenButton({
   href,
   variant = "primary",
   reducedMotion = false,
+  showArrow = true,
   className = "",
   ...rest
 }) {
@@ -168,22 +169,23 @@ function MoltenButton({
         {children}
       </motion.span>
 
-      {/* Arrow doubles as a descent cue; it drops rather than points right. */}
-      <motion.svg
-        aria-hidden="true"
-        viewBox="0 0 12 16"
-        className="relative h-3.5 w-3"
-        variants={reducedMotion ? undefined : { cold: { y: 0 }, hot: { y: 3 } }}
-        transition={transition}
-      >
-        <path
-          d="M6 0v13M1 8l5 6 5-6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          className="text-brimstone group-hover:text-void group-focus-visible:text-void"
-        />
-      </motion.svg>
+      {showArrow ? (
+        <motion.svg
+          aria-hidden="true"
+          viewBox="0 0 12 16"
+          className="relative h-3.5 w-3"
+          variants={reducedMotion ? undefined : { cold: { y: 0 }, hot: { y: 3 } }}
+          transition={transition}
+        >
+          <path
+            d="M6 0v13M1 8l5 6 5-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            className="text-brimstone group-hover:text-void group-focus-visible:text-void"
+          />
+        </motion.svg>
+      ) : null}
     </Tag>
   );
 }

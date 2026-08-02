@@ -4,6 +4,7 @@ import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { initPointer } from "./lib/store";
 import HellCanvas from "./components/HellCanvas";
 import StoneNav from "./components/nav/StoneNav";
+import SparkTrail from "./components/ui/SparkTrail";
 import Gates from "./sections/Gates";
 import Fallen from "./sections/Fallen";
 import Arsenal from "./sections/Arsenal";
@@ -24,6 +25,7 @@ export default function App() {
       </a>
 
       <StoneNav />
+      <SparkTrail disabled={env.coarsePointer || env.reducedMotion} />
 
       <HellCanvas env={env} />
 

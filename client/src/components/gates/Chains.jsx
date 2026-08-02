@@ -87,9 +87,9 @@ function Chain({ x, links, breakAt, drift, scale = 1, registry }) {
 /** x position, link count, where it snaps, and which way the tail swings. */
 const CHAINS = [
   { x: 90, links: 15, breakAt: 8, drift: -70, scale: 1 },
-  { x: 215, links: 11, breakAt: 6, drift: -40, scale: 0.82 },
-  { x: 985, links: 14, breakAt: 7, drift: 65, scale: 0.94 },
-  { x: 1110, links: 10, breakAt: 5, drift: 95, scale: 0.76 },
+  { x: 215, links: 10, breakAt: 5, drift: -40, scale: 0.76 },
+  { x: 985, links: 11, breakAt: 6, drift: 40, scale: 0.82 },
+  { x: 1110, links: 14, breakAt: 7, drift: 70, scale: 0.94 },
 ];
 
 function Chains({ triggerRef, reducedMotion }) {

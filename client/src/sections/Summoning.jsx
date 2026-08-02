@@ -100,61 +100,31 @@ function Summoning({ env }) {
       id="summoning"
       ref={section}
       aria-labelledby="summoning-title"
-      className="relative isolate flex min-h-screen items-center overflow-hidden py-28 sm:py-36"
+      className="relative isolate flex min-h-[85svh] flex-col items-center justify-center overflow-hidden pt-10 sm:pt-14 pb-10 sm:pb-14"
     >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-20"
         style={{
           // Deeper than the other sections on purpose. The circle is drawn in thin
-// ember strokes, and over a lit lava surface it reads as scattered arcs
-// rather than as a figure. It needs near-black to sit on.
+          // ember strokes, and over a lit lava surface it reads as scattered arcs
+          // rather than as a figure. It needs near-black to sit on.
           background:
             "radial-gradient(88% 78% at 50% 50%, rgba(5,3,10,0.99) 0%, rgba(5,3,10,0.95) 48%, rgba(5,3,10,0.62) 100%)",
         }}
       />
 
-      {/* The portal, rushing past on the way in. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        {/* Two layers, because GSAP writes the whole transform when it animates
-            scale and would wipe a Tailwind -translate-x-1/2 off the same
-            element. The outer span owns the centring and never animates. */}
-        {[0, 1, 2].map((i) => (
-          <span
-            key={i}
-            className="absolute top-1/2 left-1/2 aspect-square w-[52vmin]
-              -translate-x-1/2 -translate-y-1/2"
-          >
-            <span
-              className="portal-ring block h-full w-full rounded-full border-2
-                border-ember opacity-0 shadow-[0_0_60px_10px_rgba(255,77,0,0.45)]"
-            />
-          </span>
-        ))}
-      </div>
-
       <EmberField count={18} reducedMotion={env.reducedMotion} className="-z-10" />
 
-      <div ref={stage} className="relative mx-auto w-full max-w-3xl px-6">
-        {/* The circle sits behind the copy, sized to the block it wards. */}
-        <div
-          aria-hidden="true"
-          className="absolute top-1/2 left-1/2 aspect-square w-[min(108%,38rem)]
-            -translate-x-1/2 -translate-y-1/2"
-        >
-          <div className="summon-circle relative h-full w-full">
-            <SummoningCircle reducedMotion={env.reducedMotion} />
-          </div>
-        </div>
-
+      <div ref={stage} className="relative mx-auto w-full max-w-3xl px-6 pt-14 sm:pt-20">
         <div className="relative text-center">
           <SectionMark
             roman="VI"
             label="Summoning Circle"
-            className="summon-rise justify-center"
+            className="summon-rise justify-center mb-8 sm:mb-10"
           />
 
-          <h2 id="summoning-title" className="mt-7">
+          <h2 id="summoning-title" className="mt-4">
             <span className="text-molten summon-rise block font-display text-[clamp(2rem,5.4vw,4rem)] leading-[0.95] font-black">
               {summoning.headline}
             </span>
@@ -165,7 +135,34 @@ function Summoning({ env }) {
 
           <p className="summon-rise mx-auto mt-6 max-w-md text-parchment/90">{summoning.lede}</p>
 
-          <div className="summon-rise mt-10 flex justify-center">
+          <div className="summon-rise relative mt-10 flex justify-center">
+            {/* The portal rings, rushing past on the way in, perfectly concentric with the circle! */}
+            <div aria-hidden="true" className="pointer-events-none absolute top-1/2 left-1/2 -z-10 -translate-x-1/2 -translate-y-1/2">
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="absolute top-1/2 left-1/2 aspect-square w-[52vmin]
+                    -translate-x-1/2 -translate-y-1/2"
+                >
+                  <span
+                    className="portal-ring block h-full w-full rounded-full border-2
+                      border-ember opacity-0 shadow-[0_0_60px_10px_rgba(255,77,0,0.45)]"
+                  />
+                </span>
+              ))}
+            </div>
+
+            {/* The BIG circle sits centered directly behind the SEND WORD button. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-1/2 left-1/2 aspect-square w-[min(108vw,36rem)] sm:w-[38rem]
+                -translate-x-1/2 -translate-y-1/2"
+            >
+              <div className="summon-circle relative h-full w-full">
+                <SummoningCircle reducedMotion={env.reducedMotion} />
+              </div>
+            </div>
+
             <MoltenButton href={summoning.cta.href} reducedMotion={env.reducedMotion}>
               {summoning.cta.label}
             </MoltenButton>

@@ -24,8 +24,8 @@ export const gates = {
   mark: "MMXXVI",
   tagline:
     "Six chambers below, a record of everything built, broken and rebuilt. Descend at your own pace.",
-  cta: { label: "Begin the Descent", target: "fallen" },
-  secondary: { label: "The Chronicle", target: "chronicle" },
+  cta: { label: "Contact Me", target: "summoning" },
+  secondary: { label: "View Resume", href: "/resume.pdf" },
   scrollCue: "Descend",
 };
 
@@ -108,6 +108,9 @@ export const chambers = {
         "Automated the registration workflow with UPI payment proof verification, synchronising attendee seat allocations.",
       ],
       stack: ["React", "Node.js", "Express", "PostgreSQL", "Cloudinary"],
+      links: [
+        { label: "View Project", href: "https://business40.vercel.app/" },
+      ],
     },
     {
       name: "SafarSaathi",
@@ -126,6 +129,9 @@ export const chambers = {
         "PostgreSQL",
         "Twilio",
         "Razorpay",
+      ],
+      links: [
+        { label: "View Project", href: "https://safarsaathi-frontend.vercel.app/" },
       ],
     },
     {
