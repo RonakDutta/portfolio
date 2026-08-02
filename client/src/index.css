@@ -98,6 +98,29 @@
   -webkit-text-stroke: 1px rgba(255, 122, 24, 0.5);
 }
 
+/* Heavier cut, for ghost type that has to hold its own at display size. */
+@utility text-outline-ember-strong {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 138, 31, 0.9);
+  text-shadow:
+    0 0 26px rgba(255, 77, 0, 0.5),
+    0 0 60px rgba(255, 77, 0, 0.28);
+}
+
+/* Struck iron: lit along the top edge, shadowed under, text cut into it. */
+@utility surface-forged {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 235, 205, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.85),
+    0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+@utility text-engraved {
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.95),
+    0 -1px 0 rgba(255, 180, 90, 0.12);
+}
+
 /* Forged plaque: two corners struck off, as if cut from sheet. */
 @utility clip-plaque {
   clip-path: polygon(
@@ -207,6 +230,24 @@
   }
 }
 
+/* Embers drifting up through a section. --rise is the travel, --dx the wander. */
+@keyframes ember-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--peak, 0.85);
+  }
+  86% {
+    opacity: var(--peak, 0.85);
+  }
+  100% {
+    transform: translate3d(var(--dx, 0px), var(--rise, -340px), 0) scale(0.35);
+    opacity: 0;
+  }
+}
+
 @keyframes pulse-glow {
   0%,
   100% {
@@ -227,6 +268,9 @@
 }
 .animate-ember-rise {
   animation: ember-rise 1.5s ease-out infinite;
+}
+.animate-ember-float {
+  animation: ember-float linear infinite;
 }
 .animate-flicker {
   animation: flicker 5s steps(1, end) infinite;
