@@ -54,26 +54,17 @@ const OPENINGS = {
 };
 
 /**
- * Two-centred arch. Both centres sit on the springline, offset D either side of
- * the axis: the construction that lets rise and span be chosen independently
- * and still meet at a true point. D falls out of requiring one radius to reach
- * both its own springer and the apex.
+ * Smooth round arch geometry: One continuous semi-circular arc connecting the piers
+ * without any pointed apex or merging seams.
  */
 function geometry({ l, r }) {
-  const apexX = (l + r) / 2;
-  const half = (r - l) / 2;
-  const rise = SPRING - APEX_Y;
-  const d = (rise * rise - half * half) / (2 * half);
-  const radius = half + d;
-
-  const arcs = [
-    `A${radius},${radius} 0 0,1 ${apexX},${APEX_Y}`,
-    `A${radius},${radius} 0 0,1 ${r},${SPRING}`,
-  ].join(" ");
+  const radius = (r - l) / 2;
+  const springY = 410;
+  const arc = `A${radius},${radius} 0 0,1 ${r},${springY}`;
 
   return {
-    wall: `M0,0 H${W} V${H} H0 Z M${l},${H} V${SPRING} ${arcs} V${H} Z`,
-    reveal: `M${l},${H} V${SPRING} ${arcs} V${H}`,
+    wall: `M0,0 H${W} V${H} H0 Z M${l},${H} V${springY} ${arc} V${H} Z`,
+    reveal: `M${l},${H} V${springY} ${arc} V${H}`,
   };
 }
 
