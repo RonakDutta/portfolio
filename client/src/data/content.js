@@ -128,7 +128,7 @@ export const chambers = {
 export const chronicle = {
   headline: "Infernal Chronicle",
   headlineSub: "the record so far",
-  lede: "Where I have been, in the order it happened.",
+  lede: "Where I have been, earliest first, in the order it happened.",
 
   /**
    * Same rules as the chambers: edit, reorder or extend freely, the timeline
@@ -136,12 +136,11 @@ export const chronicle = {
    */
   entries: [
     {
-      period: "June 2026 to now",
-      title: "Software Development Intern",
-      org: "RARS Innoventa",
-      kind: "Role",
-      detail:
-        "Backend services and React interfaces for a B2B marketplace, plus a community platform with automated onboarding, event RSVPs and payment gateway integration. Built full-stack features alongside senior engineers.",
+      period: "2022",
+      title: "CBSE Class XII",
+      org: "Bal Mandir Sr. Sec. School",
+      kind: "Study",
+      detail: "92.6 percent.",
     },
     {
       period: "Expected July 2027",
@@ -151,11 +150,12 @@ export const chronicle = {
       detail: "GPA 8.83 out of 10.",
     },
     {
-      period: "2022",
-      title: "CBSE Class XII",
-      org: "Bal Mandir Sr. Sec. School",
-      kind: "Study",
-      detail: "92.6 percent.",
+      period: "June 2026 to now",
+      title: "Software Development Intern",
+      org: "RARS Innoventa",
+      kind: "Role",
+      detail:
+        "Backend services and React interfaces for a B2B marketplace, plus a community platform with automated onboarding, event RSVPs and payment gateway integration. Built full-stack features alongside senior engineers.",
     },
   ],
 

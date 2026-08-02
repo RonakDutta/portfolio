@@ -76,7 +76,7 @@ function Gates({ env }) {
           WebkitMaskImage: "linear-gradient(to bottom, #000 0%, #000 70%, transparent 95%)",
         }}
       >
-        <div ref={arch} className="absolute inset-x-0 -top-[8%] -bottom-[26%]">
+        <div ref={arch} className="absolute inset-x-0 -top-[2%] -bottom-[30%]">
           <GateArch />
         </div>
       </div>
@@ -117,7 +117,7 @@ function Gates({ env }) {
         <div className="relative">
           <span
             aria-hidden="true"
-            className="gate-ghost text-outline-ember-strong pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[19vw] leading-none font-black tracking-[0.08em] opacity-55 select-none"
+            className="gate-ghost text-outline-ember-strong pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[clamp(3rem,15vw,16rem)] leading-none font-black tracking-[0.06em] opacity-40 select-none"
           >
             {gates.ghost}
           </span>
@@ -129,12 +129,12 @@ function Gates({ env }) {
               {identity.name}, {identity.role} from {identity.region}
             </span>
             <span aria-hidden="true" className="block overflow-hidden">
-              <span className="gate-rise text-molten block font-display text-[clamp(2.4rem,10vw,12rem)] leading-[0.86] font-black tracking-[-0.01em]">
+              <span className="gate-rise text-molten block font-display text-[clamp(2.2rem,9vw,11rem)] leading-[0.86] font-black tracking-[-0.01em]">
                 {identity.given}
               </span>
             </span>
             <span aria-hidden="true" className="block overflow-hidden">
-              <span className="gate-rise text-molten block font-display text-[clamp(2.4rem,10vw,12rem)] leading-[0.86] font-black tracking-[-0.01em]">
+              <span className="gate-rise text-molten block font-display text-[clamp(2.2rem,9vw,11rem)] leading-[0.86] font-black tracking-[-0.01em]">
                 {identity.family}
               </span>
             </span>
@@ -176,7 +176,7 @@ function Gates({ env }) {
       <div
         ref={cue}
         aria-hidden="true"
-        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3"
+        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 [@media(max-height:860px)]:hidden"
       >
         <span className="font-display text-[0.6rem] tracking-[0.4em] text-parchment/60 uppercase">
           {gates.scrollCue}
