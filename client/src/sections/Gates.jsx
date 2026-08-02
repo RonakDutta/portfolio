@@ -117,7 +117,7 @@ function Gates({ env }) {
         <div className="relative">
           <span
             aria-hidden="true"
-            className="gate-ghost text-outline-ember pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[17vw] leading-none font-black tracking-[0.08em] opacity-25 select-none"
+            className="gate-ghost text-outline-ember-strong pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[19vw] leading-none font-black tracking-[0.08em] opacity-55 select-none"
           >
             {gates.ghost}
           </span>

@@ -124,3 +124,46 @@ export const chambers = {
     },
   ],
 };
+
+export const chronicle = {
+  headline: "Infernal Chronicle",
+  headlineSub: "the record so far",
+  lede: "Where I have been, in the order it happened.",
+
+  /**
+   * Same rules as the chambers: edit, reorder or extend freely, the timeline
+   * renders whatever is here. `detail` is optional.
+   */
+  entries: [
+    {
+      period: "June 2026 to now",
+      title: "Software Development Intern",
+      org: "RARS Innoventa",
+      kind: "Role",
+      detail:
+        "Backend services and React interfaces for a B2B marketplace, plus a community platform with automated onboarding, event RSVPs and payment gateway integration. Built full-stack features alongside senior engineers.",
+    },
+    {
+      period: "Expected July 2027",
+      title: "B.Tech, Industrial Internet of Things",
+      org: "University School of Automation and Robotics, GGSIPU",
+      kind: "Study",
+      detail: "GPA 8.83 out of 10.",
+    },
+    {
+      period: "2022",
+      title: "CBSE Class XII",
+      org: "Bal Mandir Sr. Sec. School",
+      kind: "Study",
+      detail: "92.6 percent.",
+    },
+  ],
+
+  /** Undated, so they sit below the timeline rather than inside it. */
+  honoursTitle: "Sigils",
+  honours: [
+    { name: "Smart India Hackathon", note: "Cleared Round 1 of the national innovation hackathon" },
+    { name: "Samsung Innovation Campus", note: "Professional training and certification in Artificial Intelligence" },
+    { name: "Google Cloud GenAI", note: "Prompt Engineering, via Google Cloud Skills Boost" },
+  ],
+};

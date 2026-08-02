@@ -7,6 +7,7 @@ import Gates from "./sections/Gates";
 import Fallen from "./sections/Fallen";
 import Arsenal from "./sections/Arsenal";
 import Chambers from "./sections/Chambers";
+import Chronicle from "./sections/Chronicle";
 
 export default function App() {
   const env = useEnvironment();
@@ -27,9 +28,10 @@ export default function App() {
         <Fallen env={env} />
         <Arsenal env={env} />
         <Chambers env={env} />
+        <Chronicle env={env} />
 
-        {/* Sections V-VI still placeholders. */}
-        {SECTIONS.slice(4).map((s) => (
+        {/* Section VI still a placeholder. */}
+        {SECTIONS.slice(5).map((s) => (
           <section
             key={s.id}
             id={s.id}
