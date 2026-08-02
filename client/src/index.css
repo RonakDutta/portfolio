@@ -141,6 +141,21 @@
   }
 }
 
+/* Ember sliding down the scroll cue. */
+@keyframes ember-fall {
+  0% {
+    transform: translate(-50%, -0.375rem);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 3.5rem);
+    opacity: 0;
+  }
+}
+
 @keyframes pulse-glow {
   0%,
   100% {
@@ -153,6 +168,9 @@
   }
 }
 
+.animate-ember-fall {
+  animation: ember-fall 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 .animate-flicker {
   animation: flicker 5s steps(1, end) infinite;
 }

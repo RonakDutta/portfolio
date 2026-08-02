@@ -3,6 +3,8 @@ import { useEnvironment } from "./lib/useEnvironment";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { initPointer, SECTIONS } from "./lib/store";
 import HellCanvas from "./components/HellCanvas";
+import Gates from "./sections/Gates";
+import Fallen from "./sections/Fallen";
 
 export default function App() {
   const env = useEnvironment();
@@ -12,17 +14,18 @@ export default function App() {
 
   return (
     <>
-      <a
-        href="#gates"
-        className="sr-focusable bg-obsidian text-bone px-4 py-2 font-display"
-      >
+      <a href="#gates" className="sr-focusable bg-obsidian text-bone px-4 py-2 font-display">
         Skip to content
       </a>
 
       <HellCanvas env={env} />
 
       <main id="descent" className="relative z-10">
-        {SECTIONS.map((s) => (
+        <Gates env={env} />
+        <Fallen env={env} />
+
+        {/* Sections III-VI still placeholders. */}
+        {SECTIONS.slice(2).map((s) => (
           <section
             key={s.id}
             id={s.id}
