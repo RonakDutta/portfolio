@@ -44,10 +44,16 @@ export function useEnvironment() {
       quality,
       enable3D: !reducedMotion,
       dpr:
-        quality === "low" ? [1, 1] : quality === "mid" ? [1, 1.35] : [1, 1.75],
-      emberCount: quality === "low" ? 260 : quality === "mid" ? 900 : 2200,
-      lavaSegments: quality === "low" ? 32 : quality === "mid" ? 72 : 128,
-      fbmOctaves: quality === "low" ? 2 : quality === "mid" ? 3 : 5,
+        isMobile
+          ? [0.85, 1.0]
+          : quality === "low"
+            ? [1, 1]
+            : quality === "mid"
+              ? [1, 1.25]
+              : [1, 1.5],
+      emberCount: isMobile ? 180 : quality === "low" ? 260 : quality === "mid" ? 700 : 1600,
+      lavaSegments: isMobile ? 40 : quality === "low" ? 32 : quality === "mid" ? 64 : 96,
+      fbmOctaves: isMobile ? 2 : quality === "low" ? 2 : quality === "mid" ? 3 : 4,
     }),
     [reducedMotion, isMobile, coarsePointer, quality],
   );

@@ -141,7 +141,7 @@ function Summoning({ env }) {
               {[0, 1, 2].map((i) => (
                 <span
                   key={i}
-                  className="absolute top-1/2 left-1/2 aspect-square w-[52vmin]
+                  className="absolute top-1/2 left-1/2 aspect-square w-[75vmin] sm:w-[52vmin]
                     -translate-x-1/2 -translate-y-1/2"
                 >
                   <span
@@ -152,10 +152,10 @@ function Summoning({ env }) {
               ))}
             </div>
 
-            {/* The BIG circle sits centered directly behind the SEND WORD button. */}
+            {/* The circle sits centered directly behind the SEND WORD button. Proportioned on mobile. */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-1/2 aspect-square w-[min(108vw,36rem)] sm:w-[38rem]
+              className="pointer-events-none absolute top-1/2 left-1/2 aspect-square w-[min(88vw,24rem)] sm:w-[38rem]
                 -translate-x-1/2 -translate-y-1/2"
             >
               <div className="summon-circle relative h-full w-full">
