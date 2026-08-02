@@ -144,7 +144,7 @@ export const chambers = {
 export const chronicle = {
   headline: "Infernal Chronicle",
   headlineSub: "the record so far",
-  lede: "Where I have been, in the order it happened.",
+  lede: "Where I have been, earliest first, in the order it happened.",
 
   /**
    * Same rules as the chambers: edit, reorder or extend freely, the timeline
@@ -152,12 +152,11 @@ export const chronicle = {
    */
   entries: [
     {
-      period: "June 2026 to now",
-      title: "Software Development Intern",
-      org: "RARS Innoventa",
-      kind: "Role",
-      detail:
-        "Backend services and React interfaces for a B2B marketplace, plus a community platform with automated onboarding, event RSVPs and payment gateway integration. Built full-stack features alongside senior engineers.",
+      period: "2022",
+      title: "CBSE Class XII",
+      org: "Bal Mandir Sr. Sec. School",
+      kind: "Study",
+      detail: "92.6 percent.",
     },
     {
       period: "Expected July 2027",
@@ -167,11 +166,12 @@ export const chronicle = {
       detail: "GPA 8.83 out of 10.",
     },
     {
-      period: "2022",
-      title: "CBSE Class XII",
-      org: "Bal Mandir Sr. Sec. School",
-      kind: "Study",
-      detail: "92.6 percent.",
+      period: "June 2026 to now",
+      title: "Software Development Intern",
+      org: "RARS Innoventa",
+      kind: "Role",
+      detail:
+        "Backend services and React interfaces for a B2B marketplace, plus a community platform with automated onboarding, event RSVPs and payment gateway integration. Built full-stack features alongside senior engineers.",
     },
   ],
 
@@ -182,4 +182,36 @@ export const chronicle = {
     { name: "Samsung Innovation Campus", note: "Professional training and certification in Artificial Intelligence" },
     { name: "Google Cloud GenAI", note: "Prompt Engineering, via Google Cloud Skills Boost" },
   ],
+};
+
+export const summoning = {
+  headline: "Summoning Circle",
+  headlineSub: "call and I answer",
+  lede: "The descent ends here. If you have something worth building, the circle is drawn.",
+
+  /**
+   * Direct links only, no contact form. A form with no backend behind it is a
+   * lie: it looks like it sent and it did not. Add one when there is something
+   * to receive it.
+   *
+   * Your phone number is on your resume but deliberately not here, since a
+   * resume goes to people you chose and a website goes to everyone. Add it to
+   * this array if you want it public.
+   */
+  channels: [
+    {
+      label: "Email",
+      value: "ronakdutta100@gmail.com",
+      href: "mailto:ronakdutta100@gmail.com",
+      copy: true,
+    },
+    {
+      label: "GitHub",
+      value: "github.com/RonakDutta",
+      href: "https://github.com/RonakDutta",
+    },
+  ],
+
+  cta: { label: "Send word", href: "mailto:ronakdutta100@gmail.com" },
+  closing: "Ronak Dutta, New Delhi",
 };
