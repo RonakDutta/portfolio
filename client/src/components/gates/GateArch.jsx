@@ -1,117 +1,190 @@
 import { memo, useId } from "react";
 
-const W = 1200;
-const H = 900;
-const SPRING_Y = 0.58;
-const OPEN_R = 0.76;
-const OPEN_L = 0.24;
-const MID_X = (OPEN_L + OPEN_R) / 2;
-const R = OPEN_R - OPEN_L;
+/**
+ * The gate itself: a stone wall with a pointed arch cut out of it.
+ *
+ * Drawn as a single evenodd path so the opening is a real hole. The lava
+ * canvas shows through it rather than being drawn on top of. That's what turns
+ * the background from "a nice shader" into something you are standing before.
+ *
+ * Stretched to the frame with preserveAspectRatio="none", deliberately. Under
+ * "slice" the arch keeps its proportions and the frame crops it, which means
+ * the opening's width at a given height depends on the viewport's aspect ratio:
+ * on a wide, short screen the lockup ends up under the narrow point instead of
+ * between the piers. Stretching gives up exact arch geometry to buy the
+ * guarantee that matters more, which is that the opening is always the same
+ * share of the frame and the name always sits inside it. Strokes carry
+ * vector-effect so the non-uniform scale cannot thin them unevenly.
+ *
+ * No filters: gradients and strokes only, so it composites on the GPU and costs
+ * nothing per frame. It never animates on its own; the parent parallaxes it.
+ */
 
-const WALL_PATH = [
-  `M 0 0`,
-  `H ${W}`,
-  `V ${H}`,
-  `H 0`,
-  `Z`,
-  `M ${OPEN_L * W} ${H}`,
-  `V ${SPRING_Y * H}`,
-  `A ${R * W} ${R * H} 0 0 1 ${MID_X * W} ${(SPRING_Y - R * 0.72) * H}`,
-  `A ${R * W} ${R * H} 0 0 1 ${OPEN_R * W} ${SPRING_Y * H}`,
-  `V ${H}`,
-  `Z`,
-].join(" ");
+/** Course lines for the masonry, as fractions of the viewBox height. */
+const COURSES = [0.13, 0.24, 0.35, 0.46, 0.57, 0.68, 0.79, 0.9];
 
-const ARCH_RIM_PATH = [
-  `M ${OPEN_L * W} ${H}`,
-  `V ${SPRING_Y * H}`,
-  `A ${R * W} ${R * H} 0 0 1 ${MID_X * W} ${(SPRING_Y - R * 0.72) * H}`,
-  `A ${R * W} ${R * H} 0 0 1 ${OPEN_R * W} ${SPRING_Y * H}`,
-  `V ${H}`,
-].join(" ");
-
-function Course({ y, height, joints, stroke }) {
-  return (
-    <g>
-      <line x1="0" y1={y} x2={OPEN_L * W} y2={y} stroke={stroke} strokeWidth="1.2" />
-      <line x1={OPEN_R * W} y1={y} x2={W} y2={y} stroke={stroke} strokeWidth="1.2" />
-      {joints.map((x, i) => (
-        <g key={i}>
-          <line x1={x} y1={y} x2={x} y2={y + height} stroke={stroke} strokeWidth="1.2" />
-          <line x1={W - x} y1={y} x2={W - x} y2={y + height} stroke={stroke} strokeWidth="1.2" />
-        </g>
-      ))}
-    </g>
-  );
-}
-
-const COURSES = [
-  { y: 60, height: 60, joints: [100, 220] },
-  { y: 120, height: 65, joints: [50, 160] },
-  { y: 185, height: 60, joints: [110, 230] },
-  { y: 245, height: 70, joints: [60, 180] },
-  { y: 315, height: 65, joints: [120, 240] },
-  { y: 380, height: 70, joints: [70, 190] },
-  { y: 450, height: 75, joints: [130, 250] },
-  { y: 525, height: 75, joints: [80, 200] },
-  { y: 600, height: 80, joints: [140, 260] },
-  { y: 680, height: 85, joints: [90, 210] },
-  { y: 765, height: 135, joints: [150, 270] },
+/** Where the vertical joints fall on each course, alternating like real bond. */
+const JOINTS = [
+  [0.05, 0.14, 0.23],
+  [0.095, 0.185],
+  [0.05, 0.14, 0.23],
+  [0.095, 0.185],
+  [0.05, 0.14, 0.23],
+  [0.095, 0.185],
+  [0.05, 0.14, 0.23],
+  [0.095, 0.185],
 ];
 
-function GateArch() {
+const W = 1600;
+const H = 900;
+const SPRING = 340; // where the arch leaves the piers
+const APEX_Y = 72; // high enough to read as a point, low enough to stay on screen
+
+/**
+ * The opening, as a share of the frame.
+ *
+ * Wider on a phone. The opening is a fixed percentage of the viewport, so 45%
+ * of a 1900px screen is generous and 45% of a 390px one is 175px, which is
+ * narrower than the name set at any size worth reading. The piers give up the
+ * width because at that size there is no pier detail to see anyway.
+ */
+const OPENINGS = {
+  wide: { l: 440, r: 1160 },
+  narrow: { l: 300, r: 1300 },
+};
+
+/**
+ * Two-centred arch. Both centres sit on the springline, offset D either side of
+ * the axis: the construction that lets rise and span be chosen independently
+ * and still meet at a true point. D falls out of requiring one radius to reach
+ * both its own springer and the apex.
+ */
+function geometry({ l, r }) {
+  const apexX = (l + r) / 2;
+  const half = (r - l) / 2;
+  const rise = SPRING - APEX_Y;
+  const d = (rise * rise - half * half) / (2 * half);
+  const radius = half + d;
+
+  const arcs = [
+    `A${radius},${radius} 0 0,1 ${apexX},${APEX_Y}`,
+    `A${radius},${radius} 0 0,1 ${r},${SPRING}`,
+  ].join(" ");
+
+  return {
+    wall: `M0,0 H${W} V${H} H0 Z M${l},${H} V${SPRING} ${arcs} V${H} Z`,
+    reveal: `M${l},${H} V${SPRING} ${arcs} V${H}`,
+  };
+}
+
+const PATHS = {
+  wide: geometry(OPENINGS.wide),
+  narrow: geometry(OPENINGS.narrow),
+};
+
+function GateArch({ className = "", narrow = false }) {
+  const { wall: WALL, reveal: REVEAL } = PATHS[narrow ? "narrow" : "wide"];
+  // Scoped ids so a second instance can never steal this one's gradients.
   const uid = useId().replace(/:/g, "");
-  const wallGrad = `wall-grad-${uid}`;
-  const rimGrad = `rim-grad-${uid}`;
-  const sootGrad = `soot-grad-${uid}`;
-  const wallMask = `wall-mask-${uid}`;
+  const stone = `stone-${uid}`;
+  const rim = `rim-${uid}`;
+  const grime = `grime-${uid}`;
 
   return (
     <svg
       aria-hidden="true"
-      className="h-full w-full"
+      className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}
       viewBox={`0 0 ${W} ${H}`}
-      preserveAspectRatio="xMidYMid slice"
+      preserveAspectRatio="none"
     >
       <defs>
-        <linearGradient id={wallGrad} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#08060c" />
-          <stop offset="55%" stopColor="#141019" />
-          <stop offset="100%" stopColor="#281a17" />
+        {/* Stone is lit from below by the lava, so it warms toward the base. */}
+        <linearGradient id={stone} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#08060b" />
+          <stop offset="55%" stopColor="#0f0b12" />
+          <stop offset="100%" stopColor="#241511" />
         </linearGradient>
 
-        <linearGradient id={rimGrad} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#241d29" />
-          <stop offset="45%" stopColor="#ff4d00" stopOpacity="0.45" />
-          <stop offset="85%" stopColor="#ff8a1f" stopOpacity="0.85" />
-          <stop offset="100%" stopColor="#ffc061" />
+        {/* Heat bleeding onto the reveal of the opening. */}
+        <linearGradient id={rim} x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stopColor="#ff7a18" stopOpacity="0.85" />
+          <stop offset="45%" stopColor="#ff4d00" stopOpacity="0.28" />
+          <stop offset="100%" stopColor="#ff4d00" stopOpacity="0.05" />
         </linearGradient>
 
-        <linearGradient id={sootGrad} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#05030a" stopOpacity="0.95" />
-          <stop offset="100%" stopColor="#05030a" stopOpacity="0" />
+        <linearGradient id={grime} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#000" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0" />
         </linearGradient>
-
-        <mask id={wallMask}>
-          <path d={WALL_PATH} fill="#fff" fillRule="evenodd" />
-        </mask>
       </defs>
 
-      <path d={WALL_PATH} fill={`url(#${wallGrad})`} fillRule="evenodd" />
+      {/* The wall. evenodd punches the arch straight through it. */}
+      <path d={WALL} fill={`url(#${stone})`} fillRule="evenodd" />
 
-      <g mask={`url(#${wallMask})`}>
-        {COURSES.map((c) => (
-          <Course key={c.y} {...c} stroke="rgba(255,138,31,0.07)" />
-        ))}
+      {/* Masonry courses, masked to the wall so they never cross the opening. */}
+      <g opacity="0.55">
+        <mask id={`m-${uid}`}>
+          <path d={WALL} fill="#fff" fillRule="evenodd" />
+        </mask>
+        <g
+          mask={`url(#m-${uid})`}
+          stroke="#000"
+          strokeOpacity="0.7"
+          strokeWidth="2.5"
+        >
+          {COURSES.map((f) => (
+            <line
+              key={f}
+              x1="0"
+              y1={H * f}
+              x2={W}
+              y2={H * f}
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
+          {COURSES.map((f, row) =>
+            JOINTS[row].map((j) => (
+              <g key={`${f}-${j}`}>
+                {/* Mirrored across the centre line so both piers stay bonded. */}
+                <line
+                  x1={W * j}
+                  y1={H * f}
+                  x2={W * j}
+                  y2={H * (COURSES[row + 1] ?? 1)}
+                  vectorEffect="non-scaling-stroke"
+                />
+                <line
+                  x1={W * (1 - j)}
+                  y1={H * f}
+                  x2={W * (1 - j)}
+                  y2={H * (COURSES[row + 1] ?? 1)}
+                  vectorEffect="non-scaling-stroke"
+                />
+              </g>
+            )),
+          )}
+        </g>
       </g>
 
-      <rect x="0" y="0" width={W} height={H * 0.35} fill={`url(#${sootGrad})`} />
+      {/* Soot gathering along the top of the wall. */}
+      <rect x="0" y="0" width={W} height={H * 0.34} fill={`url(#${grime})`} />
 
+      {/* Heat rim on the cut edge, the only warm line in the whole gate. */}
       <path
-        d={ARCH_RIM_PATH}
+        d={REVEAL}
         fill="none"
-        stroke={`url(#${rimGrad})`}
-        strokeWidth="3.5"
+        stroke={`url(#${rim})`}
+        strokeWidth="6"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+      />
+      <path
+        d={REVEAL}
+        fill="none"
+        stroke="#ffb347"
+        strokeOpacity="0.22"
+        strokeWidth="1.5"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );

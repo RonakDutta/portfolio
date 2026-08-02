@@ -13,13 +13,13 @@ export const depthAt = (progress) => DESCENT_START_Y - progress * DESCENT_DEPTH;
 const _target = new THREE.Vector3();
 
 /**
- * Drives the camera from the mutable frame store — never from React state, so
+ * Drives the camera from the mutable frame store, never from React state, so
  * scrolling costs zero rerenders.
  *
  * Three layered motions, in order of amplitude:
- *   1. Descent      — scroll maps to world Y.
- *   2. Parallax     — damped pointer offsets X/Y and adds a slight roll.
- *   3. Handheld     — low-amplitude drift so a still page never feels frozen.
+ *   1. Descent:      scroll maps to world Y.
+ *   2. Parallax:     damped pointer offsets X/Y and adds a slight roll.
+ *   3. Handheld:     low-amplitude drift so a still page never feels frozen.
  * Plus an impulse shake fed by scroll velocity, which is what makes the big
  * section transitions land physically rather than just visually.
  */
@@ -37,7 +37,7 @@ export default function CameraRig({ isMobile = false, coarsePointer = false }) {
     p.x = damp(p.x, frame.pointer.x, 3.2, dt);
     p.y = damp(p.y, frame.pointer.y, 3.2, dt);
 
-    // Parallax is a luxury on a phone — the accelerometer noise isn't worth it.
+    // Parallax is a luxury on a phone, and the accelerometer noise isn't worth it.
     const par = coarsePointer ? 0 : isMobile ? 0.4 : 1;
 
     // 1. Descent.
@@ -69,7 +69,7 @@ export default function CameraRig({ isMobile = false, coarsePointer = false }) {
     _target.set(p.x * 3.5 * par, targetY - 5 - p.y * 2.5 * par, -18);
     camera.lookAt(_target);
 
-    // A touch of roll — reads as weight, not as a tilt effect, at this scale.
+    // A touch of roll, which reads as weight, not as a tilt effect, at this scale.
     camera.rotation.z += p.x * 0.035 * par + shake.current * 0.02;
 
     camera.updateProjectionMatrix();

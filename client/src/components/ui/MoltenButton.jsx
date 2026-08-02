@@ -1,27 +1,76 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 
-const fillVariants = {
+/**
+ * Cold iron until you touch it, then it catches.
+ *
+ * The ignite state is a variant rather than a `:hover` rule so keyboard focus
+ * lights it identically. A hover-only effect would leave keyboard users with a
+ * dead-looking button. Both states clear 4.5:1 against their own background:
+ * bone on near-black cold, void on brimstone hot.
+ *
+ * The fire is deliberately split between two systems. Framer drives the states
+ * that need to interpolate (fill, colour, lift). The flames and sparks are CSS
+ * keyframes that are always declared but held paused, so hovering costs a class
+ * change rather than mounting a dozen animating elements, and nothing burns
+ * cycles while the button sits cold. Every layer moves on transform or opacity
+ * only.
+ *
+ * Note the clipping: only the fill and flames sit inside an overflow-hidden
+ * wrapper. The sparks are siblings of it, because a spark's whole job is to
+ * leave the top edge, and clipping the button itself would eat them.
+ */
+
+const fill = {
   cold: { scaleY: 0, opacity: 0 },
   hot: { scaleY: 1, opacity: 1 },
 };
 
-const glowVariants = {
-  cold: { opacity: 0 },
-  hot: { opacity: 1 },
-};
+const glow = { cold: { opacity: 0 }, hot: { opacity: 1 } };
+const label = { cold: { color: "#ddd3c4" }, hot: { color: "#0b0810" } };
+const body = { cold: { y: 0 }, hot: { y: -2 } };
 
-const labelVariants = {
-  cold: { color: "#ddd3c4" },
-  hot: { color: "#05030a" },
-};
+const SPRING = { type: "spring", stiffness: 420, damping: 32, mass: 0.7 };
 
-const containerVariants = {
-  cold: { y: 0 },
-  hot: { y: -3 },
-};
+/** Sideways wander and timing offset per spark, so they never march in step. */
+const SPARKS = [
+  { left: "14%", dx: "-9px", delay: "0s", dur: "1.35s" },
+  { left: "31%", dx: "6px", delay: "0.32s", dur: "1.6s" },
+  { left: "52%", dx: "-4px", delay: "0.66s", dur: "1.25s" },
+  { left: "71%", dx: "10px", delay: "0.18s", dur: "1.75s" },
+  { left: "88%", dx: "-7px", delay: "0.85s", dur: "1.45s" },
+];
 
-const SPRING = { type: "spring", stiffness: 500, damping: 25, mass: 0.5 };
+/**
+ * Two ranks of tongues. Each is one ellipse tiled horizontally, not a
+ * repeating-radial-gradient: concentric rings struck from a point render as
+ * vertical bars once you mask them, which reads as a barcode, not as fire.
+ */
+const FLAMES = [
+  {
+    tile: 36,
+    height: 22,
+    duration: "1.9s",
+    direction: "normal",
+    opacity: 0.85,
+    stops: "#fff3d6 0%, rgba(255,196,90,0.72) 42%, transparent 70%",
+    fade: "46%",
+  },
+  {
+    tile: 23,
+    height: 14,
+    duration: "2.9s",
+    direction: "reverse",
+    opacity: 0.7,
+    stops: "#fffaf0 0%, rgba(255,222,150,0.6) 38%, transparent 68%",
+    fade: "34%",
+  },
+];
+
+/** Applied to every CSS-animated layer: paused until the button is lit. */
+const IGNITE =
+  "opacity-0 [animation-play-state:paused] transition-opacity duration-200 " +
+  "group-hover:[animation-play-state:running] group-focus-visible:[animation-play-state:running]";
 
 function MoltenButton({
   children,
@@ -29,11 +78,12 @@ function MoltenButton({
   href,
   variant = "primary",
   reducedMotion = false,
+  showArrow = true,
   className = "",
   ...rest
 }) {
   const Tag = href ? motion.a : motion.button;
-  const isGhost = variant === "ghost";
+  const ghost = variant === "ghost";
   const transition = reducedMotion ? { duration: 0 } : SPRING;
 
   return (
@@ -44,97 +94,98 @@ function MoltenButton({
       initial="cold"
       whileHover="hot"
       whileFocus="hot"
-      whileTap={reducedMotion ? undefined : { scale: 0.95 }}
-      variants={containerVariants}
+      whileTap={reducedMotion ? undefined : { scale: 0.97 }}
+      variants={body}
       transition={transition}
-      className={`group relative isolate inline-flex items-center justify-center gap-3 overflow-hidden px-10 py-5
-        font-display text-xs font-black tracking-[0.35em] uppercase transition-colors duration-300 rounded-sm cursor-pointer
-        ${isGhost ? "border border-iron/90 hover:border-ember" : "border border-ember/70 hover:border-hellfire"}
+      className={`group relative isolate inline-flex items-center gap-3 px-8 py-4
+        font-display text-xs font-bold tracking-[0.28em] uppercase
+        ${ghost ? "border border-iron/90" : "border border-ember/45"}
         ${className}`}
       {...rest}
     >
-      {/* Dark cold iron base */}
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 -z-20 bg-gradient-to-b from-[#1c1524] via-obsidian to-[#08050e]"
-      />
+      {/* Everything that must stay inside the button's box. */}
+      <span aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+        {/* Cold body. */}
+        <span className="absolute inset-0 bg-gradient-to-b from-obsidian to-[#0a070d]" />
 
-      {/* Fiery molten lava fill rising from the bottom */}
+        {/* Molten fill, rising from the base like metal reaching temperature. */}
+        <motion.span
+          variants={fill}
+          transition={transition}
+          style={{ originY: 1 }}
+          className="absolute inset-0 bg-gradient-to-t from-[#ff2d00] via-ember to-brimstone"
+        />
+
+        {/* Flame tongues over the fill. Held to the lower third so they never
+            wash out the label sitting in the middle of the button. */}
+        {FLAMES.map((f) => (
+          <span
+            key={f.tile}
+            className={`animate-flame-drift absolute bottom-0 left-0 h-full ${IGNITE} group-hover:opacity-(--lit) group-focus-visible:opacity-(--lit)`}
+            style={{
+              "--tile": `${f.tile}px`,
+              "--lit": f.opacity,
+              width: `calc(100% + ${f.tile}px)`,
+              animationDuration: f.duration,
+              animationDirection: f.direction,
+              backgroundImage: `radial-gradient(ellipse ${f.tile * 0.3}px ${f.height}px at 50% 100%, ${f.stops})`,
+              backgroundSize: `${f.tile}px 100%`,
+              backgroundRepeat: "repeat-x",
+              maskImage: `linear-gradient(to top, #000 0%, #000 10%, transparent ${f.fade})`,
+              WebkitMaskImage: `linear-gradient(to top, #000 0%, #000 10%, transparent ${f.fade})`,
+            }}
+          />
+        ))}
+      </span>
+
+      {/* Sparks thrown clear of the top edge. Outside the clip on purpose. */}
+      <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-0">
+        {SPARKS.map((s) => (
+          <span
+            key={s.left}
+            className={`animate-ember-rise absolute h-1 w-1 rounded-full bg-hellfire ${IGNITE} group-hover:opacity-100 group-focus-visible:opacity-100`}
+            style={{
+              left: s.left,
+              animationDelay: s.delay,
+              animationDuration: s.dur,
+              "--dx": s.dx,
+              boxShadow: "0 0 6px 2px rgba(255,138,31,0.75)",
+            }}
+          />
+        ))}
+      </span>
+
+      {/* Heat haze. Opacity-only, so it composites instead of repainting, and
+          it flickers once lit rather than sitting at a constant brightness. */}
       <motion.span
         aria-hidden="true"
-        variants={fillVariants}
+        variants={glow}
         transition={transition}
-        style={{ originY: 1 }}
-        className="animate-fire-lava absolute inset-0 -z-10 bg-gradient-to-tr from-[#8a0f16] via-[#ff4d00] to-[#ffc061]"
+        className="pointer-events-none absolute inset-0 -z-20 group-hover:animate-flicker group-focus-visible:animate-flicker"
+        style={{ boxShadow: "0 0 34px 6px rgba(255,77,0,0.55)" }}
       />
 
-      {/* Intense infernal glow shadow surrounding the button */}
-      <motion.span
-        aria-hidden="true"
-        variants={glowVariants}
-        transition={transition}
-        className="pointer-events-none absolute inset-0 -z-30 rounded-sm"
-        style={{
-          boxShadow:
-            "0 0 50px 12px rgba(255, 77, 0, 0.85), 0 0 100px 30px rgba(255, 192, 97, 0.4), inset 0 0 25px rgba(255, 255, 255, 0.6)",
-        }}
-      />
-
-      {/* Inner glowing fire border frame */}
-      <motion.span
-        aria-hidden="true"
-        variants={glowVariants}
-        transition={transition}
-        className="pointer-events-none absolute inset-0 border-2 border-hellfire opacity-0 group-hover:opacity-100 transition-opacity"
-      />
-
-      {/* Floating sparks/embers floating up on hover */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1 left-4 h-1.5 w-1.5 rounded-full bg-white opacity-0 group-hover:opacity-100 group-hover:animate-spark"
-      />
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-2 right-6 h-2 w-2 rounded-full bg-hellfire opacity-0 group-hover:opacity-100 group-hover:animate-spark"
-        style={{ animationDelay: "0.3s" }}
-      />
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute top-3 right-3 h-1 w-1 rounded-full bg-ember opacity-0 group-hover:opacity-100 group-hover:animate-spark"
-        style={{ animationDelay: "0.6s" }}
-      />
-
-      {/* Gothic Corner Notch Accents */}
-      <span aria-hidden="true" className="absolute top-0 left-0 h-2 w-2 border-t-2 border-l-2 border-brimstone group-hover:border-void" />
-      <span aria-hidden="true" className="absolute top-0 right-0 h-2 w-2 border-t-2 border-r-2 border-brimstone group-hover:border-void" />
-      <span aria-hidden="true" className="absolute bottom-0 left-0 h-2 w-2 border-b-2 border-l-2 border-brimstone group-hover:border-void" />
-      <span aria-hidden="true" className="absolute bottom-0 right-0 h-2 w-2 border-b-2 border-r-2 border-brimstone group-hover:border-void" />
-
-      {/* Button Text with Hot Illumination */}
-      <motion.span
-        variants={labelVariants}
-        transition={transition}
-        className="relative z-10 font-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.9)]"
-      >
+      <motion.span variants={label} transition={transition} className="relative">
         {children}
       </motion.span>
 
-      {/* Descent Arrow Icon */}
-      <motion.svg
-        aria-hidden="true"
-        viewBox="0 0 12 16"
-        className="relative z-10 h-4 w-3.5"
-        variants={reducedMotion ? undefined : { cold: { y: 0, scale: 1 }, hot: { y: 4, scale: 1.3 } }}
-        transition={transition}
-      >
-        <path
-          d="M6 0v13M1 8l5 6 5-6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          className="text-brimstone group-hover:text-void transition-colors"
-        />
-      </motion.svg>
+      {showArrow ? (
+        <motion.svg
+          aria-hidden="true"
+          viewBox="0 0 12 16"
+          className="relative h-3.5 w-3"
+          variants={reducedMotion ? undefined : { cold: { y: 0 }, hot: { y: 3 } }}
+          transition={transition}
+        >
+          <path
+            d="M6 0v13M1 8l5 6 5-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            className="text-brimstone group-hover:text-void group-focus-visible:text-void"
+          />
+        </motion.svg>
+      ) : null}
     </Tag>
   );
 }

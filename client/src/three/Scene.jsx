@@ -6,7 +6,7 @@ import CameraRig from "./CameraRig";
 import LavaField from "./LavaField";
 
 /**
- * Everything inside the <Canvas>. Lazy-loaded as its own chunk — importing this
+ * Everything inside the <Canvas>. Lazy-loaded as its own chunk. Importing this
  * file is what pulls three.js into the graph, so nothing above it pays for 3D.
  */
 
@@ -55,7 +55,7 @@ export default function Scene({ env }) {
   return (
     <>
       <color attach="background" args={["#05030a"]} />
-      {/* Exponential fog swallows the far geometry — the volumetric depth cue
+      {/* Exponential fog swallows the far geometry, the volumetric depth cue
           that makes a 64-unit shaft feel bottomless. */}
       <fogExp2 attach="fog" args={["#0a0509", 0.017]} />
 
