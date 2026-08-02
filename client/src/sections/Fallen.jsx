@@ -61,7 +61,7 @@ function Fallen({ env }) {
         }}
       />
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:gap-28">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:gap-30">
         <div className="fallen-rise">
           <PortraitNiche
             src={fallen.portrait}
@@ -72,7 +72,11 @@ function Fallen({ env }) {
         </div>
 
         <div>
-          <SectionMark roman="II" label="The Fallen One" className="fallen-rise" />
+          <SectionMark
+            roman="II"
+            label="The Fallen One"
+            className="fallen-rise"
+          />
 
           <h2 id="fallen-title" className="mt-7">
             <span className="text-molten fallen-rise block font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[0.95] font-black">
@@ -85,7 +89,10 @@ function Fallen({ env }) {
 
           <div className="mt-8 space-y-5">
             {fallen.body.map((para) => (
-              <p key={para.slice(0, 24)} className="fallen-rise max-w-prose text-parchment/90">
+              <p
+                key={para.slice(0, 24)}
+                className="fallen-rise max-w-prose text-parchment/90"
+              >
                 {para}
               </p>
             ))}
@@ -93,7 +100,10 @@ function Fallen({ env }) {
 
           <dl className="fallen-facts mt-11 grid gap-x-8 gap-y-5 sm:grid-cols-2">
             {fallen.facts.map((fact) => (
-              <div key={fact.term} className="fallen-fact border-l border-ember/35 pl-4">
+              <div
+                key={fact.term}
+                className="fallen-fact border-l border-ember/35 pl-4"
+              >
                 <dt className="font-display text-[0.6rem] tracking-[0.32em] text-ember/85 uppercase">
                   {fact.term}
                 </dt>

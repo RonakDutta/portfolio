@@ -34,7 +34,7 @@ export const fallen = {
    * Portrait reads best at roughly 4:5, framed head and shoulders, since the
    * arch crops the top corners hard.
    */
-  portrait: "/portrait.jpg",
+  portrait: "/portrait.png",
   portraitAlt: "Ronak Dutta",
 
   headline: "Software Engineer",
@@ -60,11 +60,20 @@ export const arsenal = {
   lede: "The tools I reach for, grouped by where they sit in the stack.",
 
   racks: [
-    { name: "Languages", items: ["JavaScript (ES6+)", "C/C++", "SQL", "Python", "Java"] },
-    { name: "Front-End", items: ["React.js", "Next.js", "Tailwind CSS", "Redux"] },
+    {
+      name: "Languages",
+      items: ["JavaScript (ES6+)", "C/C++", "SQL", "Python", "Java"],
+    },
+    {
+      name: "Front-End",
+      items: ["React.js", "Next.js", "Tailwind CSS", "Redux"],
+    },
     { name: "Back-End", items: ["Node.js", "Express.js"] },
     { name: "Databases", items: ["MongoDB", "PostgreSQL", "MySQL"] },
-    { name: "Tools & Platforms", items: ["Git", "GitHub", "Postman", "Vercel", "NeonDB"] },
+    {
+      name: "Tools & Platforms",
+      items: ["Git", "GitHub", "Postman", "Vercel", "NeonDB"],
+    },
   ],
 };
 
@@ -108,7 +117,14 @@ export const chambers = {
         "Built an admin dashboard for revenue tracking, plus fleet management with real-time driver assignment and automated WhatsApp confirmations.",
         "Integrated Razorpay for payment processing and built the driver onboarding workflow end to end.",
       ],
-      stack: ["React", "Node.js", "Express", "PostgreSQL", "Twilio", "Razorpay"],
+      stack: [
+        "React",
+        "Node.js",
+        "Express",
+        "PostgreSQL",
+        "Twilio",
+        "Razorpay",
+      ],
     },
     {
       name: "Descent",
