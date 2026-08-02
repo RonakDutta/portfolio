@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
  * A portrait set into a carved stone niche.
  *
  * The arch is a `clip-path` in objectBoundingBox units, so one path definition
- * scales to any frame size without recomputing — and the same gothic point that
+ * scales to any frame size without recomputing, and the same gothic point that
  * cuts the gate upstairs cuts this, which is what ties the two sections
  * together visually.
  *
@@ -55,7 +55,7 @@ function PortraitNiche({ src, alt, initials = "", reducedMotion = false }) {
         },
       });
 
-      // The portrait drifts inside its frame — the stone is fixed, the face
+      // The portrait drifts inside its frame. The stone is fixed, the face
       // is not, which keeps the niche from feeling like a flat pasted rectangle.
       gsap.fromTo(
         image.current,
@@ -93,7 +93,7 @@ function PortraitNiche({ src, alt, initials = "", reducedMotion = false }) {
       {/* Carved surround. Three stacked shapes, each slightly tighter than the
           last, so the jamb reads as depth cut into the wall rather than a
           border drawn around a picture. Light enough to actually separate from
-          the background — a dark-on-dark frame is the same as no frame. */}
+          the background. A dark-on-dark frame is the same as no frame. */}
       <div
         aria-hidden="true"
         className="absolute -inset-5 bg-gradient-to-b from-[#3a323f] via-[#221c2a] to-[#3d2419]"

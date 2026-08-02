@@ -21,7 +21,7 @@ function StaticHell() {
 
 /**
  * Cinematic falloff over the scene. Also the reason DOM copy stays legible over
- * a surface that runs from black to white-hot — the corners and the upper third
+ * a surface that runs from black to white-hot. The corners and the upper third
  * are pulled down hard, which is where headings and nav live.
  */
 function Vignette() {

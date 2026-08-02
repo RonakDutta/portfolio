@@ -10,7 +10,7 @@ import { identity, gates } from "../data/content";
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Section I — Gates of Hell.
+ * Section I: Gates of Hell.
  *
  * Depth is built from four layers moving at different rates: lava (WebGL, moves
  * with the camera), the stone gate, the chains, and the type. The gate lags the
@@ -45,7 +45,7 @@ function Gates({ env }) {
         },
       });
 
-      // GSAP owns this transform outright — a Tailwind `scale-*` class on the
+      // GSAP owns this transform outright. A Tailwind `scale-*` class on the
       // same element would be clobbered the moment the tween writes.
       gsap.set(arch.current, { scale: 1.06, transformOrigin: "50% 42%" });
       tl.to(arch.current, { yPercent: 12, scale: 1.14, ease: "none" }, 0);
@@ -65,7 +65,7 @@ function Gates({ env }) {
     >
       {/* Architecture, in two nested layers on purpose.
           Outer is static and carries the fade, so the wall always dissolves at
-          the same point in the *section* — the section clips at its own bottom
+          the same point in the *section*. The section clips at its own bottom
           edge, and an opaque wall meeting bright lava there reads as a seam.
           Inner is what parallaxes; a fade baked into the moving layer would
           slide out of position as it travels. */}
@@ -120,7 +120,7 @@ function Gates({ env }) {
             {/* One clean string for assistive tech; the split lines below are
                 decorative so a screen reader never hears the name twice. */}
             <span className="sr-only">
-              {identity.name} — {identity.role} from {identity.region}
+              {identity.name}, {identity.role} from {identity.region}
             </span>
             <span aria-hidden="true" className="block overflow-hidden">
               <span className="gate-rise text-molten block font-display text-[clamp(2.75rem,12vw,10rem)] leading-[0.86] font-black tracking-[-0.01em]">
@@ -166,7 +166,7 @@ function Gates({ env }) {
         </div>
       </div>
 
-      {/* Scroll cue. CSS-only animation — no JS runs to keep this alive. */}
+      {/* Scroll cue. CSS-only animation, so no JS runs to keep this alive. */}
       <div
         ref={cue}
         aria-hidden="true"

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
  * Cold iron until you touch it.
  *
  * The ignite state is a variant rather than a `:hover` rule so keyboard focus
- * lights it identically — a hover-only effect would leave keyboard users with a
+ * lights it identically. A hover-only effect would leave keyboard users with a
  * dead-looking button. Both states clear 4.5:1 against their own background:
  * bone on near-black cold, void on brimstone hot.
  *

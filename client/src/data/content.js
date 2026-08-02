@@ -1,5 +1,5 @@
 /**
- * All copy lives here. Sections are presentation only — swapping your details
+ * All copy lives here. Sections are presentation only, so swapping your details
  * in should never mean touching a component.
  */
 
@@ -12,6 +12,7 @@ export const identity = {
   location: "New Delhi",
   region: "New Delhi, India",
   email: "ronakdutta100@gmail.com",
+  github: "https://github.com/RonakDutta",
 };
 
 export const gates = {
@@ -30,8 +31,8 @@ export const fallen = {
   /**
    * Drop your photo at `client/public/portrait.jpg` and it appears here with no
    * code change. Until then the niche shows a carved stone slab instead.
-   * Portrait reads best roughly 4:5, framed head-and-shoulders — the arch crops
-   * the top corners hard.
+   * Portrait reads best at roughly 4:5, framed head and shoulders, since the
+   * arch crops the top corners hard.
    */
   portrait: "/portrait.jpg",
   portraitAlt: "Ronak Dutta",
@@ -40,15 +41,15 @@ export const fallen = {
   headlineSub: "from New Delhi",
 
   body: [
-    "I build for the browser — interfaces, tools, and the occasional thing that has no business running at sixty frames a second. Most of my work sits where product engineering meets realtime graphics: the place where the design file and the frame budget have to agree before anything ships.",
-    "I care about the parts nobody names in a review. Whether the first paint lands fast, whether the animation survives a mid-range phone, whether someone navigating by keyboard reaches every place everyone else does.",
+    "I build full-stack web applications. Right now I am a software development intern at RARS Innoventa, working on backend services and React interfaces for a B2B marketplace, covering product cataloguing, inventory control and order fulfillment.",
+    "Alongside that I am finishing a B.Tech in Industrial Internet of Things at University School of Automation and Robotics, GGSIPU. Most of what I know came from building projects end to end and then finding out what broke.",
   ],
 
-  /** Shown as a definition list. Keep the values short — they're set in caps. */
+  /** Shown as a definition list. Keep the values short, they are set in caps. */
   facts: [
     { term: "Based in", value: "New Delhi, India" },
-    { term: "Focus", value: "Product engineering, realtime graphics" },
-    { term: "Working in", value: "React, TypeScript, WebGL" },
-    { term: "Status", value: "Open to selected work" },
+    { term: "Currently", value: "Software Development Intern, RARS Innoventa" },
+    { term: "Working in", value: "React, Node.js, Express, PostgreSQL" },
+    { term: "Studying", value: "B.Tech Industrial IoT, GGSIPU" },
   ],
 };

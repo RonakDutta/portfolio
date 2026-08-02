@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
  *
  * Each chain is split into two groups at its break point. Scrolling scrubs a
  * timeline that first loads the chain with tension, then drops the lower half.
- * Because it's scrubbed rather than fired, scrolling back up re-forges it — a
+ * Because it's scrubbed rather than fired, scrolling back up re-forges it. A
  * one-shot break would leave the hero permanently wrecked for anyone who
  * scrolls up, which is exactly what people do on a site like this.
  */

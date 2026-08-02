@@ -3,12 +3,12 @@ import { memo, useId } from "react";
 /**
  * The gate itself: a stone wall with a pointed arch cut out of it.
  *
- * Drawn as a single evenodd path so the opening is a real hole — the lava
+ * Drawn as a single evenodd path so the opening is a real hole. The lava
  * canvas shows through it rather than being drawn on top of. That's what turns
  * the background from "a nice shader" into something you are standing before.
  *
  * Pure SVG, no filters: gradients and strokes only, so it composites on the GPU
- * and costs nothing per frame. It never animates on its own — the parent
+ * and costs nothing per frame. It never animates on its own; the parent
  * parallaxes it with a transform.
  */
 
@@ -128,7 +128,7 @@ function GateArch({ className = "" }) {
       {/* Soot gathering along the top of the wall. */}
       <rect x="0" y="0" width={W} height={H * 0.34} fill={`url(#${grime})`} />
 
-      {/* Heat rim on the cut edge — the only warm line in the whole gate. */}
+      {/* Heat rim on the cut edge, the only warm line in the whole gate. */}
       <path d={REVEAL} fill="none" stroke={`url(#${rim})`} strokeWidth="6" strokeLinecap="round" />
       <path d={REVEAL} fill="none" stroke="#ffb347" strokeOpacity="0.22" strokeWidth="1.5" />
     </svg>

@@ -8,7 +8,7 @@ import { identity, fallen } from "../data/content";
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Section II — The Fallen One.
+ * Section II: The Fallen One.
  *
  * The portrait section, and the first place the descent stops moving long
  * enough to read. Copy sits right of the niche on desktop and below it on

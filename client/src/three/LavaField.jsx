@@ -7,9 +7,9 @@ import { noise3D, fbm, bloomFalloff } from "./glsl";
 /**
  * The molten river beneath the descent.
  *
- * One plane, not many. It rides along under the camera — including ahead of it,
+ * One plane, not many. It rides along under the camera, including ahead of it,
  * since a forward-pitched camera sees lava 30-150 units downrange, not directly
- * below — and samples its noise in world space, so the surface slides past
+ * below, and samples its noise in world space, so the surface slides past
  * correctly instead of being dragged along with the mesh. The gap between
  * camera and lava tightens as you descend; that closing distance is the descent.
  *
@@ -85,7 +85,7 @@ const fragmentShader = (octaves) => /* glsl */ `
     float t = uTime * 0.06;
 
     // Domain warp turns clean noise bands into something that churns.
-    // Two octaves is plenty here — it only perturbs a lookup.
+    // Two octaves is plenty here, since it only perturbs a lookup.
     vec2 warp = vec2(
       fbmLow(vec3(p * 1.3, t)),
       fbmLow(vec3(p * 1.3 + 19.7, t))
@@ -95,7 +95,7 @@ const fragmentShader = (octaves) => /* glsl */ `
     float crust = fbm(vec3(p + warp * 0.55, t * 1.4)) * 0.5 + 0.5;
 
     // Veins glow where the crust has split. The band is deliberately narrow and
-    // the falloff steep — a wide band reads as orange ground, not as molten
+    // the falloff steep. A wide band reads as orange ground, not as molten
     // rock, and the whole illusion rests on most of this surface being black.
     float veins = 1.0 - smoothstep(0.40, 0.53, crust);
     veins = pow(veins, 2.4);
@@ -112,7 +112,7 @@ const fragmentShader = (octaves) => /* glsl */ `
     col = mix(col, uHot, smoothstep(0.38, 0.82, temp));
     col = mix(col, uCore, smoothstep(0.88, 1.25, temp));
 
-    // Soot speckle over the cooled crust only — keeps the hot cracks clean.
+    // Soot speckle over the cooled crust only, which keeps the hot cracks clean.
     float soot = fbmLow(vec3(p * 8.0, t * 1.8)) * 0.5 + 0.5;
     col *= mix(0.80 + 0.20 * soot, 1.0, smoothstep(0.35, 0.8, temp));
 
@@ -125,7 +125,7 @@ const fragmentShader = (octaves) => /* glsl */ `
   }
 `;
 
-// Reused across frames — allocating these per frame is how you get GC hitches.
+// Reused across frames. Allocating these per frame is how you get GC hitches.
 const _plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 const _ray = new THREE.Raycaster();
 const _hit = new THREE.Vector3();
@@ -194,7 +194,7 @@ export default function LavaField({
     m.position.y = damp(m.position.y, camera.position.y - drop, 6, dt);
 
     u.uTime.value = t;
-    // Noise domain offset by absolute depth — this is what makes it flow.
+    // Noise domain offset by absolute depth. This is what makes it flow.
     u.uFlow.value = -camera.position.y * 0.012 + t * 0.015;
     u.uIntensity.value = 0.95 + 0.45 * s;
     u.uSwell.value = 0.9 + 0.6 * s;
@@ -217,7 +217,7 @@ export default function LavaField({
         heat.current.z = damp(heat.current.z, _hit.z, 4.5, dt);
         heat.current.strength = damp(heat.current.strength, 1, 2.5, dt);
       } else {
-        // Cursor is above the horizon — cool off, don't teleport the bloom.
+        // Cursor is above the horizon, so cool off, don't teleport the bloom.
         heat.current.strength = damp(heat.current.strength, 0, 2, dt);
       }
     }
