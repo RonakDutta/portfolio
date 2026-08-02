@@ -43,8 +43,11 @@ function PortraitNiche({ src, alt, initials = "", reducedMotion = false }) {
     if (reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Emerging from the dark as the niche enters the viewport.
-      gsap.to(shroud.current, {
+      // Emerging from the dark as the niche enters the viewport. fromTo, not
+      // to: the shroud's resting state in CSS has to be transparent so that
+      // skipping this effect leaves the portrait visible rather than blacked
+      // out. GSAP paints it back in on mount and clears it on scroll.
+      gsap.fromTo(shroud.current, { opacity: 1 }, {
         opacity: 0,
         ease: "none",
         scrollTrigger: {
@@ -162,7 +165,7 @@ function PortraitNiche({ src, alt, initials = "", reducedMotion = false }) {
         <div
           ref={shroud}
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-void"
+          className="pointer-events-none absolute inset-0 bg-void opacity-0"
         />
       </div>
     </div>

@@ -67,3 +67,60 @@ export const arsenal = {
     { name: "Tools & Platforms", items: ["Git", "GitHub", "Postman", "Vercel", "NeonDB"] },
   ],
 };
+
+export const chambers = {
+  headline: "Chambers",
+  headlineSub: "what I have built",
+  lede: "Three rooms below, each one a thing that shipped and the work it took.",
+
+  /**
+   * Edit, reorder, add or delete freely. The section renders whatever is in
+   * this array, at any length, and the roman numerals renumber themselves.
+   *
+   *   name     required, the project title
+   *   kind     required, one line under the title
+   *   summary  required, a short paragraph
+   *   work     optional, what you actually did on it
+   *   stack    optional, tags along the bottom
+   *   links    optional, [{ label, href }]. Leave the array off entirely and
+   *            no links render, rather than dead buttons pointing nowhere.
+   */
+  projects: [
+    {
+      name: "Business 4.0",
+      kind: "Community meetup platform",
+      summary:
+        "A membership platform where members sign up, log in and RSVP to events, with a separate admin role for the organisers running them.",
+      work: [
+        "Built JWT authentication with a separate admin role for organisers.",
+        "Created an admin panel to add, edit and cancel events and upload images, with photos on Cloudinary and event data in PostgreSQL.",
+        "Automated the registration workflow with UPI payment proof verification, synchronising attendee seat allocations.",
+      ],
+      stack: ["React", "Node.js", "Express", "PostgreSQL", "Cloudinary"],
+    },
+    {
+      name: "SafarSaathi",
+      kind: "Cab booking application",
+      summary:
+        "A booking system with three distinct sides to it: customers hailing rides, drivers accepting them, and admins watching the fleet.",
+      work: [
+        "Implemented a multi-tier RBAC system managing separate authentication flows for admins, drivers and customers via JWT.",
+        "Built an admin dashboard for revenue tracking, plus fleet management with real-time driver assignment and automated WhatsApp confirmations.",
+        "Integrated Razorpay for payment processing and built the driver onboarding workflow end to end.",
+      ],
+      stack: ["React", "Node.js", "Express", "PostgreSQL", "Twilio", "Razorpay"],
+    },
+    {
+      name: "Descent",
+      kind: "This portfolio",
+      summary:
+        "The site you are reading. Six chambers and one continuous fall, with your scroll position driving every layer of the scene at once.",
+      work: [
+        "Built the scroll engine on Lenis and GSAP ScrollTrigger sharing a single animation loop, since separate loops are what make this kind of site stutter.",
+        "Kept scroll and pointer state out of React entirely, so scrolling never costs a rerender.",
+        "Falls back to a still, high-contrast layout for anyone who asks for reduced motion.",
+      ],
+      stack: ["React", "Vite", "Tailwind CSS", "GSAP"],
+    },
+  ],
+};

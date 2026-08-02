@@ -6,6 +6,7 @@ import HellCanvas from "./components/HellCanvas";
 import Gates from "./sections/Gates";
 import Fallen from "./sections/Fallen";
 import Arsenal from "./sections/Arsenal";
+import Chambers from "./sections/Chambers";
 
 export default function App() {
   const env = useEnvironment();
@@ -25,9 +26,10 @@ export default function App() {
         <Gates env={env} />
         <Fallen env={env} />
         <Arsenal env={env} />
+        <Chambers env={env} />
 
-        {/* Sections IV-VI still placeholders. */}
-        {SECTIONS.slice(3).map((s) => (
+        {/* Sections V-VI still placeholders. */}
+        {SECTIONS.slice(4).map((s) => (
           <section
             key={s.id}
             id={s.id}

@@ -61,7 +61,7 @@ function Fallen({ env }) {
         }}
       />
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] lg:gap-20">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:gap-28">
         <div className="fallen-rise">
           <PortraitNiche
             src={fallen.portrait}
