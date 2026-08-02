@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function useMediaQuery(query) {
   const [matches, setMatches] = useState(() =>
@@ -36,15 +36,19 @@ export function useEnvironment() {
       ? "mid"
       : tier;
 
-  return {
-    reducedMotion,
-    isMobile,
-    coarsePointer,
-    quality,
-    enable3D: !reducedMotion,
-    dpr: quality === "low" ? [1, 1] : quality === "mid" ? [1, 1.35] : [1, 1.75],
-    emberCount: quality === "low" ? 260 : quality === "mid" ? 900 : 2200,
-    lavaSegments: quality === "low" ? 32 : quality === "mid" ? 72 : 128,
-    fbmOctaves: quality === "low" ? 2 : quality === "mid" ? 3 : 5,
-  };
+  return useMemo(
+    () => ({
+      reducedMotion,
+      isMobile,
+      coarsePointer,
+      quality,
+      enable3D: !reducedMotion,
+      dpr:
+        quality === "low" ? [1, 1] : quality === "mid" ? [1, 1.35] : [1, 1.75],
+      emberCount: quality === "low" ? 260 : quality === "mid" ? 900 : 2200,
+      lavaSegments: quality === "low" ? 32 : quality === "mid" ? 72 : 128,
+      fbmOctaves: quality === "low" ? 2 : quality === "mid" ? 3 : 5,
+    }),
+    [reducedMotion, isMobile, coarsePointer, quality],
+  );
 }

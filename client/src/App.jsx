@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useEnvironment } from "./lib/useEnvironment";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { initPointer, SECTIONS } from "./lib/store";
+import HellCanvas from "./components/HellCanvas";
 
 export default function App() {
   const env = useEnvironment();
@@ -17,6 +18,8 @@ export default function App() {
       >
         Skip to content
       </a>
+
+      <HellCanvas env={env} />
 
       <main id="descent" className="relative z-10">
         {SECTIONS.map((s) => (
