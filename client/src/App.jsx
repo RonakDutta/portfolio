@@ -3,6 +3,7 @@ import { useEnvironment } from "./lib/useEnvironment";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { initPointer, SECTIONS } from "./lib/store";
 import HellCanvas from "./components/HellCanvas";
+import Gates from "./sections/Gates";
 
 export default function App() {
   const env = useEnvironment();
@@ -22,6 +23,7 @@ export default function App() {
       <HellCanvas env={env} />
 
       <main id="descent" className="relative z-10">
+        <Gates env={env} />
         {SECTIONS.map((s) => (
           <section
             key={s.id}
