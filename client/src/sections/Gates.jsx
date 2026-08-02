@@ -31,7 +31,8 @@ function Gates({ env }) {
           .timeline({ defaults: { ease: "expo.out" } })
           .from(".gate-rise", { yPercent: 120, opacity: 0, duration: 1.6, stagger: 0.12 })
           .from(".gate-ghost", { opacity: 0, scale: 1.12, duration: 2.2 }, 0.1)
-          .from(".gate-rule", { scaleX: 0, duration: 1.4 }, 0.5);
+          .from(".gate-rule", { scaleX: 0, duration: 1.4 }, 0.5)
+          .from(".gate-rail", { opacity: 0, duration: 1.8 }, 0.6);
       }
 
       // ── Parallax ────────────────────────────────────────────────────────
@@ -51,6 +52,7 @@ function Gates({ env }) {
       tl.to(arch.current, { yPercent: 12, scale: 1.14, ease: "none" }, 0);
       tl.to(content.current, { yPercent: -38, opacity: 0, ease: "none" }, 0);
       tl.to(cue.current, { opacity: 0, duration: 0.2, ease: "none" }, 0);
+      tl.to(".gate-rail", { opacity: 0, ease: "none" }, 0);
     }, section);
 
     return () => ctx.revert();
@@ -77,8 +79,38 @@ function Gates({ env }) {
         }}
       >
         <div ref={arch} className="absolute inset-x-0 -top-[2%] -bottom-[30%]">
-          <GateArch />
+          <GateArch narrow={env.isMobile} />
         </div>
+      </div>
+
+      {/* Carved into the piers, running bottom to top. This is where the
+          ghost word went: the piers are the one part of the frame that is
+          empty at every viewport, so an inscription here never has to fight
+          the lockup for width the way full-width type behind it did. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center sm:left-6"
+      >
+        <span className="gate-rail flex flex-col items-center gap-3">
+          <span className="h-10 w-px bg-gradient-to-b from-transparent to-ember/50 sm:h-16" />
+          <span className="text-engraved rotate-180 font-display text-[0.6rem] font-bold tracking-[0.55em] text-brimstone/60 uppercase [writing-mode:vertical-rl] sm:text-[0.72rem]">
+            {gates.ghost}
+          </span>
+          <span className="h-10 w-px bg-gradient-to-t from-transparent to-ember/50 sm:h-16" />
+        </span>
+      </div>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-3 z-10 flex items-center sm:right-6"
+      >
+        <span className="gate-rail flex flex-col items-center gap-3">
+          <span className="h-10 w-px bg-gradient-to-b from-transparent to-ember/50 sm:h-16" />
+          <span className="text-engraved font-display text-[0.6rem] font-bold tracking-[0.55em] text-brimstone/60 uppercase [writing-mode:vertical-rl] sm:text-[0.72rem]">
+            {gates.mark}
+          </span>
+          <span className="h-10 w-px bg-gradient-to-t from-transparent to-ember/50 sm:h-16" />
+        </span>
       </div>
 
       <Chains triggerRef={section} reducedMotion={env.reducedMotion} />
@@ -113,14 +145,19 @@ function Gates({ env }) {
           <span className="h-px flex-1 bg-gradient-to-l from-transparent to-ember/60" />
         </div>
 
-        {/* The lockup. The ghost word sits behind it for depth. */}
+        {/* The lockup. Nothing is set behind it any more: a full-width ghost
+            word has no width left to give once the viewport narrows, so it ends
+            up printed through the name. The word moved to the piers instead,
+            where there is always empty stone and never a collision. */}
         <div className="relative">
           <span
             aria-hidden="true"
-            className="gate-ghost text-outline-ember-strong pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[clamp(3rem,15vw,16rem)] leading-none font-black tracking-[0.06em] opacity-40 select-none"
-          >
-            {gates.ghost}
-          </span>
+            className="gate-bloom pointer-events-none absolute inset-0 -z-10 scale-150"
+            style={{
+              background:
+                "radial-gradient(50% 50% at 50% 50%, rgba(255,77,0,0.20) 0%, rgba(255,77,0,0.07) 45%, transparent 72%)",
+            }}
+          />
 
           <h1 id="gates-title" className="relative">
             {/* One clean string for assistive tech; the split lines below are
@@ -129,25 +166,27 @@ function Gates({ env }) {
               {identity.name}, {identity.role} from {identity.region}
             </span>
             <span aria-hidden="true" className="block overflow-hidden">
-              <span className="gate-rise text-molten block font-display text-[clamp(2.2rem,9vw,11rem)] leading-[0.86] font-black tracking-[-0.01em]">
+              <span className="gate-rise text-molten block font-display text-[clamp(3.2rem,9vw,11rem)] leading-[0.86] font-black tracking-[-0.01em]">
                 {identity.given}
               </span>
             </span>
             <span aria-hidden="true" className="block overflow-hidden">
-              <span className="gate-rise text-molten block font-display text-[clamp(2.2rem,9vw,11rem)] leading-[0.86] font-black tracking-[-0.01em]">
+              <span className="gate-rise text-molten block font-display text-[clamp(3.2rem,9vw,11rem)] leading-[0.86] font-black tracking-[-0.01em]">
                 {identity.family}
               </span>
             </span>
           </h1>
         </div>
 
+        {/* Two lines on a phone. Set on one line at this tracking, the phrase
+            wraps wherever it runs out of room and splits "New Delhi" in half. */}
         <div className="overflow-hidden">
-          <p className="gate-rise mt-7 font-display text-[0.7rem] tracking-[0.42em] text-parchment uppercase sm:text-xs">
-            {identity.role}
-            <span aria-hidden="true" className="mx-3 text-ember">
+          <p className="gate-rise mt-6 flex flex-col items-center gap-1 font-display text-[0.62rem] tracking-[0.3em] text-parchment uppercase sm:mt-7 sm:flex-row sm:justify-center sm:gap-0 sm:text-xs sm:tracking-[0.42em]">
+            <span>{identity.role}</span>
+            <span aria-hidden="true" className="hidden text-ember sm:mx-3 sm:inline">
               ✦
             </span>
-            {identity.location}
+            <span>{identity.location}</span>
           </p>
         </div>
 
@@ -155,14 +194,16 @@ function Gates({ env }) {
           {gates.tagline}
         </p>
 
-        <div className="gate-rise mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="gate-rise mx-auto mt-8 flex w-full max-w-xs flex-col items-stretch gap-3 sm:mt-10 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:justify-center sm:gap-4">
           <MoltenButton
+            className="justify-center"
             reducedMotion={env.reducedMotion}
             onClick={() => scrollToSection(gates.cta.target)}
           >
             {gates.cta.label}
           </MoltenButton>
           <MoltenButton
+            className="justify-center"
             variant="ghost"
             reducedMotion={env.reducedMotion}
             onClick={() => scrollToSection(gates.secondary.target)}

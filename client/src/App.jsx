@@ -3,6 +3,7 @@ import { useEnvironment } from "./lib/useEnvironment";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { initPointer } from "./lib/store";
 import HellCanvas from "./components/HellCanvas";
+import StoneNav from "./components/nav/StoneNav";
 import Gates from "./sections/Gates";
 import Fallen from "./sections/Fallen";
 import Arsenal from "./sections/Arsenal";
@@ -21,6 +22,8 @@ export default function App() {
       <a href="#gates" className="sr-focusable bg-obsidian text-bone px-4 py-2 font-display">
         Skip to content
       </a>
+
+      <StoneNav />
 
       <HellCanvas env={env} />
 

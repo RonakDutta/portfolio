@@ -37,17 +37,21 @@ const JOINTS = [
 
 const W = 1600;
 const H = 900;
-
-// The opening, as a share of the frame. 45% wide leaves the lockup room to sit
-// between the piers at every viewport this has to hold up on.
-const OPEN_L = 440;
-const OPEN_R = 1160;
 const SPRING = 340; // where the arch leaves the piers
 const APEX_Y = 72; // high enough to read as a point, low enough to stay on screen
 
-const APEX_X = (OPEN_L + OPEN_R) / 2;
-const HALF = (OPEN_R - OPEN_L) / 2;
-const RISE = SPRING - APEX_Y;
+/**
+ * The opening, as a share of the frame.
+ *
+ * Wider on a phone. The opening is a fixed percentage of the viewport, so 45%
+ * of a 1900px screen is generous and 45% of a 390px one is 175px, which is
+ * narrower than the name set at any size worth reading. The piers give up the
+ * width because at that size there is no pier detail to see anyway.
+ */
+const OPENINGS = {
+  wide: { l: 440, r: 1160 },
+  narrow: { l: 300, r: 1300 },
+};
 
 /**
  * Two-centred arch. Both centres sit on the springline, offset D either side of
@@ -55,21 +59,28 @@ const RISE = SPRING - APEX_Y;
  * and still meet at a true point. D falls out of requiring one radius to reach
  * both its own springer and the apex.
  */
-const D = (RISE * RISE - HALF * HALF) / (2 * HALF);
-const R = HALF + D;
+function geometry({ l, r }) {
+  const apexX = (l + r) / 2;
+  const half = (r - l) / 2;
+  const rise = SPRING - APEX_Y;
+  const d = (rise * rise - half * half) / (2 * half);
+  const radius = half + d;
 
-const ARCS = [
-  `A${R},${R} 0 0,1 ${APEX_X},${APEX_Y}`,
-  `A${R},${R} 0 0,1 ${OPEN_R},${SPRING}`,
-].join(" ");
+  const arcs = [
+    `A${radius},${radius} 0 0,1 ${apexX},${APEX_Y}`,
+    `A${radius},${radius} 0 0,1 ${r},${SPRING}`,
+  ].join(" ");
 
-/** Wall with the arch removed. */
-const WALL = `M0,0 H${W} V${H} H0 Z M${OPEN_L},${H} V${SPRING} ${ARCS} V${H} Z`;
+  return {
+    wall: `M0,0 H${W} V${H} H0 Z M${l},${H} V${SPRING} ${arcs} V${H} Z`,
+    reveal: `M${l},${H} V${SPRING} ${arcs} V${H}`,
+  };
+}
 
-/** The inner edge of the opening, traced for the glow rim. */
-const REVEAL = `M${OPEN_L},${H} V${SPRING} ${ARCS} V${H}`;
+const PATHS = { wide: geometry(OPENINGS.wide), narrow: geometry(OPENINGS.narrow) };
 
-function GateArch({ className = "" }) {
+function GateArch({ className = "", narrow = false }) {
+  const { wall: WALL, reveal: REVEAL } = PATHS[narrow ? "narrow" : "wide"];
   // Scoped ids so a second instance can never steal this one's gradients.
   const uid = useId().replace(/:/g, "");
   const stone = `stone-${uid}`;

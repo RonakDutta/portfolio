@@ -18,8 +18,10 @@ export const identity = {
 export const gates = {
   /** Blackletter eyebrow above the lockup. Dante, via the obvious route. */
   eyebrow: "Abandon all hope, ye who enter",
-  /** Ghosted word set behind the name for depth. */
+  /** Carved down the left pier of the gate. */
   ghost: "INFERNO",
+  /** Carved down the right pier. Roman year, as a foundation stone would be. */
+  mark: "MMXXVI",
   tagline:
     "Six chambers below, a record of everything built, broken and rebuilt. Descend at your own pace.",
   cta: { label: "Begin the Descent", target: "fallen" },
