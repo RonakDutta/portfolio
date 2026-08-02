@@ -53,3 +53,17 @@ export const fallen = {
     { term: "Studying", value: "B.Tech Industrial IoT, GGSIPU" },
   ],
 };
+
+export const arsenal = {
+  headline: "Arsenal",
+  headlineSub: "what I build with",
+  lede: "The tools I reach for, grouped by where they sit in the stack.",
+
+  racks: [
+    { name: "Languages", items: ["JavaScript (ES6+)", "C/C++", "SQL", "Python", "Java"] },
+    { name: "Front-End", items: ["React.js", "Next.js", "Tailwind CSS", "Redux"] },
+    { name: "Back-End", items: ["Node.js", "Express.js"] },
+    { name: "Databases", items: ["MongoDB", "PostgreSQL", "MySQL"] },
+    { name: "Tools & Platforms", items: ["Git", "GitHub", "Postman", "Vercel", "NeonDB"] },
+  ],
+};

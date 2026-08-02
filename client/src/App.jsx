@@ -5,6 +5,7 @@ import { initPointer, SECTIONS } from "./lib/store";
 import HellCanvas from "./components/HellCanvas";
 import Gates from "./sections/Gates";
 import Fallen from "./sections/Fallen";
+import Arsenal from "./sections/Arsenal";
 
 export default function App() {
   const env = useEnvironment();
@@ -23,9 +24,10 @@ export default function App() {
       <main id="descent" className="relative z-10">
         <Gates env={env} />
         <Fallen env={env} />
+        <Arsenal env={env} />
 
-        {/* Sections III-VI still placeholders. */}
-        {SECTIONS.slice(2).map((s) => (
+        {/* Sections IV-VI still placeholders. */}
+        {SECTIONS.slice(3).map((s) => (
           <section
             key={s.id}
             id={s.id}

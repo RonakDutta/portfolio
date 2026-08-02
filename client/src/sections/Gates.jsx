@@ -94,7 +94,13 @@ function Gates({ env }) {
         }}
       />
 
-      <div ref={content} className="relative mx-auto w-full max-w-5xl px-6 text-center">
+      {/* max-w-3xl keeps the lockup inside the arch springers, and the bottom
+          padding stops centred content colliding with the scroll cue on
+          short viewports. */}
+      <div
+        ref={content}
+        className="relative mx-auto w-full max-w-3xl px-6 pb-20 text-center sm:pb-24"
+      >
         <div className="overflow-hidden">
           <p className="gate-rise font-blackletter text-brimstone/85 text-base sm:text-xl">
             {gates.eyebrow}
@@ -111,7 +117,7 @@ function Gates({ env }) {
         <div className="relative">
           <span
             aria-hidden="true"
-            className="gate-ghost text-outline-ember pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[22vw] leading-none font-black tracking-[0.08em] opacity-25 select-none"
+            className="gate-ghost text-outline-ember pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[17vw] leading-none font-black tracking-[0.08em] opacity-25 select-none"
           >
             {gates.ghost}
           </span>
@@ -123,12 +129,12 @@ function Gates({ env }) {
               {identity.name}, {identity.role} from {identity.region}
             </span>
             <span aria-hidden="true" className="block overflow-hidden">
-              <span className="gate-rise text-molten block font-display text-[clamp(2.75rem,12vw,10rem)] leading-[0.86] font-black tracking-[-0.01em]">
+              <span className="gate-rise text-molten block font-display text-[clamp(2.4rem,10vw,12rem)] leading-[0.86] font-black tracking-[-0.01em]">
                 {identity.given}
               </span>
             </span>
             <span aria-hidden="true" className="block overflow-hidden">
-              <span className="gate-rise text-molten block font-display text-[clamp(2.75rem,12vw,10rem)] leading-[0.86] font-black tracking-[-0.01em]">
+              <span className="gate-rise text-molten block font-display text-[clamp(2.4rem,10vw,12rem)] leading-[0.86] font-black tracking-[-0.01em]">
                 {identity.family}
               </span>
             </span>
