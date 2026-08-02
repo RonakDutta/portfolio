@@ -1,1 +1,174 @@
 @import "tailwindcss";
+
+@theme {
+  --color-void: #05030a;
+  --color-ash: #0b0810;
+  --color-obsidian: #141019;
+  --color-iron: #241d29;
+  --color-smoke: #6b6270;
+  --color-bone: #ddd3c4;
+  --color-parchment: #a89a86;
+
+  --color-ember: #ff4d00;
+  --color-brimstone: #ff8a1f;
+  --color-hellfire: #ffc061;
+  --color-blood: #8b0f16;
+  --color-soul: #4de0ff;
+
+  --font-display: "Cinzel", ui-serif, Georgia, "Times New Roman", serif;
+  --font-blackletter: "UnifrakturMaguntia", "Cinzel", ui-serif, serif;
+  --font-body: "Cormorant Garamond", ui-serif, Georgia, serif;
+
+  --ease-descent: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    background: var(--color-void);
+    scroll-behavior: auto;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-void);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    line-height: 1.65;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brimstone);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-ember);
+    color: var(--color-void);
+  }
+}
+
+@utility text-molten {
+  background: linear-gradient(
+    180deg,
+    #fff3d6 0%,
+    var(--color-hellfire) 28%,
+    var(--color-ember) 62%,
+    #6d1c05 88%,
+    #2a0d05 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility text-carved {
+  color: #2a2028;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.9),
+    0 -1px 1px rgba(255, 138, 31, 0.18);
+}
+
+@utility text-outline-ember {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 122, 24, 0.5);
+}
+
+@utility sr-focusable {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  z-index: 200;
+  transform: translateY(-250%);
+  transition: transform 0.25s var(--ease-descent);
+  &:focus-visible {
+    transform: translateY(0);
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.82;
+  }
+  45% {
+    opacity: 0.98;
+  }
+  52% {
+    opacity: 0.72;
+  }
+  56% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 0.88;
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-8%, -4%, 0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.06);
+  }
+}
+
+.animate-flicker {
+  animation: flicker 5s steps(1, end) infinite;
+}
+.animate-drift {
+  animation: drift 24s ease-in-out infinite alternate;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
