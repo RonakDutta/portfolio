@@ -48,7 +48,7 @@ function Fallen({ env }) {
       id="fallen"
       ref={section}
       aria-labelledby="fallen-title"
-      className="relative isolate flex min-h-screen items-center py-28 sm:py-36"
+      className="relative isolate flex min-h-screen items-center py-28 sm:py-36 overflow-x-clip"
     >
       {/* Copy floor. The lava runs hot behind this section too, and body text
           needs a darker ground than a heading does to stay comfortable. */}

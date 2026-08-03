@@ -22,7 +22,7 @@ export default function App() {
     <>
       <a
         href="#gates"
-        className="sr-focusable bg-obsidian text-bone px-4 py-2 font-display"
+        className="sr-focusable inline-flex min-h-11 items-center bg-obsidian px-4 font-display text-bone"
       >
         Skip to content
       </a>

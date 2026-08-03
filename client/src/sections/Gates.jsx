@@ -191,7 +191,7 @@ function Gates({ env }) {
         {/* Two lines on a phone. Set on one line at this tracking, the phrase
             wraps wherever it runs out of room and splits "New Delhi" in half. */}
         <div className="overflow-hidden">
-          <p className="gate-rise mt-6 flex flex-col items-center gap-1 font-display text-[0.62rem] tracking-[0.3em] text-parchment uppercase sm:mt-7 sm:flex-row sm:justify-center sm:gap-0 sm:text-xs sm:tracking-[0.42em]">
+          <p className="gate-rise mt-6 flex flex-col items-center gap-1 font-display text-[0.68rem] tracking-[0.26em] text-parchment uppercase sm:mt-7 sm:flex-row sm:justify-center sm:gap-0 sm:text-xs sm:tracking-[0.42em]">
             <span>{identity.role}</span>
             <span
               aria-hidden="true"

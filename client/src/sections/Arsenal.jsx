@@ -69,7 +69,7 @@ function Arsenal({ env }) {
       id="arsenal"
       ref={section}
       aria-labelledby="arsenal-title"
-      className="relative isolate flex min-h-screen items-center py-28 sm:py-36"
+      className="relative isolate flex min-h-screen items-center py-28 sm:py-36 overflow-x-clip"
     >
       {/* Copy floor. */}
       <div

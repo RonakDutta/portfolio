@@ -37,9 +37,6 @@ const JOINTS = [
 
 const W = 1600;
 const H = 900;
-const SPRING = 340; // where the arch leaves the piers
-const APEX_Y = 72; // high enough to read as a point, low enough to stay on screen
-
 /**
  * The opening, as a share of the frame.
  *

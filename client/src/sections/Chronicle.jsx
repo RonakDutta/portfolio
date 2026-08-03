@@ -77,7 +77,7 @@ function Chronicle({ env }) {
       id="chronicle"
       ref={section}
       aria-labelledby="chronicle-title"
-      className="relative isolate py-28 sm:py-36"
+      className="relative isolate py-28 sm:py-36 overflow-x-clip"
     >
       <div
         aria-hidden="true"
@@ -130,7 +130,7 @@ function Chronicle({ env }) {
                 <span className="h-1.5 w-1.5 bg-ember" />
               </span>
 
-              <p className="font-display text-[0.62rem] tracking-[0.32em] text-ember uppercase">
+              <p className="font-display text-[0.7rem] tracking-[0.28em] text-ember uppercase sm:text-[0.62rem] sm:tracking-[0.32em]">
                 {entry.period}
                 <span aria-hidden="true" className="mx-2 text-iron">
                   /

@@ -42,7 +42,7 @@ function Chambers({ env }) {
       id="chambers"
       ref={section}
       aria-labelledby="chambers-title"
-      className="relative isolate py-28 sm:py-36"
+      className="relative isolate py-28 sm:py-36 overflow-x-clip"
     >
       <div
         aria-hidden="true"

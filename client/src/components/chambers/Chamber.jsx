@@ -76,7 +76,7 @@ function Chamber({ project, index, reducedMotion = false }) {
 
       <div className="relative grid gap-8 p-8 sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:gap-12">
         <div>
-          <p className="chamber-line font-display text-[0.6rem] tracking-[0.36em] text-ember uppercase">
+          <p className="chamber-line font-display text-[0.7rem] tracking-[0.28em] text-ember uppercase sm:text-[0.6rem] sm:tracking-[0.36em]">
             Chamber {ROMAN[index] ?? index + 1}
           </p>
 
@@ -123,14 +123,14 @@ function Chamber({ project, index, reducedMotion = false }) {
                   href={link.href}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="group/link relative font-display text-[0.65rem] font-bold
-                    tracking-[0.24em] text-hellfire uppercase transition-colors
-                    hover:text-bone"
+                  className="group/link relative inline-flex min-h-11 items-center
+                    font-display text-[0.68rem] font-bold tracking-[0.24em] text-hellfire
+                    uppercase transition-colors hover:text-bone"
                 >
                   {link.label}
                   <span
                     aria-hidden="true"
-                    className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-100
+                    className="absolute bottom-2 left-0 h-px w-full origin-left scale-x-100
                       bg-ember transition-transform duration-300 group-hover/link:scale-x-0"
                   />
                 </a>

@@ -41,16 +41,19 @@ function Chain({ x, links, breakAt, drift, scale = 1, registry }) {
 
   // Hand the refs up so the parent can build one timeline for every chain.
   useLayoutEffect(() => {
+    // Captured now, so cleanup splices the same array this pushed into even if
+    // the parent has since swapped the ref.
+    const list = registry.current;
     const entry = {
       upper: upper.current,
       lower: lower.current,
       spark: spark.current,
       drift,
     };
-    registry.current.push(entry);
+    list.push(entry);
     return () => {
-      const i = registry.current.indexOf(entry);
-      if (i > -1) registry.current.splice(i, 1);
+      const i = list.indexOf(entry);
+      if (i > -1) list.splice(i, 1);
     };
   }, [registry, drift]);
 

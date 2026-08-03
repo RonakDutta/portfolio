@@ -18,15 +18,11 @@ gsap.registerPlugin(ScrollTrigger);
  * approach, not to the section, which is why it is driven off the section's top
  * edge crossing the bottom of the viewport.
  *
- * The shake lands on the same beat and is deliberately small. Two pixels sold
- * as weight; any more and it reads as a broken transform.
- *
  * No contact form. A form with nothing behind it looks like it sent and did
  * not, and that is a worse first impression than a plain link.
  */
 function Summoning({ env }) {
   const section = useRef(null);
-  const stage = useRef(null);
   const [copied, setCopied] = useState("");
 
   useLayoutEffect(() => {
@@ -52,16 +48,6 @@ function Summoning({ env }) {
         },
       );
 
-      // A short shake as it opens, then it settles.
-      gsap
-        .timeline({
-          scrollTrigger: { trigger: section.current, start: "top 62%" },
-        })
-        .to(stage.current, {
-          keyframes: { x: [0, -3, 3, -2, 2, 0], y: [0, 2, -2, 1, -1, 0] },
-          duration: 0.5,
-          ease: "power2.out",
-        });
 
       gsap.from(".summon-rise", {
         y: 44,
@@ -116,7 +102,7 @@ function Summoning({ env }) {
 
       <EmberField count={18} reducedMotion={env.reducedMotion} className="-z-10" />
 
-      <div ref={stage} className="relative mx-auto w-full max-w-3xl px-6 pt-14 sm:pt-20">
+      <div className="relative mx-auto w-full max-w-3xl px-6 pt-14 sm:pt-20">
         <div className="relative text-center">
           <SectionMark
             roman="VI"
@@ -172,10 +158,11 @@ function Summoning({ env }) {
             {summoning.channels.map((channel) => (
               <li
                 key={channel.label}
-                className="surface-forged flex items-center justify-between gap-4 border
-                  border-iron/80 bg-obsidian/70 px-4 py-3 text-left"
+                className="surface-forged flex flex-wrap items-center gap-x-4 gap-y-1 border
+                  border-iron/80 bg-obsidian/70 px-4 py-2 text-left sm:flex-nowrap
+                  sm:justify-between sm:py-3"
               >
-                <span className="font-display text-[0.58rem] tracking-[0.3em] text-ember uppercase">
+                <span className="font-display text-[0.62rem] tracking-[0.3em] text-ember uppercase">
                   {channel.label}
                 </span>
 
@@ -183,7 +170,8 @@ function Summoning({ env }) {
                   href={channel.href}
                   target={channel.href.startsWith("http") ? "_blank" : undefined}
                   rel={channel.href.startsWith("http") ? "noreferrer noopener" : undefined}
-                  className="flex-1 truncate text-right text-bone transition-colors hover:text-hellfire"
+                  className="flex min-h-11 flex-1 items-center truncate text-bone
+                    transition-colors hover:text-hellfire sm:justify-end sm:text-right"
                 >
                   {channel.value}
                 </a>
@@ -192,8 +180,9 @@ function Summoning({ env }) {
                   <button
                     type="button"
                     onClick={() => copy(channel.value)}
-                    className="font-display text-[0.55rem] tracking-[0.2em] text-parchment/70
-                      uppercase transition-colors hover:text-hellfire"
+                    className="flex min-h-11 min-w-11 items-center justify-center font-display
+                      text-[0.6rem] tracking-[0.2em] text-parchment/70 uppercase
+                      transition-colors hover:text-hellfire"
                   >
                     {/* Announced politely so a screen reader hears it happened. */}
                     <span aria-hidden="true">{copied === channel.value ? "Copied" : "Copy"}</span>
@@ -212,7 +201,7 @@ function Summoning({ env }) {
             {copied ? "Copied to clipboard" : ""}
           </p>
 
-          <p className="summon-rise mt-14 font-display text-[0.6rem] tracking-[0.36em] text-smoke uppercase">
+          <p className="summon-rise mt-14 font-display text-[0.7rem] tracking-[0.26em] text-smoke uppercase sm:text-[0.6rem] sm:tracking-[0.36em]">
             {summoning.closing}
             <span aria-hidden="true" className="mx-3 text-ember">
               ✦

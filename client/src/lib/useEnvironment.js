@@ -1,19 +1,28 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 
+/**
+ * Reactive `matchMedia`, as an external store rather than state plus an effect.
+ *
+ * matchMedia is exactly what useSyncExternalStore is for: a value that lives
+ * outside React and notifies on change. Reading it into state and syncing in an
+ * effect costs a second render on every mount and can tear during a concurrent
+ * render. This has neither problem, and needs no effect at all.
+ */
 function useMediaQuery(query) {
-  const [matches, setMatches] = useState(() =>
-    typeof window === "undefined" ? false : window.matchMedia(query).matches,
+  const subscribe = useCallback(
+    (onChange) => {
+      const mql = window.matchMedia(query);
+      mql.addEventListener("change", onChange);
+      return () => mql.removeEventListener("change", onChange);
+    },
+    [query],
   );
 
-  useEffect(() => {
-    const mql = window.matchMedia(query);
-    const onChange = (e) => setMatches(e.matches);
-    setMatches(mql.matches);
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, [query]);
+  const getSnapshot = useCallback(() => window.matchMedia(query).matches, [query]);
 
-  return matches;
+  // Server snapshot: assume the roomier branch, since a desktop layout
+  // degrades more gracefully on a phone than the reverse.
+  return useSyncExternalStore(subscribe, getSnapshot, () => false);
 }
 
 export function useEnvironment() {

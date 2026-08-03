@@ -30,6 +30,12 @@
   html {
     background: var(--color-void);
     scroll-behavior: auto;
+    /* clip, not hidden. Decorative layers get scaled past their box all over
+       this page (arch parallax, pulsing glows, drifting embers) and any one of
+       them pushing the document a few pixels wide gives a phone a sideways
+       scroll. `clip` stops that without making the root a scroll container,
+       which `hidden` would, and which breaks position: sticky underneath it. */
+    overflow-x: clip;
   }
 
   body {
@@ -38,7 +44,7 @@
     font-family: var(--font-body);
     font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
     line-height: 1.65;
-    overflow-x: hidden;
+    overflow-x: clip;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
@@ -62,6 +68,17 @@
     outline: 2px solid var(--color-brimstone);
     outline-offset: 3px;
     border-radius: 2px;
+  }
+
+  /* Sections receive focus when a chapter is chosen, so a keyboard user lands
+     inside the section rather than back in the nav. They are containers, not
+     controls, so they get the scroll margin but not the ring. */
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  section[id]:focus {
+    outline: none;
   }
 
   ::selection {

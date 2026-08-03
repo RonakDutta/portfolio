@@ -14,6 +14,10 @@ import { identity } from "../../data/content";
  * The slab itself is drawn with layered gradients rather than an image: a lit
  * top edge, a shadowed base, and a masonry joint pattern in a repeating
  * gradient. No network request, no decode, and it tints with the theme.
+ *
+ * Every control carries min-h-11. A 34px chapter row is comfortable with a
+ * mouse and a coin-toss with a thumb, and this is the one piece of chrome that
+ * is on screen for the whole descent.
  */
 
 /** Masonry: a lit top edge, a dark base, and vertical joints struck into it. */
@@ -33,9 +37,9 @@ function ChapterButton({ section, active, onSelect, compact = false }) {
         type="button"
         onClick={() => onSelect(section.id)}
         aria-current={active ? "true" : undefined}
-        className={`group relative flex items-baseline gap-2 px-3 py-2 font-display
+        className={`group relative flex min-h-11 items-center gap-2 px-3 py-2 font-display
           text-[0.6rem] font-bold tracking-[0.24em] uppercase transition-colors duration-300
-          ${compact ? "w-full justify-start text-[0.7rem]" : ""}
+          ${compact ? "w-full justify-start text-[0.72rem]" : ""}
           ${active ? "text-hellfire" : "text-parchment/65 hover:text-bone"}`}
       >
         <span
@@ -126,7 +130,7 @@ function StoneNav() {
           <button
             type="button"
             onClick={() => select(SECTIONS[0].id)}
-            className="group flex items-center gap-2.5 font-display text-[0.7rem] font-black tracking-[0.22em] text-bone uppercase"
+            className="group -ml-2 flex min-h-11 min-w-11 items-center gap-2.5 px-2.5 font-display text-[0.7rem] font-black tracking-[0.22em] text-bone uppercase"
           >
             <span
               aria-hidden="true"
@@ -169,8 +173,8 @@ function StoneNav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="chapter-panel"
-              className="flex items-center gap-2 border border-iron/80 px-3 py-2 font-display
-                text-[0.58rem] font-bold tracking-[0.24em] text-parchment uppercase
+              className="flex min-h-11 items-center gap-2 border border-iron/80 px-3.5 py-2 font-display
+                text-[0.6rem] font-bold tracking-[0.24em] text-parchment uppercase
                 transition-colors duration-300 hover:border-ember/60 hover:text-hellfire lg:hidden"
             >
               {open ? "Close" : "Chapters"}

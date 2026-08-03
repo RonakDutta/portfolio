@@ -1,6 +1,6 @@
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { DESCENT_START_Y } from "../three/CameraRig";
+import { DESCENT_START_Y } from "../three/descent";
 
 // three.js lands in its own chunk and is fetched only once the DOM has painted.
 const Scene = lazy(() => import("../three/Scene"));

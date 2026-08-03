@@ -1,3 +1,10 @@
+/* eslint-disable react-hooks/immutability --
+   Every write in this file happens inside useFrame, which runs outside React's
+   render phase on the renderer's own loop. Mutating the camera and memoised
+   uniform objects there is the documented react-three-fiber pattern and the
+   whole point of the mutable frame store: routing any of it through state
+   would re-render the tree on every frame. Scoped to this file rather than
+   turned off in the config, because anywhere else the rule is right. */
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
