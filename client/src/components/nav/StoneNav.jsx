@@ -138,7 +138,7 @@ function StoneNav() {
                 bg-gradient-to-br from-[#241d29] to-[#0d0913] transition-colors duration-300
                 group-hover:border-hellfire"
             >
-              <span className="flex h-full w-full -rotate-45 items-center justify-center text-[0.55rem] font-black leading-none text-hellfire select-none">
+              <span className="flex h-full w-full -rotate-45 items-center justify-center text-[0.62rem] font-black leading-none text-hellfire select-none">
                 {identity.initials}
               </span>
             </span>

@@ -7,7 +7,7 @@ export const identity = {
   name: "Ronak Dutta",
   given: "Ronak",
   family: "Dutta",
-  initials: "RD",
+  initials: "R",
   role: "Software Engineer",
   location: "New Delhi",
   region: "New Delhi, India",
