@@ -135,29 +135,28 @@ function PortraitNiche({ src, alt, initials = "", reducedMotion = false }) {
             decoding="async"
             onError={() => setFailed(true)}
             className="absolute inset-0 h-full w-full object-cover"
-            // Graded to belong here: colour pulled back, contrast lifted, warmed.
-            style={{ filter: "grayscale(0.45) contrast(1.18) sepia(0.28) brightness(0.88)" }}
+            // Bright, clear and vibrant portrait grading.
+            style={{ filter: "brightness(1.05) contrast(1.08) sepia(0.10)" }}
           />
         )}
 
-        {/* Uplight from the lava below. `screen` adds light rather than
-            tinting, so the highlights warm without the shadows going muddy. */}
+        {/* Soft warm uplight from the lava below. */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 mix-blend-screen"
           style={{
             background:
-              "linear-gradient(to top, rgba(255,77,0,0.42) 0%, rgba(255,138,31,0.14) 26%, transparent 58%)",
+              "linear-gradient(to top, rgba(255,77,0,0.25) 0%, rgba(255,138,31,0.08) 22%, transparent 50%)",
           }}
         />
 
-        {/* Shadow gathering in the top corners, under the arch. */}
+        {/* Soft shadow in upper arch corners. */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(110% 70% at 50% 100%, transparent 35%, rgba(5,3,10,0.72) 100%)",
+              "radial-gradient(120% 80% at 50% 100%, transparent 60%, rgba(5,3,10,0.35) 100%)",
           }}
         />
 
