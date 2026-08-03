@@ -40,7 +40,7 @@ function ChapterButton({ section, active, onSelect, compact = false }) {
         className={`group relative flex min-h-11 items-center gap-2 px-3 py-2 font-display
           text-[0.6rem] font-bold tracking-[0.24em] uppercase transition-colors duration-300
           ${compact ? "w-full justify-start text-[0.72rem]" : ""}
-          ${active ? "text-hellfire" : "text-parchment/65 hover:text-bone"}`}
+          ${active ? "text-hellfire" : "text-parchment/85 hover:text-bone"}`}
       >
         <span
           aria-hidden="true"

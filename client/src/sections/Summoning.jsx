@@ -49,6 +49,17 @@ function Summoning({ env }) {
       );
 
 
+      // The portal landing, felt rather than seen. Desktop only, for the same
+      // reason as the camera: a thumb flick makes this read as breakage.
+      if (!env.coarsePointer && !env.isMobile) {
+        gsap.to(".summon-stage", {
+          keyframes: { x: [0, -3, 3, -2, 2, 0], y: [0, 2, -2, 1, -1, 0] },
+          duration: 0.5,
+          ease: "power2.out",
+          scrollTrigger: { trigger: section.current, start: "top 62%" },
+        });
+      }
+
       gsap.from(".summon-rise", {
         y: 44,
         opacity: 0,
@@ -68,7 +79,7 @@ function Summoning({ env }) {
     }, section);
 
     return () => ctx.revert();
-  }, [env.reducedMotion]);
+  }, [env.reducedMotion, env.coarsePointer, env.isMobile]);
 
   const copy = async (value) => {
     try {
@@ -102,7 +113,7 @@ function Summoning({ env }) {
 
       <EmberField count={18} reducedMotion={env.reducedMotion} className="-z-10" />
 
-      <div className="relative mx-auto w-full max-w-3xl px-6 pt-14 sm:pt-20">
+      <div className="summon-stage relative mx-auto w-full max-w-3xl px-6 pt-14 sm:pt-20">
         <div className="relative text-center">
           <SectionMark
             roman="VI"
@@ -119,7 +130,27 @@ function Summoning({ env }) {
             </span>
           </h2>
 
-          <p className="summon-rise mx-auto mt-6 max-w-md text-parchment/90">{summoning.lede}</p>
+          {/* The ward's strokes run straight through this line and measured as
+              low as 1.3:1 against it. Layering alone cannot fix that: the
+              strokes are still behind the glyphs whatever the z-order. It needs
+              an actual plate. Both children are positioned, so document order
+              decides: plate first, text after, and the text wins. */}
+          <p className="summon-rise relative mx-auto mt-6 max-w-md text-parchment">
+            <span
+              aria-hidden="true"
+              className="absolute -inset-x-10 -inset-y-6"
+              style={{
+                // A gradient, not a blurred rounded box. An ellipse leaves the
+                // paragraph's corners uncovered and a 16px blur eats its own
+                // top and bottom edges, which is exactly where the ascenders
+                // are. This is opaque across the whole text box and fades out
+                // past it, and costs no filter.
+                background:
+                  "radial-gradient(78% 96% at 50% 50%, rgba(5,3,10,0.98) 0%, rgba(5,3,10,0.95) 62%, rgba(5,3,10,0.7) 84%, transparent 100%)",
+              }}
+            />
+            <span className="relative">{summoning.lede}</span>
+          </p>
 
           <div className="summon-rise relative mt-10 flex justify-center">
             {/* The portal rings, rushing past on the way in, perfectly concentric with the circle! */}
@@ -139,12 +170,19 @@ function Summoning({ env }) {
             </div>
 
             {/* The circle sits centered directly behind the SEND WORD button. Proportioned on mobile. */}
+            {/* -z-10 matters. Without it the circle is a later sibling with auto
+                z-index, so it painted over the copy above it and its strokes
+                crossed the lede at 1.3:1. It is decoration; it belongs behind
+                everything in the section, which the section's isolate scopes. */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-1/2 aspect-square w-[min(88vw,24rem)] sm:w-[38rem]
+              className="pointer-events-none absolute top-1/2 left-1/2 -z-10 aspect-square w-[min(88vw,24rem)] sm:w-[38rem]
                 -translate-x-1/2 -translate-y-1/2"
             >
-              <div className="summon-circle relative h-full w-full">
+              {/* The ward is a backdrop, not a layer of the composition. At full
+                  strength its strokes compete with the heading and the lede
+                  that sit over it. */}
+              <div className="summon-circle relative h-full w-full opacity-65">
                 <SummoningCircle reducedMotion={env.reducedMotion} />
               </div>
             </div>
@@ -181,7 +219,7 @@ function Summoning({ env }) {
                     type="button"
                     onClick={() => copy(channel.value)}
                     className="flex min-h-11 min-w-11 items-center justify-center font-display
-                      text-[0.6rem] tracking-[0.2em] text-parchment/70 uppercase
+                      text-[0.6rem] tracking-[0.2em] text-parchment/85 uppercase
                       transition-colors hover:text-hellfire"
                   >
                     {/* Announced politely so a screen reader hears it happened. */}

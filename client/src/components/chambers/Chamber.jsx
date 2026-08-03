@@ -102,12 +102,12 @@ function Chamber({ project, index, reducedMotion = false }) {
         </div>
 
         <div>
-          <p className="chamber-line text-parchment/90">{summary}</p>
+          <p className="chamber-line text-parchment">{summary}</p>
 
           {work?.length ? (
             <ul className="mt-6 space-y-3">
               {work.map((line) => (
-                <li key={line} className="chamber-line flex gap-3 text-parchment/80">
+                <li key={line} className="chamber-line flex gap-3 text-parchment">
                   <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rotate-45 bg-ember" />
                   <span>{line}</span>
                 </li>

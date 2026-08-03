@@ -51,7 +51,7 @@ function ForgedTag({ label, className = "" }) {
 
       <span
         className="text-engraved font-display text-[0.68rem] font-bold tracking-[0.14em]
-          text-bone/85 uppercase transition-colors duration-300 group-hover/tag:text-hellfire"
+          text-bone uppercase transition-colors duration-300 group-hover/tag:text-hellfire"
       >
         {label}
       </span>

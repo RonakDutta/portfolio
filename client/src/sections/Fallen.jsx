@@ -91,7 +91,7 @@ function Fallen({ env }) {
             {fallen.body.map((para) => (
               <p
                 key={para.slice(0, 24)}
-                className="fallen-rise max-w-prose text-parchment/90"
+                className="fallen-rise max-w-prose text-parchment"
               >
                 {para}
               </p>

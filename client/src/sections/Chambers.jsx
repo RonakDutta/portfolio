@@ -66,7 +66,7 @@ function Chambers({ env }) {
             </span>
           </h2>
 
-          <p className="chambers-rise mx-auto mt-6 max-w-md text-parchment/85">{chambers.lede}</p>
+          <p className="chambers-rise mx-auto mt-6 max-w-md text-parchment">{chambers.lede}</p>
         </header>
 
         <div className="mt-16 space-y-8 sm:mt-20 sm:space-y-10">

@@ -106,7 +106,7 @@ function Arsenal({ env }) {
             </span>
           </h2>
 
-          <p className="arsenal-rise mx-auto mt-6 max-w-md text-parchment/85">{arsenal.lede}</p>
+          <p className="arsenal-rise mx-auto mt-6 max-w-md text-parchment">{arsenal.lede}</p>
         </header>
 
         <div className="arsenal-rows relative mt-16 sm:mt-20">

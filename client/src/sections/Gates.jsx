@@ -203,7 +203,7 @@ function Gates({ env }) {
           </p>
         </div>
 
-        <p className="gate-rise mx-auto mt-6 max-w-xl text-balance text-parchment/85">
+        <p className="gate-rise mx-auto mt-6 max-w-xl text-balance text-parchment">
           {gates.tagline}
         </p>
 
@@ -235,7 +235,7 @@ function Gates({ env }) {
         aria-hidden="true"
         className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 [@media(max-height:860px)]:hidden"
       >
-        <span className="font-display text-[0.6rem] tracking-[0.4em] text-parchment/60 uppercase">
+        <span className="font-display text-[0.6rem] tracking-[0.4em] text-parchment/80 uppercase">
           {gates.scrollCue}
         </span>
         <span className="relative block h-14 w-px bg-gradient-to-b from-transparent via-ember/50 to-transparent">

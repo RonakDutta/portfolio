@@ -107,7 +107,7 @@ function Chronicle({ env }) {
             </span>
           </h2>
 
-          <p className="chronicle-rise mx-auto mt-6 max-w-md text-parchment/85">{chronicle.lede}</p>
+          <p className="chronicle-rise mx-auto mt-6 max-w-md text-parchment">{chronicle.lede}</p>
         </header>
 
         <ol className="chronicle-entries relative mt-16 space-y-10 sm:mt-20 sm:space-y-12">
@@ -150,7 +150,7 @@ function Chronicle({ env }) {
               </p>
 
               {entry.detail ? (
-                <p className="mt-3 max-w-prose text-parchment/85">{entry.detail}</p>
+                <p className="mt-3 max-w-prose text-parchment">{entry.detail}</p>
               ) : null}
             </li>
           ))}
@@ -184,7 +184,7 @@ function Chronicle({ env }) {
                 <p className="text-engraved pr-6 font-display text-[0.72rem] font-bold tracking-[0.16em] text-bone uppercase">
                   {honour.name}
                 </p>
-                <p className="mt-2.5 text-sm text-parchment/80">{honour.note}</p>
+                <p className="mt-2.5 text-sm text-parchment">{honour.note}</p>
               </li>
             ))}
           </ul>

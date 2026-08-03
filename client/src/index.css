@@ -5,9 +5,9 @@
   --color-ash: #0b0810;
   --color-obsidian: #141019;
   --color-iron: #241d29;
-  --color-smoke: #6b6270;
+  --color-smoke: #948b9c;
   --color-bone: #ddd3c4;
-  --color-parchment: #a89a86;
+  --color-parchment: #c3b7a6;
 
   --color-ember: #ff4d00;
   --color-brimstone: #ff8a1f;
@@ -42,8 +42,12 @@
     margin: 0;
     color: var(--color-bone);
     font-family: var(--font-body);
-    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
-    line-height: 1.65;
+    /* 500, not 400. Cormorant is a high-contrast old-style face and its
+       hairlines all but disappear at body size on a dark ground, which reads as
+       poor contrast no matter what the ratio says. */
+    font-weight: 500;
+    font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.2rem);
+    line-height: 1.7;
     overflow-x: clip;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
