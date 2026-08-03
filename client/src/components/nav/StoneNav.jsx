@@ -130,15 +130,17 @@ function StoneNav() {
           <button
             type="button"
             onClick={() => select(SECTIONS[0].id)}
-            className="group -ml-2 flex min-h-11 min-w-11 items-center gap-2.5 px-2.5 font-display text-[0.7rem] font-black tracking-[0.22em] text-bone uppercase"
+            className="group -ml-2 flex min-h-11 items-center gap-2.5 px-2.5 font-display text-[0.7rem] font-black tracking-[0.22em] text-bone uppercase"
           >
             <span
               aria-hidden="true"
-              className="flex h-6 w-6 rotate-45 items-center justify-center border border-ember/70
+              className="flex h-6 w-6 shrink-0 rotate-45 items-center justify-center border border-ember/70
                 bg-gradient-to-br from-[#241d29] to-[#0d0913] transition-colors duration-300
                 group-hover:border-hellfire"
             >
-              <span className="-rotate-45 text-[0.55rem] text-hellfire">{identity.initials}</span>
+              <span className="flex h-full w-full -rotate-45 items-center justify-center text-[0.55rem] font-black leading-none text-hellfire select-none">
+                {identity.initials}
+              </span>
             </span>
             <span className="hidden sm:inline">{identity.family}</span>
             <span className="sr-only">Back to the top</span>
