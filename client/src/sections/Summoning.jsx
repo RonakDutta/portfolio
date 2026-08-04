@@ -118,7 +118,12 @@ function Summoning({ env }) {
         }}
       />
 
-      <EmberField count={18} reducedMotion={env.reducedMotion} className="-z-10" />
+      <EmberField
+        count={18}
+        reducedMotion={env.reducedMotion}
+        isMobile={env.isMobile}
+        className="-z-10"
+      />
 
       <div className="summon-stage relative mx-auto w-full max-w-3xl px-6 pt-14 sm:pt-20">
         <div className="relative text-center">

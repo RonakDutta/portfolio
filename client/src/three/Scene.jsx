@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { PerformanceMonitor } from "@react-three/drei";
 import { frame, damp } from "../lib/store";
@@ -31,6 +31,45 @@ function LavaGlow() {
   });
 
   return <pointLight ref={light} color="#ff5a10" distance={90} decay={2} />;
+}
+
+/**
+ * Asks for a render at a fixed rate, for canvases running on demand.
+ *
+ * Paired with `frameloop="demand"` on the Canvas, this is what caps the scene
+ * on a phone. Rendering is the expensive half of the frame here and the lava
+ * is slow, churning noise: at 30 renders a second it looks the same and costs
+ * half as much. Everything that has to stay at full rate does, because none of
+ * it is in here. Scrolling, touch handling and every DOM animation are driven
+ * by the browser and by GSAP, not by this loop.
+ *
+ * The camera and the lava both read `delta` and damp against it, so halving
+ * the rate changes how often they are sampled and not how fast they move.
+ */
+function FrameGovernor({ fps }) {
+  const invalidate = useThree((state) => state.invalidate);
+
+  useEffect(() => {
+    if (!fps) return;
+
+    const interval = 1000 / fps;
+    let raf = 0;
+    let last = -Infinity;
+
+    const tick = (now) => {
+      raf = requestAnimationFrame(tick);
+      if (now - last < interval) return;
+      // Snap to the grid rather than adding the interval to `last`, so a
+      // stalled tab does not come back owing a burst of catch-up renders.
+      last = now - ((now - last) % interval);
+      invalidate();
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [fps, invalidate]);
+
+  return null;
 }
 
 /**
@@ -88,11 +127,13 @@ export default function Scene({ env }) {
       <LavaField
         segments={env.lavaSegments}
         octaves={env.fbmOctaves}
+        detail={env.lavaDetail}
         coarsePointer={env.coarsePointer}
       />
 
       {/* Embers, monoliths, chains and the rune ring mount here. */}
 
+      <FrameGovernor fps={env.canvasFps} />
       <ReadySignal />
       <QualityGuard maxDpr={env.dpr[1]} />
     </>

@@ -102,6 +102,23 @@ class InfernalAudioEngine {
     this.onVisibility = null;
   }
 
+  /**
+   * Whether to build the cheaper graph.
+   *
+   * Read here rather than passed in from `useEnvironment`, because the only
+   * thing that touches this engine is a toggle button that has no business
+   * knowing about device tiers, and threading `env` through it to set one
+   * boolean would be the tail wagging the dog. Deliberately conservative: a
+   * coarse pointer or four cores or fewer.
+   */
+  get lean() {
+    if (typeof navigator === "undefined") return false;
+    return (
+      (navigator.hardwareConcurrency ?? 8) <= 4 ||
+      window.matchMedia?.("(pointer: coarse)").matches === true
+    );
+  }
+
   // ── Graph ───────────────────────────────────────────────────────────────
 
   init() {
@@ -136,8 +153,12 @@ class InfernalAudioEngine {
       this.dry = ctx.createGain();
       this.dry.connect(limiter);
 
+      // A shorter room on a phone. Convolution cost scales with the impulse
+      // length, and 2.8 seconds of stereo tail is the single most expensive
+      // node in this graph. 1.5 still reads as stone; it just reads as a
+      // smaller chamber, which nobody is comparing against anything.
       const convolver = ctx.createConvolver();
-      convolver.buffer = buildCavern(ctx);
+      convolver.buffer = buildCavern(ctx, this.lean ? 1.5 : 2.8);
       this.wet = ctx.createGain();
       this.wet.gain.setValueAtTime(0.85, t);
       this.wet.connect(convolver);

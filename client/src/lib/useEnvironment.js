@@ -45,6 +45,12 @@ export function useEnvironment() {
       ? "mid"
       : tier;
 
+  // The lava fragment shader is where a phone actually spends its frame, and
+  // the reason is worth stating plainly: the noise hash is sin-based, so one
+  // gnoise costs around twenty-four transcendentals, and the full shader
+  // evaluates ten of them per pixel. Everything below is aimed at that number.
+  const lean = isMobile || quality === "low";
+
   return useMemo(
     () => ({
       reducedMotion,
@@ -52,9 +58,12 @@ export function useEnvironment() {
       coarsePointer,
       quality,
       enable3D: !reducedMotion,
+      // 0.85 rather than 1.0 on a phone. The surface is slow organic noise
+      // under a heavy vignette, so a 28% cut in pixels shaded is invisible on
+      // a 6in screen and is the cheapest frame time on offer here.
       dpr:
         isMobile
-          ? [0.85, 1.0]
+          ? [0.7, 0.85]
           : quality === "low"
             ? [1, 1]
             : quality === "mid"
@@ -63,7 +72,18 @@ export function useEnvironment() {
       emberCount: isMobile ? 180 : quality === "low" ? 260 : quality === "mid" ? 700 : 1600,
       lavaSegments: isMobile ? 40 : quality === "low" ? 32 : quality === "mid" ? 64 : 96,
       fbmOctaves: isMobile ? 2 : quality === "low" ? 2 : quality === "mid" ? 3 : 4,
+
+      // Drops the two detail layers, worth four of the ten noise evaluations.
+      // They are a fine secondary fracture network and a soot speckle, and
+      // both are sub-pixel detail at arm's length on a phone.
+      lavaDetail: lean ? "plain" : "rich",
+
+      // The lava churns slowly by design; rendering it twice as often as it
+      // visibly changes is the other half of the phone's frame budget. Scroll,
+      // DOM animation and touch handling stay at full rate, since those are
+      // what actually feel laggy when they are not.
+      canvasFps: isMobile ? 30 : 0,
     }),
-    [reducedMotion, isMobile, coarsePointer, quality],
+    [reducedMotion, isMobile, coarsePointer, quality, lean],
   );
 }

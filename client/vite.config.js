@@ -34,8 +34,66 @@ function inlineSigil() {
   };
 }
 
+/**
+ * Serves 404.html for unknown paths in `dev` and `preview`.
+ *
+ * A static host does this on its own, which is what the page is written for.
+ * Neither Vite server does: the dev server answers an unmatched path with its
+ * own plain-text 404 and preview answers with the connect default, so the one
+ * page that exists to be seen when someone mistypes a URL was the one page you
+ * could not look at without deploying it.
+ *
+ * Only whole-document navigations are caught. Anything that accepts HTML but
+ * is really a missing module or image should keep failing as a missing module
+ * or image, or a typo'd import silently returns a page of markup and surfaces
+ * as an unrelated parse error somewhere else entirely.
+ */
+function notFoundFallback() {
+  const page = fileURLToPath(new URL("./404.html", import.meta.url));
+
+  const middleware = (transform) => async (req, res, next) => {
+    const accepts = req.headers.accept ?? "";
+    if (req.method !== "GET" || !accepts.includes("text/html")) return next();
+
+    const path = (req.url ?? "/").split("?")[0];
+    if (path === "/" || path.endsWith(".html") || path.startsWith("/@")) {
+      return next();
+    }
+
+    try {
+      let html = readFileSync(page, "utf8");
+      if (transform) html = await transform(html, req.url);
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "text/html");
+      res.end(html);
+    } catch {
+      next();
+    }
+  };
+
+  return {
+    name: "not-found-fallback",
+    // Appended, so real files and modules are resolved first and only genuine
+    // misses reach this.
+    configureServer(server) {
+      return () =>
+        server.middlewares.use(
+          middleware((html, url) => server.transformIndexHtml(url, html)),
+        );
+    },
+    configurePreviewServer(server) {
+      return () => server.middlewares.use(middleware(null));
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [inlineSigil(), react(), tailwindcss()],
+  // Multi-page, not single-page. There is no client-side router here: there is
+  // index.html and there is 404.html. Left on the "spa" default, both Vite
+  // servers rewrite every unknown path to index.html, so a mistyped URL
+  // silently served the portfolio with a 200 and the 404 page was unreachable.
+  appType: "mpa",
+  plugins: [inlineSigil(), notFoundFallback(), react(), tailwindcss()],
   build: {
     target: "es2022",
     cssCodeSplit: true,

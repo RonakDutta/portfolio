@@ -83,7 +83,13 @@ function HellCanvas({ env }) {
         >
           <Canvas
             dpr={env.dpr}
-            frameloop={visible ? "always" : "never"}
+            // "demand" wherever a frame cap applies: the FrameGovernor inside
+            // the scene then asks for renders at its own rate instead of the
+            // display's. "never" while the tab is in the background, which
+            // stops the loop outright rather than merely slowing it.
+            frameloop={
+              !visible ? "never" : env.canvasFps ? "demand" : "always"
+            }
             camera={{
               fov: 55,
               near: 0.1,

@@ -36,23 +36,6 @@ function Chronicle({ env }) {
         scrollTrigger: { trigger: section.current, start: "top 72%" },
       });
 
-      // The title of a record is written, so it is wiped in from the left
-      // rather than moved. fromTo, because a `from` on clip-path has to
-      // interpolate out of `none`, which is not a shape and lands as a jump.
-      // The end inset is slack on three sides: clipping flush to the border
-      // box shaves the molten gradient off the descenders.
-      gsap.fromTo(
-        ".chronicle-write",
-        { clipPath: "inset(-14% 100% -22% 0%)" },
-        {
-          clipPath: "inset(-14% -6% -22% 0%)",
-          duration: 1.15,
-          stagger: 0.14,
-          ease: "power3.inOut",
-          scrollTrigger: { trigger: section.current, start: "top 72%" },
-        },
-      );
-
       gsap.from(".chronicle-spine", {
         scaleY: 0,
         transformOrigin: "50% 0%",
@@ -65,42 +48,18 @@ function Chronicle({ env }) {
         },
       });
 
-      // One timeline for the whole record, not one per entry. Per-entry
-      // triggers fired each row in isolation, so what you saw was three
-      // unrelated arrivals; struck as a sequence, the nodes light down the
-      // spine in order and the record reads as being written.
+      // The entries themselves have no entrance, deliberately.
       //
-      // The nodes lead their own text by a beat: the mark is set on the spine
-      // first, and the entry it belongs to follows out of it.
-      // The body moves, not the whole row. The node is positioned against the
-      // row, so translating the row would carry the mark off the spine with
-      // it, which is the one thing that has to stay put.
-      const entries = gsap.utils.toArray(".chronicle-entry");
-      const nodes = entries.map((entry) => entry.querySelector(".chronicle-node"));
-      const bodies = entries.map((entry) => entry.querySelector(".chronicle-body"));
-
-      gsap
-        .timeline({
-          scrollTrigger: { trigger: ".chronicle-entries", start: "top 76%" },
-        })
-        .from(nodes, {
-          scale: 0,
-          opacity: 0,
-          duration: 0.5,
-          stagger: 0.16,
-          ease: "back.out(3)",
-        })
-        .from(
-          bodies,
-          {
-            x: 30,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.16,
-            ease: "expo.out",
-          },
-          0.14,
-        );
+      // They had one: nodes popping down the spine in sequence with the text
+      // sliding out after them. On paper that is the section's own metaphor,
+      // a record being written. In practice the spine is already drawing
+      // itself against the scroll immediately to the left, and a second timed
+      // motion running across it turned a calm timeline into two animations
+      // competing for the same few hundred pixels.
+      //
+      // The scrubbed spine is the animation here. It is tied to the reader's
+      // own scrolling rather than to a clock, so it can never be out of step
+      // with them, and the rows it passes stay still and legible.
 
       gsap.from(".chronicle-sigil", {
         y: 26,
@@ -131,7 +90,12 @@ function Chronicle({ env }) {
         }}
       />
 
-      <EmberField count={12} reducedMotion={env.reducedMotion} className="-z-10" />
+      <EmberField
+        count={12}
+        reducedMotion={env.reducedMotion}
+        isMobile={env.isMobile}
+        className="-z-10"
+      />
 
       <div className="relative mx-auto w-full max-w-4xl px-6">
         <header className="mx-auto max-w-2xl text-center">
@@ -142,10 +106,10 @@ function Chronicle({ env }) {
           />
 
           <h2 id="chronicle-title" className="mt-7">
-            <span className="text-molten chronicle-write block font-display text-[clamp(2rem,5.4vw,4rem)] leading-[0.95] font-black">
+            <span className="text-molten chronicle-rise block font-display text-[clamp(2rem,5.4vw,4rem)] leading-[0.95] font-black">
               {chronicle.headline}
             </span>
-            <span className="chronicle-write mt-3 block font-blackletter text-[clamp(1.35rem,3vw,2rem)] leading-none text-brimstone/85">
+            <span className="chronicle-rise mt-3 block font-blackletter text-[clamp(1.35rem,3vw,2rem)] leading-none text-brimstone/85">
               {chronicle.headlineSub}
             </span>
           </h2>
@@ -173,30 +137,28 @@ function Chronicle({ env }) {
                 <span className="h-1.5 w-1.5 bg-ember" />
               </span>
 
-              <div className="chronicle-body">
-                <p className="font-display text-[0.7rem] tracking-[0.28em] text-ember uppercase sm:text-[0.62rem] sm:tracking-[0.32em]">
-                  {entry.period}
-                  <span aria-hidden="true" className="mx-2 text-iron">
-                    /
-                  </span>
-                  <span className="text-smoke">{entry.kind}</span>
-                </p>
+              <p className="font-display text-[0.7rem] tracking-[0.28em] text-ember uppercase sm:text-[0.62rem] sm:tracking-[0.32em]">
+                {entry.period}
+                <span aria-hidden="true" className="mx-2 text-iron">
+                  /
+                </span>
+                <span className="text-smoke">{entry.kind}</span>
+              </p>
 
-                <h3 className="mt-3 font-display text-[clamp(1.15rem,2.6vw,1.6rem)] leading-tight font-bold text-bone">
-                  {entry.title}
-                </h3>
+              <h3 className="mt-3 font-display text-[clamp(1.15rem,2.6vw,1.6rem)] leading-tight font-bold text-bone">
+                {entry.title}
+              </h3>
 
-                {/* Display, not blackletter. "University School of Automation
-                    and Robotics, GGSIPU" set in blackletter is decoration at
-                    the expense of anyone actually reading it. */}
-                <p className="mt-1.5 font-display text-[0.9rem] tracking-[0.06em] text-brimstone/85">
-                  {entry.org}
-                </p>
+              {/* Display, not blackletter. "University School of Automation and
+                  Robotics, GGSIPU" set in blackletter is decoration at the
+                  expense of anyone actually reading it. */}
+              <p className="mt-1.5 font-display text-[0.9rem] tracking-[0.06em] text-brimstone/85">
+                {entry.org}
+              </p>
 
-                {entry.detail ? (
-                  <p className="mt-3 max-w-prose text-parchment">{entry.detail}</p>
-                ) : null}
-              </div>
+              {entry.detail ? (
+                <p className="mt-3 max-w-prose text-parchment">{entry.detail}</p>
+              ) : null}
             </li>
           ))}
         </ol>

@@ -63,7 +63,23 @@ const vertexShader = (octaves) => /* glsl */ `
   }
 `;
 
-const fragmentShader = (octaves) => /* glsl */ `
+/**
+ * `detail: "plain"` drops the two secondary layers.
+ *
+ * They are the cheapest thing to lose and the most expensive thing to keep:
+ * between them the fine fracture network and the soot speckle are four of the
+ * ten noise evaluations this shader runs per pixel, and at phone size and
+ * viewing distance neither survives the vignette. The silhouette layer, the
+ * domain warp and the vein band all stay, so the surface still churns and the
+ * cracks still glow; it just stops resolving detail nobody can see.
+ */
+const fragmentShader = (octaves, detail = "rich") => /* glsl */ `
+  // highp on both tiers, and not negotiable. Dropping the plain tier to
+  // mediump looked like free speed and is two separate faults: uniforms shared
+  // with the vertex stage must agree on precision or the program fails to
+  // validate, and this shader samples noise in world space, where coordinates
+  // run to a few hundred units and mediump has no fractional resolution left
+  // to describe crust with.
   precision highp float;
 
   uniform float uTime;
@@ -107,9 +123,14 @@ const fragmentShader = (octaves) => /* glsl */ `
     float veins = 1.0 - smoothstep(0.40, 0.53, crust);
     veins = pow(veins, 2.4);
 
+    ${
+      detail === "rich"
+        ? /* glsl */ `
     // A finer secondary fracture network, so close range keeps detail.
     float fine = 1.0 - smoothstep(0.44, 0.50, fbmLow(vec3(p * 2.6 + warp, t * 2.0)) * 0.5 + 0.5);
-    veins = max(veins, fine * 0.5);
+    veins = max(veins, fine * 0.5);`
+        : ""
+    }
 
     float heat = bloom(distance(vWorld.xz, uHeatPoint), uRadius) * uHeatStrength;
 
@@ -119,9 +140,14 @@ const fragmentShader = (octaves) => /* glsl */ `
     col = mix(col, uHot, smoothstep(0.38, 0.82, temp));
     col = mix(col, uCore, smoothstep(0.88, 1.25, temp));
 
+    ${
+      detail === "rich"
+        ? /* glsl */ `
     // Soot speckle over the cooled crust only, which keeps the hot cracks clean.
     float soot = fbmLow(vec3(p * 8.0, t * 1.8)) * 0.5 + 0.5;
-    col *= mix(0.80 + 0.20 * soot, 1.0, smoothstep(0.35, 0.8, temp));
+    col *= mix(0.80 + 0.20 * soot, 1.0, smoothstep(0.35, 0.8, temp));`
+        : ""
+    }
 
     // Our own distance fog. fogExp2 doesn't reach a raw ShaderMaterial, and
     // doing it here lets the far river dissolve instead of ending at an edge.
@@ -142,6 +168,7 @@ const _fwd = new THREE.Vector3();
 export default function LavaField({
   segments = 128,
   octaves = 4,
+  detail = "rich",
   coarsePointer = false,
 }) {
   const mesh = useRef();
@@ -246,12 +273,12 @@ export default function LavaField({
     >
       <planeGeometry args={[340, 340, segments, segments]} />
       <shaderMaterial
-        // Octave count is baked into the source, so a change needs a fresh
-        // material rather than a uniform update.
-        key={octaves}
+        // Octave count and detail tier are both baked into the source, so a
+        // change needs a fresh material rather than a uniform update.
+        key={`${octaves}-${detail}`}
         uniforms={uniforms}
         vertexShader={vertexShader(octaves)}
-        fragmentShader={fragmentShader(octaves)}
+        fragmentShader={fragmentShader(octaves, detail)}
         transparent
         depthWrite={false}
         toneMapped={false}

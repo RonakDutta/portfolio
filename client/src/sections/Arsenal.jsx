@@ -57,20 +57,18 @@ function Arsenal({ env }) {
         gsap
           .timeline({ scrollTrigger: { trigger: rack, start: "top 88%" } })
           .from(rack, { x: -24, opacity: 0, duration: 0.7, ease: "expo.out" })
-          // Tags land on the rail and straighten up, each hung a moment after
-          // the last. The rotation is what sells it as something placed by
-          // hand; a pure fade leaves five identical plates appearing at once.
+          // Tags settle onto the rail, each a moment after the last. Straight
+          // down and square: an earlier version rotated them in from -5deg,
+          // and a row of hard-edged plates caught mid-tilt reads as a layout
+          // fault rather than as motion. On a rack, things hang level.
           .from(
             rack.querySelectorAll(".arsenal-tag"),
             {
-              y: -14,
-              rotate: -5,
-              scale: 0.9,
+              y: -12,
               opacity: 0,
-              transformOrigin: "0% 0%",
-              duration: 0.5,
+              duration: 0.45,
               stagger: 0.045,
-              ease: "back.out(2)",
+              ease: "power2.out",
             },
             0.18,
           );
@@ -107,7 +105,12 @@ function Arsenal({ env }) {
         }}
       />
 
-      <EmberField count={16} reducedMotion={env.reducedMotion} className="-z-10" />
+      <EmberField
+        count={16}
+        reducedMotion={env.reducedMotion}
+        isMobile={env.isMobile}
+        className="-z-10"
+      />
 
       <div className="relative mx-auto w-full max-w-5xl px-6">
         <header className="mx-auto max-w-2xl text-center">
