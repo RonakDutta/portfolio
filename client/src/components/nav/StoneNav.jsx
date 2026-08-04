@@ -2,7 +2,6 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, subscribe, frame } from "../../lib/store";
 import { scrollToSection } from "../../lib/useSmoothScroll";
 import { identity } from "../../data/content";
-import { infernalAudio } from "../../lib/infernalAudio";
 
 /**
  * The chapter rail: a slab of carved stone across the top of the descent.
@@ -70,7 +69,6 @@ function StoneNav() {
   const [active, setActive] = useState(frame.section);
   const [lit, setLit] = useState(false);
   const [open, setOpen] = useState(false);
-  const [audioActive, setAudioActive] = useState(false);
   const toggleRef = useRef(null);
 
   useEffect(() => subscribe(setActive), []);
@@ -161,23 +159,6 @@ function StoneNav() {
           </ul>
 
           <div className="flex items-center gap-3">
-            {/* Infernal Audio toggle */}
-            <button
-              type="button"
-              onClick={() => setAudioActive(infernalAudio.toggle())}
-              aria-label={audioActive ? "Mute atmosphere audio" : "Unmute atmosphere audio"}
-              className={`flex min-h-11 items-center gap-2 border px-3 py-2 font-display text-[0.6rem] font-bold tracking-[0.2em] uppercase transition-all duration-300 ${
-                audioActive
-                  ? "border-ember/80 bg-ember/15 text-hellfire shadow-[0_0_15px_rgba(255,77,0,0.3)]"
-                  : "border-iron/80 bg-obsidian/40 text-parchment/70 hover:border-ember/50 hover:text-bone"
-              }`}
-            >
-              <span aria-hidden="true" className={`text-xs ${audioActive ? "animate-pulse text-ember" : "text-smoke"}`}>
-                {audioActive ? "🔊" : "🔇"}
-              </span>
-              <span className="hidden sm:inline">{audioActive ? "AUDIO ON" : "AUDIO OFF"}</span>
-            </button>
-
             {/* Depth read-out: which chamber, of how many. */}
             <span
               aria-hidden="true"

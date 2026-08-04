@@ -4,10 +4,17 @@ class InfernalAudioEngine {
   constructor() {
     this.ctx = null;
     this.masterGain = null;
-    this.fireGain = null;
-    this.quakeGain = null;
-    this.rockCrackleGain = null;
-    this.quakeOsc = null;
+    this.ambientGain = null;
+    this.filterNode = null;
+
+    // Volcanic scroll layers
+    this.rumbleGain = null;
+    this.rumbleOsc1 = null;
+    this.rumbleOsc2 = null;
+    this.grindGain = null;
+    this.grindFilter = null;
+    this.crackGain = null;
+
     this.isMuted = true;
     this.isInitialized = false;
     this.rafId = null;
@@ -25,86 +32,141 @@ class InfernalAudioEngine {
       this.masterGain.gain.setValueAtTime(0, this.ctx.currentTime);
       this.masterGain.connect(this.ctx.destination);
 
-      // --- 1. BACKGROUND FIRE NOISE ---
-      // Create pink noise buffer for roaring flame texture & snaps
+      // ═══════════════════════════════════════════════════════
+      // 1. AMBIENT FURNACE HUM (original — untouched)
+      // ═══════════════════════════════════════════════════════
+      this.filterNode = this.ctx.createBiquadFilter();
+      this.filterNode.type = "lowpass";
+      this.filterNode.frequency.setValueAtTime(95, this.ctx.currentTime);
+      this.filterNode.Q.setValueAtTime(2.5, this.ctx.currentTime);
+
       const bufferSize = this.ctx.sampleRate * 4;
       const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      const output = buffer.getChannelData(0);
+      let lastOut = 0.0;
       for (let i = 0; i < bufferSize; i++) {
         const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        b3 = 0.86650 * b3 + white * 0.3104856;
-        b4 = 0.55000 * b4 + white * 0.5329522;
-        b5 = -0.7616 * b5 - white * 0.0168980;
-        data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-        data[i] *= 0.11;
-        b6 = white * 0.115926;
+        output[i] = (lastOut + 0.02 * white) / 1.02;
+        lastOut = output[i];
+        output[i] *= 3.5;
       }
 
-      const fireSource = this.ctx.createBufferSource();
-      fireSource.buffer = buffer;
-      fireSource.loop = true;
+      const noiseSource = this.ctx.createBufferSource();
+      noiseSource.buffer = buffer;
+      noiseSource.loop = true;
 
-      // Bandpass filter for roaring flame body
-      const fireFilter = this.ctx.createBiquadFilter();
-      fireFilter.type = "bandpass";
-      fireFilter.frequency.setValueAtTime(420, this.ctx.currentTime);
-      fireFilter.Q.setValueAtTime(0.8, this.ctx.currentTime);
+      this.ambientGain = this.ctx.createGain();
+      this.ambientGain.gain.setValueAtTime(0.28, this.ctx.currentTime);
 
-      this.fireGain = this.ctx.createGain();
-      this.fireGain.gain.setValueAtTime(0.35, this.ctx.currentTime);
+      noiseSource.connect(this.filterNode);
+      this.filterNode.connect(this.ambientGain);
+      this.ambientGain.connect(this.masterGain);
 
-      fireSource.connect(fireFilter);
-      fireFilter.connect(this.fireGain);
-      this.fireGain.connect(this.masterGain);
-      fireSource.start();
+      const lfo = this.ctx.createOscillator();
+      lfo.frequency.setValueAtTime(0.12, this.ctx.currentTime);
+      const lfoGain = this.ctx.createGain();
+      lfoGain.gain.setValueAtTime(25, this.ctx.currentTime);
+      lfo.connect(lfoGain);
+      lfoGain.connect(this.filterNode.frequency);
+      lfo.start();
+      noiseSource.start();
 
-      // Flame crackle micro-pops LFO modulation
-      const fireLfo = this.ctx.createOscillator();
-      fireLfo.frequency.setValueAtTime(4.5, this.ctx.currentTime);
-      const fireLfoGain = this.ctx.createGain();
-      fireLfoGain.gain.setValueAtTime(120, this.ctx.currentTime);
-      fireLfo.connect(fireLfoGain);
-      fireLfoGain.connect(fireFilter.frequency);
-      fireLfo.start();
+      // ═══════════════════════════════════════════════════════
+      // 2. VOLCANIC SCROLL — LAYER A: Seismic Sub-Bass Rumble
+      //    Two detuned triangle oscillators for thick tectonic
+      //    plate movement feel, through a waveshaper for grit.
+      // ═══════════════════════════════════════════════════════
+      this.rumbleOsc1 = this.ctx.createOscillator();
+      this.rumbleOsc1.type = "triangle";
+      this.rumbleOsc1.frequency.setValueAtTime(28, this.ctx.currentTime);
 
-      // --- 2. SCROLL EARTHQUAKE RUMBLE (SUB-BASS SEISMIC THUNDERING) ---
-      this.quakeOsc = this.ctx.createOscillator();
-      this.quakeOsc.type = "triangle";
-      this.quakeOsc.frequency.setValueAtTime(38, this.ctx.currentTime);
+      this.rumbleOsc2 = this.ctx.createOscillator();
+      this.rumbleOsc2.type = "triangle";
+      this.rumbleOsc2.frequency.setValueAtTime(34, this.ctx.currentTime);
 
-      const quakeFilter = this.ctx.createBiquadFilter();
-      quakeFilter.type = "lowpass";
-      quakeFilter.frequency.setValueAtTime(75, this.ctx.currentTime);
+      // Waveshaper for sub-harmonic distortion (the "tearing earth" edge)
+      const shaper = this.ctx.createWaveShaper();
+      const curveLen = 256;
+      const curve = new Float32Array(curveLen);
+      for (let i = 0; i < curveLen; i++) {
+        const x = (i * 2) / curveLen - 1;
+        curve[i] = (Math.PI + 3.2) * x / (Math.PI + 3.2 * Math.abs(x));
+      }
+      shaper.curve = curve;
+      shaper.oversample = "2x";
 
-      this.quakeGain = this.ctx.createGain();
-      this.quakeGain.gain.setValueAtTime(0, this.ctx.currentTime);
+      const rumbleLowpass = this.ctx.createBiquadFilter();
+      rumbleLowpass.type = "lowpass";
+      rumbleLowpass.frequency.setValueAtTime(80, this.ctx.currentTime);
+      rumbleLowpass.Q.setValueAtTime(4, this.ctx.currentTime);
 
-      this.quakeOsc.connect(quakeFilter);
-      quakeFilter.connect(this.quakeGain);
-      this.quakeGain.connect(this.masterGain);
-      this.quakeOsc.start();
+      this.rumbleGain = this.ctx.createGain();
+      this.rumbleGain.gain.setValueAtTime(0, this.ctx.currentTime);
 
-      // --- 3. SCROLL ROCK CRACKLING / STONE FRACTURE ---
-      const rockFilter = this.ctx.createBiquadFilter();
-      rockFilter.type = "bandpass";
-      rockFilter.frequency.setValueAtTime(1800, this.ctx.currentTime);
-      rockFilter.Q.setValueAtTime(3.5, this.ctx.currentTime);
+      const rumbleMerge = this.ctx.createGain();
+      rumbleMerge.gain.setValueAtTime(0.5, this.ctx.currentTime);
+      this.rumbleOsc1.connect(rumbleMerge);
+      this.rumbleOsc2.connect(rumbleMerge);
+      rumbleMerge.connect(shaper);
+      shaper.connect(rumbleLowpass);
+      rumbleLowpass.connect(this.rumbleGain);
+      this.rumbleGain.connect(this.masterGain);
+      this.rumbleOsc1.start();
+      this.rumbleOsc2.start();
 
-      const rockSource = this.ctx.createBufferSource();
-      rockSource.buffer = buffer;
-      rockSource.loop = true;
+      // Slow LFO on the rumble frequency for seismic wavering
+      const rumbleLfo = this.ctx.createOscillator();
+      rumbleLfo.frequency.setValueAtTime(0.3, this.ctx.currentTime);
+      const rumbleLfoGain = this.ctx.createGain();
+      rumbleLfoGain.gain.setValueAtTime(8, this.ctx.currentTime);
+      rumbleLfo.connect(rumbleLfoGain);
+      rumbleLfoGain.connect(this.rumbleOsc1.frequency);
+      rumbleLfoGain.connect(this.rumbleOsc2.frequency);
+      rumbleLfo.start();
 
-      this.rockCrackleGain = this.ctx.createGain();
-      this.rockCrackleGain.gain.setValueAtTime(0, this.ctx.currentTime);
+      // ═══════════════════════════════════════════════════════
+      // 3. VOLCANIC SCROLL — LAYER B: Rock Grinding Mid-Freq
+      //    Brown noise through a resonant bandpass for the
+      //    grinding/shifting stone texture on top of the bass.
+      // ═══════════════════════════════════════════════════════
+      const grindSource = this.ctx.createBufferSource();
+      grindSource.buffer = buffer;
+      grindSource.loop = true;
 
-      rockSource.connect(rockFilter);
-      rockFilter.connect(this.rockCrackleGain);
-      this.rockCrackleGain.connect(this.masterGain);
-      rockSource.start();
+      this.grindFilter = this.ctx.createBiquadFilter();
+      this.grindFilter.type = "bandpass";
+      this.grindFilter.frequency.setValueAtTime(320, this.ctx.currentTime);
+      this.grindFilter.Q.setValueAtTime(2.0, this.ctx.currentTime);
+
+      this.grindGain = this.ctx.createGain();
+      this.grindGain.gain.setValueAtTime(0, this.ctx.currentTime);
+
+      grindSource.connect(this.grindFilter);
+      this.grindFilter.connect(this.grindGain);
+      this.grindGain.connect(this.masterGain);
+      grindSource.start();
+
+      // ═══════════════════════════════════════════════════════
+      // 4. VOLCANIC SCROLL — LAYER C: Surface Crackle/Pops
+      //    High-passed noise for the snap-crackle of cooling
+      //    lava crust breaking apart as you move through it.
+      // ═══════════════════════════════════════════════════════
+      const crackSource = this.ctx.createBufferSource();
+      crackSource.buffer = buffer;
+      crackSource.loop = true;
+
+      const crackFilter = this.ctx.createBiquadFilter();
+      crackFilter.type = "highpass";
+      crackFilter.frequency.setValueAtTime(2800, this.ctx.currentTime);
+      crackFilter.Q.setValueAtTime(1.5, this.ctx.currentTime);
+
+      this.crackGain = this.ctx.createGain();
+      this.crackGain.gain.setValueAtTime(0, this.ctx.currentTime);
+
+      crackSource.connect(crackFilter);
+      crackFilter.connect(this.crackGain);
+      this.crackGain.connect(this.masterGain);
+      crackSource.start();
 
       this.isInitialized = true;
       this.startLoop();
@@ -114,20 +176,18 @@ class InfernalAudioEngine {
   }
 
   toggle() {
-    if (!this.isInitialized) {
-      this.init();
-    }
-
-    if (this.ctx && this.ctx.state === "suspended") {
-      this.ctx.resume();
-    }
+    if (!this.isInitialized) this.init();
+    if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
 
     this.isMuted = !this.isMuted;
     const now = this.ctx ? this.ctx.currentTime : 0;
 
     if (this.masterGain) {
       this.masterGain.gain.cancelScheduledValues(now);
-      this.masterGain.gain.linearRampToValueAtTime(this.isMuted ? 0 : 0.85, now + 0.4);
+      this.masterGain.gain.linearRampToValueAtTime(
+        this.isMuted ? 0 : 0.85,
+        now + 0.4,
+      );
     }
 
     return !this.isMuted;
@@ -137,17 +197,31 @@ class InfernalAudioEngine {
     const update = () => {
       if (this.isInitialized && !this.isMuted && this.ctx) {
         const now = this.ctx.currentTime;
+        const s = frame.scroll;
         const v = Math.abs(frame.velocity);
 
-        // Seismic Earthquake sub-bass rumble scales with scroll speed
-        const quakeVol = Math.min(0.55, v * 0.08);
-        const quakeFreq = 34 + Math.min(30, v * 3.5);
-        this.quakeGain.gain.setTargetAtTime(quakeVol, now, 0.06);
-        this.quakeOsc.frequency.setTargetAtTime(quakeFreq, now, 0.06);
+        // Original ambient depth modulation
+        const targetFreq = 95 + s * 140;
+        this.filterNode.frequency.setTargetAtTime(targetFreq, now, 0.15);
 
-        // Rock grinding & stone crackle scales with scroll speed
-        const rockVol = Math.min(0.40, v * 0.06);
-        this.rockCrackleGain.gain.setTargetAtTime(rockVol, now, 0.05);
+        // ── Volcanic scroll intensity (velocity-driven) ──
+
+        // Layer A: Seismic sub-bass (28-50Hz tectonic rumble)
+        const rumbleVol = Math.min(0.6, v * 0.09);
+        const rumbleFreq = 28 + Math.min(22, v * 3);
+        this.rumbleGain.gain.setTargetAtTime(rumbleVol, now, 0.05);
+        this.rumbleOsc1.frequency.setTargetAtTime(rumbleFreq, now, 0.06);
+        this.rumbleOsc2.frequency.setTargetAtTime(rumbleFreq * 1.22, now, 0.06);
+
+        // Layer B: Rock grinding mid-texture
+        const grindVol = Math.min(0.18, v * 0.025);
+        const grindFreq = 280 + Math.min(300, v * 50);
+        this.grindGain.gain.setTargetAtTime(grindVol, now, 0.06);
+        this.grindFilter.frequency.setTargetAtTime(grindFreq, now, 0.08);
+
+        // Layer C: Lava crust crackle pops
+        const crackVol = Math.min(0.08, v * 0.012);
+        this.crackGain.gain.setTargetAtTime(crackVol, now, 0.04);
       }
       this.rafId = requestAnimationFrame(update);
     };

@@ -23,8 +23,12 @@ export function useSmoothScroll({ reducedMotion, isMobile }) {
     });
 
     lenis.on("scroll", (e) => {
-      frame.scroll = e.progress ?? 0;
-      frame.velocity = e.velocity ?? 0;
+      const progress = e.progress ?? 0;
+      frame.scroll = progress;
+      // Clamp velocity to zero at scroll boundaries to prevent
+      // phantom jitter when the scrollbar is held at the edge.
+      const atBoundary = progress <= 0.001 || progress >= 0.999;
+      frame.velocity = atBoundary ? 0 : (e.velocity ?? 0);
       ScrollTrigger.update();
     });
 

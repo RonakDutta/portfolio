@@ -5,6 +5,7 @@ import { initPointer } from "./lib/store";
 import HellCanvas from "./components/HellCanvas";
 import StoneNav from "./components/nav/StoneNav";
 import SparkTrail from "./components/ui/SparkTrail";
+import AudioToggleWidget from "./components/ui/AudioToggleWidget";
 import Gates from "./sections/Gates";
 import Fallen from "./sections/Fallen";
 import Arsenal from "./sections/Arsenal";
@@ -29,6 +30,7 @@ export default function App() {
 
       <StoneNav />
       <SparkTrail disabled={env.coarsePointer || env.reducedMotion} />
+      <AudioToggleWidget />
 
       <HellCanvas env={env} />
 
