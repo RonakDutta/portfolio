@@ -4,9 +4,10 @@ class InfernalAudioEngine {
   constructor() {
     this.ctx = null;
     this.masterGain = null;
-    this.ambientGain = null;
-    this.scrollGain = null;
-    this.filterNode = null;
+    this.fireGain = null;
+    this.quakeGain = null;
+    this.rockCrackleGain = null;
+    this.quakeOsc = null;
     this.isMuted = true;
     this.isInitialized = false;
     this.rafId = null;
@@ -24,61 +25,86 @@ class InfernalAudioEngine {
       this.masterGain.gain.setValueAtTime(0, this.ctx.currentTime);
       this.masterGain.connect(this.ctx.destination);
 
-      // Lowpass Filter for Furnace Rumble
-      this.filterNode = this.ctx.createBiquadFilter();
-      this.filterNode.type = "lowpass";
-      this.filterNode.frequency.setValueAtTime(95, this.ctx.currentTime);
-      this.filterNode.Q.setValueAtTime(2.5, this.ctx.currentTime);
-
-      // Ambient Noise Generator (Brown Noise buffer)
+      // --- 1. BACKGROUND FIRE NOISE ---
+      // Create pink noise buffer for roaring flame texture & snaps
       const bufferSize = this.ctx.sampleRate * 4;
       const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const output = buffer.getChannelData(0);
-      let lastOut = 0.0;
+      const data = buffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
       for (let i = 0; i < bufferSize; i++) {
         const white = Math.random() * 2 - 1;
-        output[i] = (lastOut + 0.02 * white) / 1.02;
-        lastOut = output[i];
-        output[i] *= 3.5;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        data[i] *= 0.11;
+        b6 = white * 0.115926;
       }
 
-      const noiseSource = this.ctx.createBufferSource();
-      noiseSource.buffer = buffer;
-      noiseSource.loop = true;
+      const fireSource = this.ctx.createBufferSource();
+      fireSource.buffer = buffer;
+      fireSource.loop = true;
 
-      // Ambient Gain Node
-      this.ambientGain = this.ctx.createGain();
-      this.ambientGain.gain.setValueAtTime(0.28, this.ctx.currentTime);
+      // Bandpass filter for roaring flame body
+      const fireFilter = this.ctx.createBiquadFilter();
+      fireFilter.type = "bandpass";
+      fireFilter.frequency.setValueAtTime(420, this.ctx.currentTime);
+      fireFilter.Q.setValueAtTime(0.8, this.ctx.currentTime);
 
-      noiseSource.connect(this.filterNode);
-      this.filterNode.connect(this.ambientGain);
-      this.ambientGain.connect(this.masterGain);
+      this.fireGain = this.ctx.createGain();
+      this.fireGain.gain.setValueAtTime(0.35, this.ctx.currentTime);
 
-      // LFO for breathing furnace pulse
-      const lfo = this.ctx.createOscillator();
-      lfo.frequency.setValueAtTime(0.12, this.ctx.currentTime);
-      const lfoGain = this.ctx.createGain();
-      lfoGain.gain.setValueAtTime(25, this.ctx.currentTime);
-      lfo.connect(lfoGain);
-      lfoGain.connect(this.filterNode.frequency);
-      lfo.start();
-      noiseSource.start();
+      fireSource.connect(fireFilter);
+      fireFilter.connect(this.fireGain);
+      this.fireGain.connect(this.masterGain);
+      fireSource.start();
 
-      // Scroll Friction Crackle
-      this.scrollGain = this.ctx.createGain();
-      this.scrollGain.gain.setValueAtTime(0, this.ctx.currentTime);
+      // Flame crackle micro-pops LFO modulation
+      const fireLfo = this.ctx.createOscillator();
+      fireLfo.frequency.setValueAtTime(4.5, this.ctx.currentTime);
+      const fireLfoGain = this.ctx.createGain();
+      fireLfoGain.gain.setValueAtTime(120, this.ctx.currentTime);
+      fireLfo.connect(fireLfoGain);
+      fireLfoGain.connect(fireFilter.frequency);
+      fireLfo.start();
 
-      const highpass = this.ctx.createBiquadFilter();
-      highpass.type = "highpass";
-      highpass.frequency.setValueAtTime(1400, this.ctx.currentTime);
+      // --- 2. SCROLL EARTHQUAKE RUMBLE (SUB-BASS SEISMIC THUNDERING) ---
+      this.quakeOsc = this.ctx.createOscillator();
+      this.quakeOsc.type = "triangle";
+      this.quakeOsc.frequency.setValueAtTime(38, this.ctx.currentTime);
 
-      const crackleSource = this.ctx.createBufferSource();
-      crackleSource.buffer = buffer;
-      crackleSource.loop = true;
-      crackleSource.connect(highpass);
-      highpass.connect(this.scrollGain);
-      this.scrollGain.connect(this.masterGain);
-      crackleSource.start();
+      const quakeFilter = this.ctx.createBiquadFilter();
+      quakeFilter.type = "lowpass";
+      quakeFilter.frequency.setValueAtTime(75, this.ctx.currentTime);
+
+      this.quakeGain = this.ctx.createGain();
+      this.quakeGain.gain.setValueAtTime(0, this.ctx.currentTime);
+
+      this.quakeOsc.connect(quakeFilter);
+      quakeFilter.connect(this.quakeGain);
+      this.quakeGain.connect(this.masterGain);
+      this.quakeOsc.start();
+
+      // --- 3. SCROLL ROCK CRACKLING / STONE FRACTURE ---
+      const rockFilter = this.ctx.createBiquadFilter();
+      rockFilter.type = "bandpass";
+      rockFilter.frequency.setValueAtTime(1800, this.ctx.currentTime);
+      rockFilter.Q.setValueAtTime(3.5, this.ctx.currentTime);
+
+      const rockSource = this.ctx.createBufferSource();
+      rockSource.buffer = buffer;
+      rockSource.loop = true;
+
+      this.rockCrackleGain = this.ctx.createGain();
+      this.rockCrackleGain.gain.setValueAtTime(0, this.ctx.currentTime);
+
+      rockSource.connect(rockFilter);
+      rockFilter.connect(this.rockCrackleGain);
+      this.rockCrackleGain.connect(this.masterGain);
+      rockSource.start();
 
       this.isInitialized = true;
       this.startLoop();
@@ -111,16 +137,17 @@ class InfernalAudioEngine {
     const update = () => {
       if (this.isInitialized && !this.isMuted && this.ctx) {
         const now = this.ctx.currentTime;
-        const s = frame.scroll;
         const v = Math.abs(frame.velocity);
 
-        // Modulate furnace pitch as you descend deeper into Hell
-        const targetFreq = 95 + s * 140;
-        this.filterNode.frequency.setTargetAtTime(targetFreq, now, 0.15);
+        // Seismic Earthquake sub-bass rumble scales with scroll speed
+        const quakeVol = Math.min(0.55, v * 0.08);
+        const quakeFreq = 34 + Math.min(30, v * 3.5);
+        this.quakeGain.gain.setTargetAtTime(quakeVol, now, 0.06);
+        this.quakeOsc.frequency.setTargetAtTime(quakeFreq, now, 0.06);
 
-        // Modulate scroll friction crackle with scroll velocity
-        const crackleVol = Math.min(0.22, v * 0.035);
-        this.scrollGain.gain.setTargetAtTime(crackleVol, now, 0.08);
+        // Rock grinding & stone crackle scales with scroll speed
+        const rockVol = Math.min(0.40, v * 0.06);
+        this.rockCrackleGain.gain.setTargetAtTime(rockVol, now, 0.05);
       }
       this.rafId = requestAnimationFrame(update);
     };
