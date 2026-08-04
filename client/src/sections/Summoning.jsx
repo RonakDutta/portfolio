@@ -5,6 +5,8 @@ import SummoningCircle from "../components/summoning/SummoningCircle";
 import MoltenButton from "../components/ui/MoltenButton";
 import SectionMark from "../components/ui/SectionMark";
 import EmberField from "../components/ui/EmberField";
+import { scrollToSection } from "../lib/useSmoothScroll";
+import { SECTIONS } from "../lib/store";
 import { summoning, identity } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -60,10 +62,15 @@ function Summoning({ env }) {
         });
       }
 
+      // Nothing travels into this section. Everywhere above, content arrives
+      // from somewhere; inside a summoning circle it should resolve where it
+      // stands, so this settles inward from slightly too large. It is the only
+      // entrance on the page with no direction, which is what makes the end of
+      // the descent feel like an arrival rather than one more panel.
       gsap.from(".summon-rise", {
-        y: 44,
+        scale: 1.09,
         opacity: 0,
-        duration: 1.1,
+        duration: 1.2,
         stagger: 0.09,
         ease: "expo.out",
         scrollTrigger: { trigger: section.current, start: "top 65%" },
@@ -246,6 +253,32 @@ function Summoning({ env }) {
             </span>
             {new Date().getFullYear()}
           </p>
+
+          {/* The way back up. Six chambers down, the only route out was the
+              chapter rail, which means the one deliberate journey on the page
+              had no ending. This is the descent cue from the hero run
+              backwards: same rule, same ember, travelling the other way. */}
+          <button
+            type="button"
+            onClick={() => scrollToSection(SECTIONS[0].id)}
+            className="summon-rise group mx-auto mt-16 flex min-h-11 flex-col items-center gap-3 px-4"
+          >
+            <span
+              aria-hidden="true"
+              className="relative block h-14 w-px bg-gradient-to-t from-transparent via-ember/45 to-transparent"
+            >
+              <span
+                className="animate-ember-climb absolute left-1/2 h-1.5 w-1.5 -translate-x-1/2
+                  rounded-full bg-hellfire shadow-[0_0_10px_3px_rgba(255,138,31,0.7)]"
+              />
+            </span>
+            <span
+              className="font-display text-[0.6rem] tracking-[0.4em] text-parchment/75 uppercase
+                transition-colors duration-300 group-hover:text-hellfire"
+            >
+              {summoning.ascend}
+            </span>
+          </button>
 
           <p className="sr-only">
             {identity.name}, {identity.role}. Contact by email at {identity.email}.

@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, subscribe, frame } from "../../lib/store";
 import { scrollToSection } from "../../lib/useSmoothScroll";
+import Sigil from "../ui/Sigil";
 import { identity } from "../../data/content";
 
 /**
@@ -70,15 +71,34 @@ function StoneNav() {
   const [lit, setLit] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleRef = useRef(null);
+  const gauge = useRef(null);
 
   useEffect(() => subscribe(setActive), []);
 
   // The bar is bare stone over the hero and lights up once you are inside.
+  //
+  // The same listener writes the depth gauge, straight to the node. Lenis
+  // scrolls the real document, so a plain scroll listener sees every frame of
+  // it, and a transform written by hand costs nothing; routing this through
+  // state would rerender the whole rail on every pixel of the descent, which
+  // is the one thing the store's discrete section index exists to avoid.
   useEffect(() => {
-    const onScroll = () => setLit(window.scrollY > window.innerHeight * 0.5);
+    const onScroll = () => {
+      setLit(window.scrollY > window.innerHeight * 0.5);
+
+      const doc = document.documentElement;
+      const travel = doc.scrollHeight - window.innerHeight;
+      const depth = travel > 0 ? Math.min(1, window.scrollY / travel) : 0;
+      if (gauge.current) gauge.current.style.transform = `scaleX(${depth})`;
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   // Escape closes the panel and hands focus back to the control that opened it.
@@ -112,14 +132,18 @@ function StoneNav() {
             : "0 8px 24px -20px rgba(0,0,0,0.8)",
         }}
       >
-        {/* Heat creeping along the underside of the slab. */}
+        {/* Depth gauge. Heat creeping along the underside of the slab, but
+            struck only as far as you have actually descended, so how much is
+            left is readable at a glance without a number to parse. */}
         <span
+          ref={gauge}
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-x-0 bottom-0 h-px transition-opacity duration-700
-            ${lit ? "opacity-100" : "opacity-0"}`}
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left"
           style={{
+            transform: "scaleX(0)",
             background:
-              "linear-gradient(90deg, transparent, rgba(255,77,0,0.65) 30%, rgba(255,192,97,0.8) 50%, rgba(255,77,0,0.65) 70%, transparent)",
+              "linear-gradient(90deg, rgba(255,77,0,0.5), rgba(255,138,31,0.85) 60%, rgba(255,240,214,0.95))",
+            boxShadow: "0 0 10px rgba(255,77,0,0.55)",
           }}
         />
 
@@ -132,15 +156,15 @@ function StoneNav() {
             onClick={() => select(SECTIONS[0].id)}
             className="group -ml-2 flex min-h-11 items-center gap-2.5 px-2.5 font-display text-[0.7rem] font-black tracking-[0.22em] text-bone uppercase"
           >
+            {/* The struck sigil, the same object as the favicon and the gate
+                that opened the page. It replaces a rotated <span> holding a
+                counter-rotated letter, which could never be given a bevel, a
+                lit facet or a rim that glows on approach. */}
             <span
               aria-hidden="true"
-              className="flex h-6 w-6 shrink-0 rotate-45 items-center justify-center border border-ember/70
-                bg-gradient-to-br from-[#241d29] to-[#0d0913] transition-colors duration-300
-                group-hover:border-hellfire"
+              className="relative flex h-7 w-7 shrink-0 items-center justify-center"
             >
-              <span className="flex h-full w-full -rotate-45 items-center justify-center text-[0.62rem] font-black leading-none text-hellfire select-none">
-                {identity.initials}
-              </span>
+              <Sigil className="h-full w-full drop-shadow-[0_0_6px_rgba(255,77,0,0.35)] transition-[filter] duration-500 group-hover:drop-shadow-[0_0_11px_rgba(255,138,31,0.75)]" />
             </span>
             <span className="hidden sm:inline">{identity.family}</span>
             <span className="sr-only">Back to the top</span>

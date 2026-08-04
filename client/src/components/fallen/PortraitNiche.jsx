@@ -29,15 +29,15 @@ gsap.registerPlugin(ScrollTrigger);
  */
 const ARCH = "M0,1 L0,0.58 C0,0.30 0.34,0.12 0.5,0 C0.66,0.12 1,0.30 1,0.58 L1,1 Z";
 
-function PortraitNiche({ src, alt, initials = "", reducedMotion = false }) {
+function PortraitNiche({ portrait, alt, initials = "", reducedMotion = false }) {
   const uid = useId().replace(/:/g, "");
   const clip = `arch-${uid}`;
   const root = useRef(null);
   const image = useRef(null);
   const shroud = useRef(null);
 
-  // No src, or a src that 404s, both fall through to the carved slab.
-  const [failed, setFailed] = useState(!src);
+  // No photo, or one that 404s, both fall through to the carved slab.
+  const [failed, setFailed] = useState(!portrait?.fallback);
 
   useLayoutEffect(() => {
     if (reducedMotion) return;
@@ -127,17 +127,30 @@ function PortraitNiche({ src, alt, initials = "", reducedMotion = false }) {
             </span>
           </div>
         ) : (
-          <img
-            ref={image}
-            src={src}
-            alt={alt}
-            loading="lazy"
-            decoding="async"
-            onError={() => setFailed(true)}
-            className="absolute inset-0 h-full w-full object-cover"
-            // Bright, clear and vibrant portrait grading.
-            style={{ filter: "brightness(1.05) contrast(1.08) sepia(0.10)" }}
-          />
+          // <picture>, so a phone downloads the 53 kB source rather than the
+          // 146 kB one. The <img> keeps the ref and the error handler: those
+          // belong to the element that actually loads, and <picture> is only a
+          // wrapper that tells the browser which file to hand it.
+          <picture>
+            <source
+              type="image/webp"
+              sizes={portrait.sizes}
+              srcSet={portrait.webp
+                .map((source) => `${source.src} ${source.width}w`)
+                .join(", ")}
+            />
+            <img
+              ref={image}
+              src={portrait.fallback}
+              alt={alt}
+              loading="lazy"
+              decoding="async"
+              onError={() => setFailed(true)}
+              className="absolute inset-0 h-full w-full object-cover"
+              // Bright, clear and vibrant portrait grading.
+              style={{ filter: "brightness(1.05) contrast(1.08) sepia(0.10)" }}
+            />
+          </picture>
         )}
 
         {/* Soft warm uplight from the lava below. */}

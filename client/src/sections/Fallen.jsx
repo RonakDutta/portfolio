@@ -20,15 +20,30 @@ function Fallen({ env }) {
   useLayoutEffect(() => {
     if (env.reducedMotion) return;
 
+    // This section is a niche cut into a wall, so it is built rather than
+    // slid: the stone is set into place from the left, the name is struck out
+    // of it from below behind a mask, and the copy arrives after, from the
+    // side the reader's eye is already travelling toward.
     const ctx = gsap.context(() => {
-      gsap.from(".fallen-rise", {
-        y: 44,
-        opacity: 0,
-        duration: 1.1,
-        stagger: 0.09,
-        ease: "expo.out",
+      const tl = gsap.timeline({
         scrollTrigger: { trigger: section.current, start: "top 68%" },
       });
+
+      tl.from(
+        ".fallen-frame",
+        { x: -54, scale: 0.94, opacity: 0, duration: 1.3, ease: "expo.out" },
+        0,
+      )
+        .from(
+          ".fallen-cut",
+          { yPercent: 115, duration: 1.15, stagger: 0.11, ease: "expo.out" },
+          0.25,
+        )
+        .from(
+          ".fallen-copy",
+          { x: 34, opacity: 0, duration: 0.95, stagger: 0.08, ease: "expo.out" },
+          0.4,
+        );
 
       gsap.from(".fallen-fact", {
         opacity: 0,
@@ -62,9 +77,9 @@ function Fallen({ env }) {
       />
 
       <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:gap-30">
-        <div className="fallen-rise">
+        <div className="fallen-frame">
           <PortraitNiche
-            src={fallen.portrait}
+            portrait={fallen.portrait}
             alt={fallen.portraitAlt}
             initials={identity.initials}
             reducedMotion={env.reducedMotion}
@@ -75,15 +90,23 @@ function Fallen({ env }) {
           <SectionMark
             roman="II"
             label="The Fallen One"
-            className="fallen-rise"
+            className="fallen-copy"
           />
 
+          {/* Each line rises out of its own clipped box, so the words are cut
+              from the stone rather than floated in over it. The mask is on the
+              wrapper and the travel is on the child; both on one element and
+              there is nothing left to hide behind. */}
           <h2 id="fallen-title" className="mt-7">
-            <span className="text-molten fallen-rise block font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[0.95] font-black">
-              {fallen.headline}
+            <span className="block overflow-hidden pb-[0.08em]">
+              <span className="text-molten fallen-cut block font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[0.95] font-black">
+                {fallen.headline}
+              </span>
             </span>
-            <span className="fallen-rise mt-3 block font-blackletter text-[clamp(1.5rem,3.2vw,2.25rem)] leading-none text-brimstone/85">
-              {fallen.headlineSub}
+            <span className="mt-3 block overflow-hidden pb-[0.12em]">
+              <span className="fallen-cut block font-blackletter text-[clamp(1.5rem,3.2vw,2.25rem)] leading-none text-brimstone/85">
+                {fallen.headlineSub}
+              </span>
             </span>
           </h2>
 
@@ -91,7 +114,7 @@ function Fallen({ env }) {
             {fallen.body.map((para) => (
               <p
                 key={para.slice(0, 24)}
-                className="fallen-rise max-w-prose text-parchment"
+                className="fallen-copy max-w-prose text-parchment"
               >
                 {para}
               </p>

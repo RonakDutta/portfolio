@@ -31,12 +31,28 @@ export const gates = {
 
 export const fallen = {
   /**
-   * Drop your photo at `client/public/portrait.jpg` and it appears here with no
-   * code change. Until then the niche shows a carved stone slab instead.
-   * Portrait reads best at roughly 4:5, framed head and shoulders, since the
-   * arch crops the top corners hard.
+   * The photo, in two widths and two formats.
+   *
+   * `fallback` is what every browser can read and what the niche uses if the
+   * WebP sources are unavailable; `webp` is what almost all of them will
+   * actually take, at roughly a third of the bytes. If the file is ever
+   * missing the niche falls back to a carved stone slab rather than a hole,
+   * so a broken path is never a broken layout.
+   *
+   * Replacing the photo means dropping a new one in and re-running the sizes.
+   * It reads best at roughly 4:5, framed head and shoulders, since the arch
+   * crops the top corners hard.
    */
-  portrait: "/portrait.png",
+  portrait: {
+    fallback: "/portrait.jpg",
+    webp: [
+      { src: "/portrait-560.webp", width: 560 },
+      { src: "/portrait.webp", width: 1000 },
+    ],
+    // Rendered at 28rem on desktop and 84% of the viewport below that, which
+    // is what tells the browser it can take the 560 on a phone.
+    sizes: "(min-width: 1024px) 28rem, 84vw",
+  },
   portraitAlt: "Ronak Dutta",
 
   headline: "Software Engineer",
@@ -234,4 +250,7 @@ export const summoning = {
 
   cta: { label: "Send word", href: "mailto:ronakdutta100@gmail.com" },
   closing: "Ronak Dutta, New Delhi",
+
+  /** The way back up, so the descent is a loop rather than a dead end. */
+  ascend: "Return to the surface",
 };

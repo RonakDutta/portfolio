@@ -24,25 +24,48 @@ function Chamber({ project, index, reducedMotion = false }) {
   useLayoutEffect(() => {
     if (reducedMotion) return;
 
+    // Alternating sides, hinged on the edge each one enters from, so the
+    // stack reads as a corridor of doors swinging open rather than a column of
+    // identical cards sliding up. The rotation is under a degree: any more and
+    // a 900px slab of type visibly keystones on the way in.
+    const fromLeft = index % 2 === 0;
+
     const ctx = gsap.context(() => {
       gsap
         .timeline({
           scrollTrigger: { trigger: root.current, start: "top 82%" },
         })
-        .from(root.current, { y: 64, duration: 1.1, ease: "expo.out" }, 0)
+        .from(
+          root.current,
+          {
+            xPercent: fromLeft ? -7 : 7,
+            y: 46,
+            rotate: fromLeft ? -0.8 : 0.8,
+            transformOrigin: fromLeft ? "0% 50%" : "100% 50%",
+            duration: 1.15,
+            ease: "expo.out",
+          },
+          0,
+        )
         // fromTo, not to. The shroud rests transparent in CSS so that skipping
         // this effect leaves a readable card instead of a black rectangle;
         // GSAP paints the darkness in and then lifts it.
         .fromTo(shroud.current, { opacity: 1 }, { opacity: 0, duration: 1.2, ease: "power2.out" }, 0)
         .from(
           root.current.querySelectorAll(".chamber-line"),
-          { y: 18, opacity: 0, duration: 0.6, stagger: 0.06, ease: "power2.out" },
+          {
+            y: 18,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.06,
+            ease: "power2.out",
+          },
           0.35,
         );
     }, root);
 
     return () => ctx.revert();
-  }, [reducedMotion]);
+  }, [reducedMotion, index]);
 
   const { name, kind, summary, work, stack, links } = project;
 

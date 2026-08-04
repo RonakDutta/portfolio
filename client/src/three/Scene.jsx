@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { PerformanceMonitor } from "@react-three/drei";
 import { frame, damp } from "../lib/store";
+import { markSceneReady } from "../lib/threshold";
 import CameraRig from "./CameraRig";
 import LavaField from "./LavaField";
 
@@ -30,6 +31,25 @@ function LavaGlow() {
   });
 
   return <pointLight ref={light} color="#ff5a10" distance={90} decay={2} />;
+}
+
+/**
+ * Tells the threshold the lava is actually on screen.
+ *
+ * Two frames, not one. The first frame is where the shaders compile, which is
+ * the longest single stall in the whole boot, and reporting from inside it
+ * would open the gate onto a canvas that is still black. The second frame only
+ * happens once that work is behind us.
+ */
+function ReadySignal() {
+  const frames = useRef(0);
+
+  useFrame(() => {
+    if (frames.current > 2) return;
+    if (++frames.current === 2) markSceneReady();
+  });
+
+  return null;
 }
 
 function QualityGuard({ maxDpr }) {
@@ -73,6 +93,7 @@ export default function Scene({ env }) {
 
       {/* Embers, monoliths, chains and the rune ring mount here. */}
 
+      <ReadySignal />
       <QualityGuard maxDpr={env.dpr[1]} />
     </>
   );

@@ -5,6 +5,7 @@ import GateArch from "../components/gates/GateArch";
 import Chains from "../components/gates/Chains";
 import MoltenButton from "../components/ui/MoltenButton";
 import { scrollToSection } from "../lib/useSmoothScroll";
+import { onCrossed } from "../lib/threshold";
 import { identity, gates } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,11 +25,17 @@ function Gates({ env }) {
   const cue = useRef(null);
 
   useLayoutEffect(() => {
+    let release = () => {};
+
     const ctx = gsap.context(() => {
       // ── Entrance ────────────────────────────────────────────────────────
+      // Built paused and held until the threshold parts. `from` tweens still
+      // render their start state immediately, so the lockup is already struck
+      // down out of sight behind the closed gate; what waits is the rise. Play
+      // it on mount instead and the whole entrance happens behind the door.
       if (!env.reducedMotion) {
-        gsap
-          .timeline({ defaults: { ease: "expo.out" } })
+        const intro = gsap
+          .timeline({ defaults: { ease: "expo.out" }, paused: true })
           .from(".gate-rise", {
             yPercent: 120,
             opacity: 0,
@@ -38,6 +45,8 @@ function Gates({ env }) {
           .from(".gate-ghost", { opacity: 0, scale: 1.12, duration: 2.2 }, 0.1)
           .from(".gate-rule", { scaleX: 0, duration: 1.4 }, 0.5)
           .from(".gate-rail", { opacity: 0, duration: 1.8 }, 0.6);
+
+        release = onCrossed(() => intro.play());
       }
 
       // ── Parallax ────────────────────────────────────────────────────────
@@ -60,7 +69,10 @@ function Gates({ env }) {
       tl.to(".gate-rail", { opacity: 0, ease: "none" }, 0);
     }, section);
 
-    return () => ctx.revert();
+    return () => {
+      release();
+      ctx.revert();
+    };
   }, [env.reducedMotion]);
 
   return (
