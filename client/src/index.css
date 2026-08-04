@@ -268,17 +268,40 @@
   }
 }
 
-/* Ember sliding down the scroll cue. */
+/* Ember sliding down the scroll cue.
+   translateY only, never translate(). The cue's ember is centred on its rule
+   with `-translate-x-1/2`, which Tailwind compiles to the `translate` property,
+   not to `transform`. Both then apply, so an -50% written in here as well lands
+   the ember a full half of its own width to the left of the line it is
+   supposed to be running down. Horizontal centring belongs to the utility;
+   this keyframe only moves it vertically. */
 @keyframes ember-fall {
   0% {
-    transform: translate(-50%, -0.375rem);
+    transform: translateY(-0.375rem);
     opacity: 0;
   }
   25% {
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, 3.5rem);
+    transform: translateY(3.5rem);
+    opacity: 0;
+  }
+}
+
+/* Ember climbing the ascent cue at the foot of the page. The descent cue's
+   fall, run backwards, so the two ends of the page read as one loop. Same
+   translateY-only rule as ember-fall above, for the same reason. */
+@keyframes ember-climb {
+  0% {
+    transform: translateY(3.5rem);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-0.375rem);
     opacity: 0;
   }
 }
@@ -328,6 +351,24 @@
   }
 }
 
+/* Bars on the sound switch. Uneven rise and fall, so four of them running at
+   different delays never read as a wave travelling across. */
+@keyframes ember-bar {
+  0%,
+  100% {
+    transform: scaleY(0.28);
+  }
+  35% {
+    transform: scaleY(1);
+  }
+  62% {
+    transform: scaleY(0.55);
+  }
+  80% {
+    transform: scaleY(0.86);
+  }
+}
+
 @keyframes pulse-glow {
   0%,
   100% {
@@ -342,6 +383,9 @@
 
 .animate-ember-fall {
   animation: ember-fall 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.animate-ember-climb {
+  animation: ember-climb 3.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 .animate-flame-drift {
   animation: flame-drift 1.9s linear infinite;
@@ -360,6 +404,9 @@
 }
 .animate-pulse-glow {
   animation: pulse-glow 4.5s ease-in-out infinite;
+}
+.animate-ember-bar {
+  animation: ember-bar 1.7s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

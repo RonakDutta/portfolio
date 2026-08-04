@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Served on any unmatched path, so it should never be indexed in its own right.
+Disallow: /404.html

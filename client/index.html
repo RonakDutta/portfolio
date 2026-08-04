@@ -10,10 +10,15 @@
     />
     <meta name="author" content="Ronak Dutta" />
     <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
 
     <!-- How the link renders when it is pasted into Slack, WhatsApp or a DM,
-         which is how most people will actually meet this page. -->
+         which is how most people will actually meet this page. A purpose-built
+         1200x630 card, not the portrait: a 3:4 photo gets centre-cropped to a
+         band across the chest by every one of them. -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:site_name" content="Ronak Dutta" />
     <meta
       property="og:title"
       content="Ronak Dutta, Software Engineer in New Delhi"
@@ -22,7 +27,13 @@
       property="og:description"
       content="A descent through six chambers of work, study and the things I have built."
     />
-    <meta property="og:image" content="/portrait.png" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Ronak Dutta, Software Engineer, New Delhi"
+    />
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
@@ -32,22 +43,247 @@
       name="twitter:description"
       content="A descent through six chambers of work, study and the things I have built."
     />
-    <meta name="twitter:image" content="/portrait.png" />
+    <meta name="twitter:image" content="%VITE_SITE_URL%/og.jpg" />
 
-    <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Loaded without blocking the render. Three families over two hosts is
+         around half a second of blocked paint on a mid-range phone, and the
+         threshold below is covering the screen for exactly that window, so the
+         swap happens where nobody can see it. -->
     <link
-      rel="stylesheet"
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..600&family=UnifrakturMaguntia&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..600&family=UnifrakturMaguntia&display=swap"
+      />
+    </noscript>
 
     <title>Ronak Dutta, Software Engineer</title>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Ronak Dutta",
+        "jobTitle": "Software Engineer",
+        "url": "%VITE_SITE_URL%/",
+        "image": "%VITE_SITE_URL%/og.jpg",
+        "email": "mailto:ronakdutta100@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "New Delhi",
+          "addressCountry": "IN"
+        },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "University School of Automation and Robotics, GGSIPU"
+        },
+        "knowsAbout": [
+          "React",
+          "Node.js",
+          "Express",
+          "PostgreSQL",
+          "Full-stack web development"
+        ],
+        "sameAs": ["https://github.com/RonakDutta"]
+      }
+    </script>
+
+    <!-- ── Threshold ──────────────────────────────────────────────────────
+         The gate that covers the page while three.js and the fonts arrive.
+
+         It lives here rather than in a React component so that it is painted
+         by the HTML parser, before a single byte of JavaScript has run. That
+         is the whole point: mounting it from React would put the black flash
+         it exists to remove *in front of it*.
+
+         React does not re-render this markup. `Threshold.jsx` adopts these
+         nodes and drives them with GSAP, then removes them. The CSS below is
+         only what has to be right before the stylesheet loads: the stone, the
+         rim drawing itself, and the bar creeping while the bundle downloads. -->
+    <style>
+      html {
+        background: #05030a;
+      }
+      #threshold {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        overflow: hidden;
+        font-family: Cinzel, Georgia, serif;
+      }
+      .th-half {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50.5%;
+        background:
+          linear-gradient(
+            to bottom,
+            rgba(255, 235, 205, 0.05) 0 1px,
+            transparent 1px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.5) 0 1px,
+            transparent 1px 84px
+          ),
+          radial-gradient(
+            120% 90% at 50% 120%,
+            rgba(255, 77, 0, 0.16) 0%,
+            transparent 62%
+          ),
+          linear-gradient(to bottom, #191320 0%, #0d0913 60%, #170e14 100%);
+        will-change: transform;
+      }
+      .th-left {
+        left: 0;
+        box-shadow: inset -1px 0 0 rgba(255, 122, 24, 0.28);
+      }
+      .th-right {
+        right: 0;
+        box-shadow: inset 1px 0 0 rgba(255, 122, 24, 0.28);
+      }
+      /* Heat trapped in the seam between the leaves. */
+      #th-seam {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        margin-left: -1px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(255, 138, 31, 0.55) 30%,
+          rgba(255, 240, 214, 0.8) 50%,
+          rgba(255, 138, 31, 0.55) 70%,
+          transparent
+        );
+        opacity: 0.5;
+      }
+      .th-core {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+      }
+      .th-sigil {
+        width: 84px;
+        height: 84px;
+        filter: drop-shadow(0 0 22px rgba(255, 77, 0, 0.45));
+      }
+      /* 167 is the perimeter of the diamond, so the rim draws itself in one
+         continuous stroke from the top vertex. */
+      .th-sigil .sigil-rim {
+        stroke-dasharray: 167;
+        stroke-dashoffset: 167;
+        animation: th-strike 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+      }
+      .th-sigil .sigil-letter,
+      .th-sigil .sigil-rule,
+      .th-sigil .sigil-facet {
+        opacity: 0;
+        animation: th-emerge 0.7s ease-out 0.85s forwards;
+      }
+      @keyframes th-strike {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes th-emerge {
+        to {
+          opacity: 1;
+        }
+      }
+      .th-bar {
+        position: relative;
+        width: min(200px, 44vw);
+        height: 2px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+      }
+      #th-fill {
+        display: block;
+        height: 100%;
+        width: 100%;
+        transform: scaleX(0);
+        transform-origin: 0 50%;
+        background: linear-gradient(90deg, #8c2606, #ff4d00 55%, #ffc061);
+        box-shadow: 0 0 12px rgba(255, 77, 0, 0.8);
+        animation: th-creep 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      /* Movement while the bundle is still in flight. GSAP takes over from
+         whatever value this has reached, so the bar never jumps backwards. */
+      @keyframes th-creep {
+        to {
+          transform: scaleX(0.4);
+        }
+      }
+      .th-word {
+        margin: 0;
+        font-size: 0.6rem;
+        letter-spacing: 0.42em;
+        text-indent: 0.42em;
+        text-transform: uppercase;
+        color: #9d8f7d;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .th-sigil .sigil-rim,
+        .th-sigil .sigil-letter,
+        .th-sigil .sigil-rule,
+        .th-sigil .sigil-facet,
+        #th-fill {
+          animation: none;
+          stroke-dashoffset: 0;
+          opacity: 1;
+        }
+        #th-fill {
+          transform: scaleX(0.4);
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- aria-hidden: this is scenery. The page underneath is already in the
+         accessibility tree and reachable, so a screen reader is never held at
+         a door it cannot see. -->
+    <div id="threshold" aria-hidden="true">
+      <div class="th-half th-left"></div>
+      <div class="th-half th-right"></div>
+      <div id="th-seam"></div>
+      <div class="th-core">
+        <!-- Injected from public/favicon.svg at build time by the
+             inline-sigil plugin, so the mark has one source of truth. -->
+        <!--SIGIL-->
+        <div class="th-bar"><i id="th-fill"></i></div>
+        <p class="th-word">Abandon all hope</p>
+      </div>
+    </div>
+
     <noscript>
+      <!-- Nothing is coming to open the gate, so take it down. -->
+      <style>
+        #threshold {
+          display: none;
+        }
+      </style>
       <div
         style="
           padding: 4rem;

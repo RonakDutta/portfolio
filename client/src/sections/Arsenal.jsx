@@ -27,12 +27,16 @@ function Arsenal({ env }) {
     if (env.reducedMotion) return;
 
     const ctx = gsap.context(() => {
+      // An armoury is hung, so this section arrives from above rather than
+      // below: the header drops and settles with a little weight behind it,
+      // which is the opposite of every other heading on the page and reads
+      // that way even though the distance is small.
       gsap.from(".arsenal-rise", {
-        y: 40,
+        y: -34,
         opacity: 0,
         duration: 1,
         stagger: 0.08,
-        ease: "expo.out",
+        ease: "back.out(1.5)",
         scrollTrigger: { trigger: section.current, start: "top 70%" },
       });
 
@@ -53,9 +57,19 @@ function Arsenal({ env }) {
         gsap
           .timeline({ scrollTrigger: { trigger: rack, start: "top 88%" } })
           .from(rack, { x: -24, opacity: 0, duration: 0.7, ease: "expo.out" })
+          // Tags settle onto the rail, each a moment after the last. Straight
+          // down and square: an earlier version rotated them in from -5deg,
+          // and a row of hard-edged plates caught mid-tilt reads as a layout
+          // fault rather than as motion. On a rack, things hang level.
           .from(
             rack.querySelectorAll(".arsenal-tag"),
-            { y: 12, opacity: 0, duration: 0.45, stagger: 0.045, ease: "power2.out" },
+            {
+              y: -12,
+              opacity: 0,
+              duration: 0.45,
+              stagger: 0.045,
+              ease: "power2.out",
+            },
             0.18,
           );
       });
@@ -91,7 +105,12 @@ function Arsenal({ env }) {
         }}
       />
 
-      <EmberField count={16} reducedMotion={env.reducedMotion} className="-z-10" />
+      <EmberField
+        count={16}
+        reducedMotion={env.reducedMotion}
+        isMobile={env.isMobile}
+        className="-z-10"
+      />
 
       <div className="relative mx-auto w-full max-w-5xl px-6">
         <header className="mx-auto max-w-2xl text-center">

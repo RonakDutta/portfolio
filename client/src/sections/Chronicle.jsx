@@ -48,16 +48,18 @@ function Chronicle({ env }) {
         },
       });
 
-      gsap.utils.toArray(".chronicle-entry").forEach((entry) => {
-        gsap
-          .timeline({ scrollTrigger: { trigger: entry, start: "top 85%" } })
-          .from(entry, { x: 28, opacity: 0, duration: 0.85, ease: "expo.out" })
-          .from(
-            entry.querySelector(".chronicle-node"),
-            { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(2.4)" },
-            0.1,
-          );
-      });
+      // The entries themselves have no entrance, deliberately.
+      //
+      // They had one: nodes popping down the spine in sequence with the text
+      // sliding out after them. On paper that is the section's own metaphor,
+      // a record being written. In practice the spine is already drawing
+      // itself against the scroll immediately to the left, and a second timed
+      // motion running across it turned a calm timeline into two animations
+      // competing for the same few hundred pixels.
+      //
+      // The scrubbed spine is the animation here. It is tied to the reader's
+      // own scrolling rather than to a clock, so it can never be out of step
+      // with them, and the rows it passes stay still and legible.
 
       gsap.from(".chronicle-sigil", {
         y: 26,
@@ -88,7 +90,12 @@ function Chronicle({ env }) {
         }}
       />
 
-      <EmberField count={12} reducedMotion={env.reducedMotion} className="-z-10" />
+      <EmberField
+        count={12}
+        reducedMotion={env.reducedMotion}
+        isMobile={env.isMobile}
+        className="-z-10"
+      />
 
       <div className="relative mx-auto w-full max-w-4xl px-6">
         <header className="mx-auto max-w-2xl text-center">

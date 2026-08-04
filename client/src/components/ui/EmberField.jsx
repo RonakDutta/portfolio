@@ -11,10 +11,22 @@ import { memo, useMemo } from "react";
  * Positions are derived from the index rather than Math.random, so the layout
  * is identical on every render and no ember jumps when React re-renders.
  */
-function EmberField({ count = 14, className = "", reducedMotion = false }) {
+function EmberField({
+  count = 14,
+  className = "",
+  reducedMotion = false,
+  isMobile = false,
+}) {
+  // Halved on a phone. Each ember carries a box-shadow and an infinite
+  // transform animation, so each one is its own composited layer; three
+  // sections' worth is forty-odd layers for a handful of pixels of glow, on
+  // the device least able to spare them. The pattern is index-derived, so
+  // taking half still spreads across the section rather than clumping.
+  const total = isMobile ? Math.ceil(count / 2) : count;
+
   const embers = useMemo(
     () =>
-      Array.from({ length: count }, (_, i) => ({
+      Array.from({ length: total }, (_, i) => ({
         // Coprime multipliers spread these out without clumping.
         left: `${(i * 37) % 100}%`,
         bottom: `${(i * 23) % 40}%`,
@@ -25,7 +37,7 @@ function EmberField({ count = 14, className = "", reducedMotion = false }) {
         size: i % 4 === 0 ? 3 : 2,
         peak: i % 3 === 0 ? 0.9 : 0.55,
       })),
-    [count],
+    [total],
   );
 
   // Nothing decorative should move for someone who asked for stillness.

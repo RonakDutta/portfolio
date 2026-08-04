@@ -32,6 +32,18 @@ function Chambers({ env }) {
         ease: "expo.out",
         scrollTrigger: { trigger: section.current, start: "top 72%" },
       });
+
+      // The two title lines draw apart as they arrive, which is the same
+      // gesture the cards below make one after another. A header that
+      // announces the pattern it is introducing costs nothing extra.
+      gsap.from(".chambers-part", {
+        x: (i) => (i === 0 ? -34 : 34),
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.1,
+        ease: "expo.out",
+        scrollTrigger: { trigger: section.current, start: "top 72%" },
+      });
     }, section);
 
     return () => ctx.revert();
@@ -58,10 +70,10 @@ function Chambers({ env }) {
           <SectionMark roman="IV" label="Chambers" className="chambers-rise justify-center" />
 
           <h2 id="chambers-title" className="mt-7">
-            <span className="text-molten chambers-rise block font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95] font-black">
+            <span className="text-molten chambers-part block font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95] font-black">
               {chambers.headline}
             </span>
-            <span className="chambers-rise mt-3 block font-blackletter text-[clamp(1.35rem,3vw,2rem)] leading-none text-brimstone/85">
+            <span className="chambers-part mt-3 block font-blackletter text-[clamp(1.35rem,3vw,2rem)] leading-none text-brimstone/85">
               {chambers.headlineSub}
             </span>
           </h2>

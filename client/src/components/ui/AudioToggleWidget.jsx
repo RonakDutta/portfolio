@@ -1,35 +1,100 @@
 import { memo, useState } from "react";
 import { infernalAudio } from "../../lib/infernalAudio";
 
+/**
+ * The switch for the ambience.
+ *
+ * The indicator is four struck bars rather than a speaker emoji. Emoji render
+ * in whatever colour and shape the operating system decides, which on this
+ * page meant a glossy blue-grey iOS speaker sitting on a wrought-iron disc,
+ * the one element on the site drawn by somebody else. Bars are drawn here, in
+ * ember, and they move with the sound instead of merely labelling it.
+ *
+ * `aria-pressed` rather than a label that changes underneath the user: the
+ * control is a toggle, and a button whose accessible name flips between "Mute"
+ * and "Unmute" is read as a different button each time it is pressed.
+ */
+
+/** Height and phase per bar, so they never rise as a block. */
+const BARS = [
+  { x: 3, h: 8, delay: "0s" },
+  { x: 7.5, h: 13, delay: "0.19s" },
+  { x: 12, h: 10.5, delay: "0.41s" },
+  { x: 16.5, h: 6, delay: "0.62s" },
+];
+
 function AudioToggleWidget() {
   const [active, setActive] = useState(false);
+  const [available, setAvailable] = useState(true);
 
   const toggle = () => {
-    const newState = infernalAudio.toggle();
-    setActive(newState);
+    const next = infernalAudio.toggle();
+    setActive(next);
+    // A browser with no Web Audio at all reports false forever. Say so once
+    // rather than leaving a control that visibly does nothing.
+    if (!next && !infernalAudio.ready) setAvailable(false);
   };
+
+  if (!available) return null;
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={active ? "Mute ambient audio" : "Unmute ambient audio"}
-      className={`group fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-500 ${
-        active
-          ? "border-ember/80 bg-[#140b12]/90 text-hellfire shadow-[0_0_20px_rgba(255,77,0,0.4)]"
-          : "border-iron/70 bg-[#0d0912]/80 text-smoke hover:border-ember/60 hover:text-parchment"
-      }`}
-    >
-      <span
-        aria-hidden="true"
-        className={`text-sm transition-transform duration-300 group-hover:scale-110 ${
-          active ? "animate-pulse text-ember" : "text-smoke"
+      aria-pressed={active}
+      className={`group fixed right-6 bottom-6 z-40 flex h-11 w-11 items-center justify-center
+        rounded-full border transition-colors duration-500 ${
+          active
+            ? "border-ember/80 bg-[#140b12]/90 shadow-[0_0_22px_rgba(255,77,0,0.38)]"
+            : "border-iron/70 bg-[#0d0912]/85 hover:border-ember/60"
         }`}
+    >
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 22 20"
+        className="h-[18px] w-[19px] overflow-visible"
       >
-        {active ? "🔊" : "🔇"}
-      </span>
+        {BARS.map((bar) => (
+          <rect
+            key={bar.x}
+            x={bar.x}
+            y={16 - bar.h}
+            width="2.4"
+            height={bar.h}
+            rx="0.6"
+            // Silent bars keep their height. Collapsing them to a third looked
+            // right in the abstract and rendered as four 2px specks under a
+            // diagonal line, which reads as a smudge rather than as a control.
+            // Colour and the strike carry the state; the shape stays legible.
+            className={
+              active
+                ? "animate-ember-bar origin-bottom fill-ember"
+                : "fill-smoke transition-colors duration-300 group-hover:fill-parchment"
+            }
+            style={
+              active
+                ? { animationDelay: bar.delay, transformBox: "fill-box" }
+                : undefined
+            }
+          />
+        ))}
 
-      <span className="sr-only">{active ? "Sound On" : "Sound Off"}</span>
+        {/* Struck through while silent. */}
+        <line
+          x1="1"
+          y1="17.5"
+          x2="21"
+          y2="1.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          className={`origin-center text-smoke transition-opacity duration-300 ${
+            active ? "opacity-0" : "opacity-100"
+          }`}
+        />
+      </svg>
+
+      <span className="sr-only">Ambient sound</span>
     </button>
   );
 }

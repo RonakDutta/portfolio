@@ -49,7 +49,12 @@ function HellCanvas({ env }) {
     if (!env.enable3D) return;
     const idle = window.requestIdleCallback ?? ((cb) => setTimeout(cb, 200));
     const cancel = window.cancelIdleCallback ?? clearTimeout;
-    const handle = idle(() => setReady(true), { timeout: 1200 });
+    // Shorter deadline than it looks. The threshold is holding the page shut
+    // while this loads, so the download and the shader compile land inside a
+    // window the visitor is already spending, and the gate will not open
+    // until the scene reports back. Waiting longer only makes the gate
+    // linger.
+    const handle = idle(() => setReady(true), { timeout: 500 });
     return () => cancel(handle);
   }, [env.enable3D]);
 
@@ -78,7 +83,13 @@ function HellCanvas({ env }) {
         >
           <Canvas
             dpr={env.dpr}
-            frameloop={visible ? "always" : "never"}
+            // "demand" wherever a frame cap applies: the FrameGovernor inside
+            // the scene then asks for renders at its own rate instead of the
+            // display's. "never" while the tab is in the background, which
+            // stops the loop outright rather than merely slowing it.
+            frameloop={
+              !visible ? "never" : env.canvasFps ? "demand" : "always"
+            }
             camera={{
               fov: 55,
               near: 0.1,

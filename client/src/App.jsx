@@ -3,6 +3,7 @@ import { useEnvironment } from "./lib/useEnvironment";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { initPointer } from "./lib/store";
 import HellCanvas from "./components/HellCanvas";
+import Threshold from "./components/Threshold";
 import StoneNav from "./components/nav/StoneNav";
 import SparkTrail from "./components/ui/SparkTrail";
 import AudioToggleWidget from "./components/ui/AudioToggleWidget";
@@ -21,6 +22,8 @@ export default function App() {
 
   return (
     <>
+      <Threshold env={env} />
+
       <a
         href="#gates"
         className="sr-focusable inline-flex min-h-11 items-center bg-obsidian px-4 font-display text-bone"

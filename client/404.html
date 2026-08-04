@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05030a" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content="noindex" />
+    <title>Lost — Ronak Dutta</title>
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:wght@300..700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+
+    <!-- Deliberately standalone: no bundle, no framework, no build step beyond
+         having the sigil injected. A 404 is served when something has already
+         gone wrong, and it is the one page that should not be able to fail for
+         a second reason on the way. -->
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html {
+        background: #05030a;
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1.5rem;
+        color: #ddd3c4;
+        font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
+        font-weight: 500;
+        font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.2rem);
+        line-height: 1.7;
+        text-align: center;
+        overflow-x: clip;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* The shaft, banked hot at the bottom, same as the live scene falls back
+         to when WebGL is unavailable. */
+      .ground {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background: radial-gradient(
+          120% 80% at 50% 118%,
+          #ff4d00 0%,
+          #8a1c03 18%,
+          #2a0d0a 42%,
+          #05030a 78%
+        );
+        opacity: 0.55;
+      }
+      .vignette {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          radial-gradient(
+            115% 75% at 50% 42%,
+            transparent 30%,
+            rgba(5, 3, 10, 0.72) 100%
+          ),
+          linear-gradient(to bottom, rgba(5, 3, 10, 0.9) 0%, transparent 35%);
+      }
+
+      main {
+        position: relative;
+        max-width: 34rem;
+      }
+
+      .sigil {
+        width: 74px;
+        height: 74px;
+        filter: drop-shadow(0 0 24px rgba(255, 77, 0, 0.45));
+      }
+
+      .code {
+        margin: 1.75rem 0 0;
+        font-family: Cinzel, ui-serif, Georgia, serif;
+        font-weight: 900;
+        font-size: clamp(4.5rem, 22vw, 9rem);
+        line-height: 0.86;
+        letter-spacing: -0.02em;
+        background: linear-gradient(
+          180deg,
+          #fff3d6 0%,
+          #ffc061 28%,
+          #ff4d00 62%,
+          #6d1c05 88%,
+          #2a0d05 100%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+      }
+
+      h1 {
+        margin: 0.75rem 0 0;
+        font-family: Cinzel, ui-serif, Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(1.1rem, 4.2vw, 1.5rem);
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+        color: #ddd3c4;
+        text-wrap: balance;
+      }
+
+      p {
+        margin: 1.25rem auto 0;
+        max-width: 26rem;
+        color: #c3b7a6;
+        text-wrap: pretty;
+      }
+
+      .rule {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        max-width: 20rem;
+        margin: 1.75rem auto 0;
+      }
+      .rule span:first-child,
+      .rule span:last-child {
+        height: 1px;
+        flex: 1;
+        background: linear-gradient(90deg, transparent, rgba(255, 77, 0, 0.6));
+      }
+      .rule span:last-child {
+        background: linear-gradient(270deg, transparent, rgba(255, 77, 0, 0.6));
+      }
+      .rule i {
+        width: 7px;
+        height: 7px;
+        rotate: 45deg;
+        border: 1px solid rgba(255, 122, 24, 0.75);
+      }
+
+      .back {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-height: 2.75rem;
+        margin-top: 2.25rem;
+        padding: 0.9rem 2rem;
+        border: 1px solid rgba(255, 77, 0, 0.45);
+        background: linear-gradient(to bottom, #141019, #0a070d);
+        color: #ddd3c4;
+        font-family: Cinzel, ui-serif, Georgia, serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        text-decoration: none;
+        overflow: hidden;
+        transition:
+          color 0.35s ease,
+          border-color 0.35s ease;
+      }
+      /* The same cold-iron-until-you-touch-it fill the buttons on the site
+         use, done with one pseudo-element instead of a spring. */
+      .back::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(to top, #ff2d00, #ff4d00 55%, #ff8a1f);
+        transform: scaleY(0);
+        transform-origin: 50% 100%;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .back:hover,
+      .back:focus-visible {
+        color: #0b0810;
+        border-color: rgba(255, 138, 31, 0.9);
+      }
+      .back:hover::before,
+      .back:focus-visible::before {
+        transform: scaleY(1);
+      }
+      .back svg {
+        width: 11px;
+        height: 14px;
+      }
+
+      :focus-visible {
+        outline: 2px solid #ff8a1f;
+        outline-offset: 3px;
+      }
+
+      /* Embers drifting up the shaft. Purely decorative, and the first thing
+         to go when motion is unwelcome. */
+      .ember {
+        position: fixed;
+        bottom: -10px;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: #ffc061;
+        box-shadow: 0 0 8px 2px rgba(255, 138, 31, 0.7);
+        opacity: 0;
+        animation: rise linear infinite;
+        z-index: -1;
+      }
+      @keyframes rise {
+        0% {
+          transform: translate3d(0, 0, 0) scale(1);
+          opacity: 0;
+        }
+        12% {
+          opacity: 0.85;
+        }
+        86% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translate3d(var(--dx, 0), -70vh, 0) scale(0.3);
+          opacity: 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ember {
+          display: none;
+        }
+        .back,
+        .back::before {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ground"></div>
+    <div class="vignette"></div>
+
+    <span class="ember" style="left: 12%; --dx: 26px; animation-duration: 9s"></span>
+    <span class="ember" style="left: 27%; --dx: -18px; animation-duration: 11s; animation-delay: 1.4s"></span>
+    <span class="ember" style="left: 44%; --dx: 32px; animation-duration: 8s; animation-delay: 3.1s"></span>
+    <span class="ember" style="left: 63%; --dx: -24px; animation-duration: 12s; animation-delay: 0.7s"></span>
+    <span class="ember" style="left: 79%; --dx: 20px; animation-duration: 10s; animation-delay: 2.3s"></span>
+    <span class="ember" style="left: 91%; --dx: -30px; animation-duration: 13s; animation-delay: 4.2s"></span>
+
+    <main>
+      <!--SIGIL-->
+
+      <p class="code">404</p>
+
+      <h1>You have strayed from the path</h1>
+
+      <div class="rule"><span></span><i></i><span></span></div>
+
+      <p>
+        There is no chamber at this door. Six were cut into the shaft, and this
+        is not one of them.
+      </p>
+
+      <a class="back" href="/">
+        Return to the gates
+        <svg viewBox="0 0 12 16" aria-hidden="true" fill="none">
+          <path
+            d="M6 16V3M1 8l5-6 5 6"
+            stroke="currentColor"
+            stroke-width="1.6"
+          />
+        </svg>
+      </a>
+    </main>
+  </body>
+</html>
