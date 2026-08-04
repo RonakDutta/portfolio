@@ -7,16 +7,6 @@ import { chambers } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Section IV: Chambers.
- *
- * A stacked list rather than a grid. These carry real detail, and a
- * three-across grid would either crop the work down to a sentence or leave
- * three columns of ragged text. Stacked, each project gets full width to
- * separate what it is from what was done to build it.
- *
- * Length is whatever `chambers.projects` holds. Nothing here counts to three.
- */
 function Chambers({ env }) {
   const section = useRef(null);
 
@@ -33,10 +23,7 @@ function Chambers({ env }) {
         scrollTrigger: { trigger: section.current, start: "top 72%" },
       });
 
-      // The two title lines draw apart as they arrive, which is the same
-      // gesture the cards below make one after another. A header that
-      // announces the pattern it is introducing costs nothing extra.
-      gsap.from(".chambers-part", {
+gsap.from(".chambers-part", {
         x: (i) => (i === 0 ? -34 : 34),
         opacity: 0,
         duration: 1.2,

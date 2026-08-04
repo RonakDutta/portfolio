@@ -11,18 +11,6 @@ import { summoning, identity } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Section VI: Summoning Circle. The end of the descent.
- *
- * The portal is the transition into it: three rings scrubbed from nothing out
- * past the edge of the frame, so scrolling in reads as passing through
- * something rather than arriving at the next block of text. It is tied to the
- * approach, not to the section, which is why it is driven off the section's top
- * edge crossing the bottom of the viewport.
- *
- * No contact form. A form with nothing behind it looks like it sent and did
- * not, and that is a worse first impression than a plain link.
- */
 function Summoning({ env }) {
   const section = useRef(null);
   const [copied, setCopied] = useState("");
@@ -31,7 +19,7 @@ function Summoning({ env }) {
     if (env.reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // The portal opening: rings rushing out past the viewer.
+      
       gsap.fromTo(
         ".portal-ring",
         { scale: 0.05, opacity: 0 },
@@ -50,10 +38,7 @@ function Summoning({ env }) {
         },
       );
 
-
-      // The portal landing, felt rather than seen. Desktop only, for the same
-      // reason as the camera: a thumb flick makes this read as breakage.
-      if (!env.coarsePointer && !env.isMobile) {
+if (!env.coarsePointer && !env.isMobile) {
         gsap.to(".summon-stage", {
           keyframes: { x: [0, -3, 3, -2, 2, 0], y: [0, 2, -2, 1, -1, 0] },
           duration: 0.5,
@@ -62,12 +47,7 @@ function Summoning({ env }) {
         });
       }
 
-      // Nothing travels into this section. Everywhere above, content arrives
-      // from somewhere; inside a summoning circle it should resolve where it
-      // stands, so this settles inward from slightly too large. It is the only
-      // entrance on the page with no direction, which is what makes the end of
-      // the descent feel like an arrival rather than one more panel.
-      gsap.from(".summon-rise", {
+gsap.from(".summon-rise", {
         scale: 1.09,
         opacity: 0,
         duration: 1.2,
@@ -94,9 +74,8 @@ function Summoning({ env }) {
       setCopied(value);
       setTimeout(() => setCopied(""), 2000);
     } catch {
-      // Clipboard can be blocked by permissions or a non-secure origin. The
-      // address is selectable text either way, so there is nothing to recover.
-    }
+
+}
   };
 
   return (
@@ -110,10 +89,8 @@ function Summoning({ env }) {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-20"
         style={{
-          // Deeper than the other sections on purpose. The circle is drawn in thin
-          // ember strokes, and over a lit lava surface it reads as scattered arcs
-          // rather than as a figure. It needs near-black to sit on.
-          background:
+
+background:
             "radial-gradient(88% 78% at 50% 50%, rgba(5,3,10,0.99) 0%, rgba(5,3,10,0.95) 48%, rgba(5,3,10,0.62) 100%)",
         }}
       />
@@ -142,22 +119,14 @@ function Summoning({ env }) {
             </span>
           </h2>
 
-          {/* The ward's strokes run straight through this line and measured as
-              low as 1.3:1 against it. Layering alone cannot fix that: the
-              strokes are still behind the glyphs whatever the z-order. It needs
-              an actual plate. Both children are positioned, so document order
-              decides: plate first, text after, and the text wins. */}
+          {}
           <p className="summon-rise relative mx-auto mt-6 max-w-md text-parchment">
             <span
               aria-hidden="true"
               className="absolute -inset-x-10 -inset-y-6"
               style={{
-                // A gradient, not a blurred rounded box. An ellipse leaves the
-                // paragraph's corners uncovered and a 16px blur eats its own
-                // top and bottom edges, which is exactly where the ascenders
-                // are. This is opaque across the whole text box and fades out
-                // past it, and costs no filter.
-                background:
+
+background:
                   "radial-gradient(78% 96% at 50% 50%, rgba(5,3,10,0.98) 0%, rgba(5,3,10,0.95) 62%, rgba(5,3,10,0.7) 84%, transparent 100%)",
               }}
             />
@@ -165,7 +134,7 @@ function Summoning({ env }) {
           </p>
 
           <div className="summon-rise relative mt-10 flex justify-center">
-            {/* The portal rings, rushing past on the way in, perfectly concentric with the circle! */}
+            {}
             <div aria-hidden="true" className="pointer-events-none absolute top-1/2 left-1/2 -z-10 -translate-x-1/2 -translate-y-1/2">
               {[0, 1, 2].map((i) => (
                 <span
@@ -181,19 +150,14 @@ function Summoning({ env }) {
               ))}
             </div>
 
-            {/* The circle sits centered directly behind the SEND WORD button. Proportioned on mobile. */}
-            {/* -z-10 matters. Without it the circle is a later sibling with auto
-                z-index, so it painted over the copy above it and its strokes
-                crossed the lede at 1.3:1. It is decoration; it belongs behind
-                everything in the section, which the section's isolate scopes. */}
+            {}
+            {}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute top-1/2 left-1/2 -z-10 aspect-square w-[min(88vw,24rem)] sm:w-[38rem]
                 -translate-x-1/2 -translate-y-1/2"
             >
-              {/* The ward is a backdrop, not a layer of the composition. At full
-                  strength its strokes compete with the heading and the lede
-                  that sit over it. */}
+              {}
               <div className="summon-circle relative h-full w-full opacity-65">
                 <SummoningCircle reducedMotion={env.reducedMotion} />
               </div>
@@ -234,7 +198,7 @@ function Summoning({ env }) {
                       text-[0.6rem] tracking-[0.2em] text-parchment/85 uppercase
                       transition-colors hover:text-hellfire"
                   >
-                    {/* Announced politely so a screen reader hears it happened. */}
+                    {}
                     <span aria-hidden="true">{copied === channel.value ? "Copied" : "Copy"}</span>
                     <span className="sr-only">
                       {copied === channel.value
@@ -259,10 +223,7 @@ function Summoning({ env }) {
             {new Date().getFullYear()}
           </p>
 
-          {/* The way back up. Six chambers down, the only route out was the
-              chapter rail, which means the one deliberate journey on the page
-              had no ending. This is the descent cue from the hero run
-              backwards: same rule, same ember, travelling the other way. */}
+          {}
           <button
             type="button"
             onClick={() => scrollToSection(SECTIONS[0].id)}

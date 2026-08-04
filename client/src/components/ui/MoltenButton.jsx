@@ -1,26 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 
-/**
- * Cold iron until you touch it, then it catches.
- *
- * The ignite state is a variant rather than a `:hover` rule so keyboard focus
- * lights it identically. A hover-only effect would leave keyboard users with a
- * dead-looking button. Both states clear 4.5:1 against their own background:
- * bone on near-black cold, void on brimstone hot.
- *
- * The fire is deliberately split between two systems. Framer drives the states
- * that need to interpolate (fill, colour, lift). The flames and sparks are CSS
- * keyframes that are always declared but held paused, so hovering costs a class
- * change rather than mounting a dozen animating elements, and nothing burns
- * cycles while the button sits cold. Every layer moves on transform or opacity
- * only.
- *
- * Note the clipping: only the fill and flames sit inside an overflow-hidden
- * wrapper. The sparks are siblings of it, because a spark's whole job is to
- * leave the top edge, and clipping the button itself would eat them.
- */
-
 const fill = {
   cold: { scaleY: 0, opacity: 0 },
   hot: { scaleY: 1, opacity: 1 },
@@ -32,7 +12,6 @@ const body = { cold: { y: 0 }, hot: { y: -2 } };
 
 const SPRING = { type: "spring", stiffness: 420, damping: 32, mass: 0.7 };
 
-/** Sideways wander and timing offset per spark, so they never march in step. */
 const SPARKS = [
   { left: "14%", dx: "-9px", delay: "0s", dur: "1.35s" },
   { left: "31%", dx: "6px", delay: "0.32s", dur: "1.6s" },
@@ -41,11 +20,6 @@ const SPARKS = [
   { left: "88%", dx: "-7px", delay: "0.85s", dur: "1.45s" },
 ];
 
-/**
- * Two ranks of tongues. Each is one ellipse tiled horizontally, not a
- * repeating-radial-gradient: concentric rings struck from a point render as
- * vertical bars once you mask them, which reads as a barcode, not as fire.
- */
 const FLAMES = [
   {
     tile: 36,
@@ -67,7 +41,6 @@ const FLAMES = [
   },
 ];
 
-/** Applied to every CSS-animated layer: paused until the button is lit. */
 const IGNITE =
   "opacity-0 [animation-play-state:paused] transition-opacity duration-200 " +
   "group-hover:[animation-play-state:running] group-focus-visible:[animation-play-state:running]";
@@ -103,12 +76,12 @@ function MoltenButton({
         ${className}`}
       {...rest}
     >
-      {/* Everything that must stay inside the button's box. */}
+      {}
       <span aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
-        {/* Cold body. */}
+        {}
         <span className="absolute inset-0 bg-gradient-to-b from-obsidian to-[#0a070d]" />
 
-        {/* Molten fill, rising from the base like metal reaching temperature. */}
+        {}
         <motion.span
           variants={fill}
           transition={transition}
@@ -116,8 +89,7 @@ function MoltenButton({
           className="absolute inset-0 bg-gradient-to-t from-[#ff2d00] via-ember to-brimstone"
         />
 
-        {/* Flame tongues over the fill. Held to the lower third so they never
-            wash out the label sitting in the middle of the button. */}
+        {}
         {FLAMES.map((f) => (
           <span
             key={f.tile}
@@ -138,7 +110,7 @@ function MoltenButton({
         ))}
       </span>
 
-      {/* Sparks thrown clear of the top edge. Outside the clip on purpose. */}
+      {}
       <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-0">
         {SPARKS.map((s) => (
           <span
@@ -155,8 +127,7 @@ function MoltenButton({
         ))}
       </span>
 
-      {/* Heat haze. Opacity-only, so it composites instead of repainting, and
-          it flickers once lit rather than sitting at a constant brightness. */}
+      {}
       <motion.span
         aria-hidden="true"
         variants={glow}

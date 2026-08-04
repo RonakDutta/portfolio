@@ -2,10 +2,8 @@ import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { DESCENT_START_Y } from "../three/descent";
 
-// three.js lands in its own chunk and is fetched only once the DOM has painted.
 const Scene = lazy(() => import("../three/Scene"));
 
-/** Painted under the canvas so there's never a black flash while it loads. */
 function StaticHell() {
   return (
     <div
@@ -19,11 +17,6 @@ function StaticHell() {
   );
 }
 
-/**
- * Cinematic falloff over the scene. Also the reason DOM copy stays legible over
- * a surface that runs from black to white-hot. The corners and the upper third
- * are pulled down hard, which is where headings and nav live.
- */
 function Vignette() {
   return (
     <div
@@ -40,21 +33,17 @@ function Vignette() {
 }
 
 function HellCanvas({ env }) {
-  // Wait for first paint before pulling ~600 kB of WebGL onto the main thread.
+  
   const [ready, setReady] = useState(false);
-  // Stop rendering entirely when the tab is backgrounded.
+  
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     if (!env.enable3D) return;
     const idle = window.requestIdleCallback ?? ((cb) => setTimeout(cb, 200));
     const cancel = window.cancelIdleCallback ?? clearTimeout;
-    // Shorter deadline than it looks. The threshold is holding the page shut
-    // while this loads, so the download and the shader compile land inside a
-    // window the visitor is already spending, and the gate will not open
-    // until the scene reports back. Waiting longer only makes the gate
-    // linger.
-    const handle = idle(() => setReady(true), { timeout: 500 });
+
+const handle = idle(() => setReady(true), { timeout: 500 });
     return () => cancel(handle);
   }, [env.enable3D]);
 
@@ -64,8 +53,7 @@ function HellCanvas({ env }) {
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
-  // Reduced motion: the descent is told through type and stillness instead.
-  if (!env.enable3D)
+if (!env.enable3D)
     return (
       <>
         <StaticHell />
@@ -83,11 +71,8 @@ function HellCanvas({ env }) {
         >
           <Canvas
             dpr={env.dpr}
-            // "demand" wherever a frame cap applies: the FrameGovernor inside
-            // the scene then asks for renders at its own rate instead of the
-            // display's. "never" while the tab is in the background, which
-            // stops the loop outright rather than merely slowing it.
-            frameloop={
+
+frameloop={
               !visible ? "never" : env.canvasFps ? "demand" : "always"
             }
             camera={{
@@ -97,7 +82,7 @@ function HellCanvas({ env }) {
               position: [0, DESCENT_START_Y, 14],
             }}
             gl={{
-              antialias: false, // fog hides the aliasing; MSAA is not worth the fill rate
+              antialias: false, 
               alpha: false,
               stencil: false,
               powerPreference: "high-performance",
@@ -115,6 +100,4 @@ function HellCanvas({ env }) {
   );
 }
 
-// `env` is a stable object from useEnvironment; memo keeps DOM-side state
-// changes in App from ever remounting the GL context.
 export default memo(HellCanvas);

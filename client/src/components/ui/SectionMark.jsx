@@ -1,12 +1,5 @@
 import { memo } from "react";
 
-/**
- * The chapter mark that opens every chamber: roman numeral, rule, label.
- *
- * Decorative as a unit (the real heading is the <h2> that follows it), so the
- * whole thing is hidden from assistive tech rather than read out as a stray
- * "II" before every section title.
- */
 function SectionMark({ roman, label, className = "" }) {
   return (
     <div aria-hidden="true" className={`flex items-center gap-4 ${className}`}>

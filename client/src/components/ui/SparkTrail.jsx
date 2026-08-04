@@ -1,9 +1,5 @@
 import { useEffect, useRef } from "react";
 
-/**
- * Lightweight canvas particle trail that leaves floating ember sparks
- * behind the mouse cursor as it glides across cards and buttons.
- */
 export default function SparkTrail({ disabled = false }) {
   const canvasRef = useRef(null);
 

@@ -30,11 +30,7 @@
   html {
     background: var(--color-void);
     scroll-behavior: auto;
-    /* clip, not hidden. Decorative layers get scaled past their box all over
-       this page (arch parallax, pulsing glows, drifting embers) and any one of
-       them pushing the document a few pixels wide gives a phone a sideways
-       scroll. `clip` stops that without making the root a scroll container,
-       which `hidden` would, and which breaks position: sticky underneath it. */
+    
     overflow-x: clip;
   }
 
@@ -42,9 +38,7 @@
     margin: 0;
     color: var(--color-bone);
     font-family: var(--font-body);
-    /* 500, not 400. Cormorant is a high-contrast old-style face and its
-       hairlines all but disappear at body size on a dark ground, which reads as
-       poor contrast no matter what the ratio says. */
+    
     font-weight: 500;
     font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.2rem);
     line-height: 1.7;
@@ -74,10 +68,7 @@
     border-radius: 2px;
   }
 
-  /* Sections receive focus when a chapter is chosen, so a keyboard user lands
-     inside the section rather than back in the nav. They are containers, not
-     controls, so they get the scroll margin but not the ring. */
-  section[id] {
+section[id] {
     scroll-margin-top: 5rem;
   }
 
@@ -90,8 +81,7 @@
     color: var(--color-void);
   }
 
-  /* ── Infernal Scrollbar ── */
-  ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 8px;
   }
 
@@ -109,8 +99,7 @@
     background: linear-gradient(180deg, #4a3520 0%, var(--color-hellfire) 50%, #4a3520 100%);
   }
 
-  /* Firefox scrollbar */
-  html {
+html {
     scrollbar-width: thin;
     scrollbar-color: var(--color-ember) var(--color-void);
   }
@@ -143,7 +132,6 @@
   -webkit-text-stroke: 1px rgba(255, 122, 24, 0.5);
 }
 
-/* Heavier cut, for ghost type that has to hold its own at display size. */
 @utility text-outline-ember-strong {
   color: transparent;
   -webkit-text-stroke: 2px rgba(255, 138, 31, 0.72);
@@ -152,7 +140,6 @@
     0 0 54px rgba(255, 77, 0, 0.2);
 }
 
-/* Struck iron: lit along the top edge, shadowed under, text cut into it. */
 @utility surface-forged {
   box-shadow:
     inset 0 1px 0 rgba(255, 235, 205, 0.1),
@@ -166,7 +153,6 @@
     0 -1px 0 rgba(255, 180, 90, 0.12);
 }
 
-/* Forged plaque: two corners struck off, as if cut from sheet. */
 @utility clip-plaque {
   clip-path: polygon(
     0 16px,
@@ -178,7 +164,6 @@
   );
 }
 
-/* Smaller version for the tags hanging on a rack. */
 @utility clip-tag {
   clip-path: polygon(
     0 0,
@@ -268,13 +253,6 @@
   }
 }
 
-/* Ember sliding down the scroll cue.
-   translateY only, never translate(). The cue's ember is centred on its rule
-   with `-translate-x-1/2`, which Tailwind compiles to the `translate` property,
-   not to `transform`. Both then apply, so an -50% written in here as well lands
-   the ember a full half of its own width to the left of the line it is
-   supposed to be running down. Horizontal centring belongs to the utility;
-   this keyframe only moves it vertically. */
 @keyframes ember-fall {
   0% {
     transform: translateY(-0.375rem);
@@ -289,9 +267,6 @@
   }
 }
 
-/* Ember climbing the ascent cue at the foot of the page. The descent cue's
-   fall, run backwards, so the two ends of the page read as one loop. Same
-   translateY-only rule as ember-fall above, for the same reason. */
 @keyframes ember-climb {
   0% {
     transform: translateY(3.5rem);
@@ -306,9 +281,6 @@
   }
 }
 
-/* Flame tongues drifting across the base of an ignited button. Travels exactly
-   one tile of the repeating background, which is the only shift that loops
-   seamlessly; a percentage of the element's own width lands mid-tile and jumps. */
 @keyframes flame-drift {
   from {
     transform: translate3d(0, 0, 0);
@@ -318,7 +290,6 @@
   }
 }
 
-/* Sparks thrown off an ignited button. --dx sets the sideways wander. */
 @keyframes ember-rise {
   0% {
     transform: translate3d(0, 0, 0) scale(1);
@@ -333,7 +304,6 @@
   }
 }
 
-/* Embers drifting up through a section. --rise is the travel, --dx the wander. */
 @keyframes ember-float {
   0% {
     transform: translate3d(0, 0, 0) scale(1);
@@ -351,8 +321,6 @@
   }
 }
 
-/* Bars on the sound switch. Uneven rise and fall, so four of them running at
-   different delays never read as a wave travelling across. */
 @keyframes ember-bar {
   0%,
   100% {

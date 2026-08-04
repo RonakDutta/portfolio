@@ -7,24 +7,13 @@ import { identity, fallen } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Section II: The Fallen One.
- *
- * The portrait section, and the first place the descent stops moving long
- * enough to read. Copy sits right of the niche on desktop and below it on
- * mobile, where a portrait competing with a paragraph for width helps nobody.
- */
 function Fallen({ env }) {
   const section = useRef(null);
 
   useLayoutEffect(() => {
     if (env.reducedMotion) return;
 
-    // This section is a niche cut into a wall, so it is built rather than
-    // slid: the stone is set into place from the left, the name is struck out
-    // of it from below behind a mask, and the copy arrives after, from the
-    // side the reader's eye is already travelling toward.
-    const ctx = gsap.context(() => {
+const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: { trigger: section.current, start: "top 68%" },
       });
@@ -65,8 +54,7 @@ function Fallen({ env }) {
       aria-labelledby="fallen-title"
       className="relative isolate flex min-h-screen items-center py-28 sm:py-36 overflow-x-clip"
     >
-      {/* Copy floor. The lava runs hot behind this section too, and body text
-          needs a darker ground than a heading does to stay comfortable. */}
+      {}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
@@ -93,10 +81,7 @@ function Fallen({ env }) {
             className="fallen-copy"
           />
 
-          {/* Each line rises out of its own clipped box, so the words are cut
-              from the stone rather than floated in over it. The mask is on the
-              wrapper and the travel is on the child; both on one element and
-              there is nothing left to hide behind. */}
+          {}
           <h2 id="fallen-title" className="mt-7">
             <span className="block overflow-hidden pb-[0.08em]">
               <span className="text-molten fallen-cut block font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[0.95] font-black">
