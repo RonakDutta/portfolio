@@ -6,17 +6,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
-/**
- * One chamber: a project, presented as a sealed room you are shown into.
- *
- * The reveal is the "emerge from darkness" beat. A void-coloured shroud sits
- * over the whole card and lifts as it enters view, which is cheaper than
- * animating a filter and reads far heavier than a plain fade, because the card
- * resolves out of black rather than sliding in from transparent.
- *
- * Every field except name, kind and summary is optional, so a half-filled
- * project still renders as a complete-looking card rather than an empty shell.
- */
 function Chamber({ project, index, reducedMotion = false }) {
   const root = useRef(null);
   const shroud = useRef(null);
@@ -24,11 +13,7 @@ function Chamber({ project, index, reducedMotion = false }) {
   useLayoutEffect(() => {
     if (reducedMotion) return;
 
-    // Alternating sides, hinged on the edge each one enters from, so the
-    // stack reads as a corridor of doors swinging open rather than a column of
-    // identical cards sliding up. The rotation is under a degree: any more and
-    // a 900px slab of type visibly keystones on the way in.
-    const fromLeft = index % 2 === 0;
+const fromLeft = index % 2 === 0;
 
     const ctx = gsap.context(() => {
       gsap
@@ -47,10 +32,8 @@ function Chamber({ project, index, reducedMotion = false }) {
           },
           0,
         )
-        // fromTo, not to. The shroud rests transparent in CSS so that skipping
-        // this effect leaves a readable card instead of a black rectangle;
-        // GSAP paints the darkness in and then lifts it.
-        .fromTo(shroud.current, { opacity: 1 }, { opacity: 0, duration: 1.2, ease: "power2.out" }, 0)
+
+.fromTo(shroud.current, { opacity: 1 }, { opacity: 0, duration: 1.2, ease: "power2.out" }, 0)
         .from(
           root.current.querySelectorAll(".chamber-line"),
           {
@@ -77,7 +60,7 @@ function Chamber({ project, index, reducedMotion = false }) {
         transition-[border-color,box-shadow] duration-500
         hover:border-ember/45 hover:shadow-[0_0_60px_-24px_rgba(255,77,0,0.85)]"
     >
-      {/* Light under the door. Widens as the chamber warms to you. */}
+      {}
       <span
         aria-hidden="true"
         className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-transparent
@@ -85,9 +68,7 @@ function Chamber({ project, index, reducedMotion = false }) {
           group-hover:w-[6px] group-hover:opacity-100"
       />
 
-      {/* The chamber's number, set large and cold behind everything. Arabic
-          rather than roman here: an outlined "I" at this size is two bare
-          strokes and reads as a stray bar, not as a numeral. */}
+      {}
       <span
         aria-hidden="true"
         className="text-outline-ember pointer-events-none absolute -top-8 right-4
@@ -163,7 +144,7 @@ function Chamber({ project, index, reducedMotion = false }) {
         </div>
       </div>
 
-      {/* The darkness the chamber resolves out of. */}
+      {}
       <span
         ref={shroud}
         aria-hidden="true"

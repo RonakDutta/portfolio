@@ -4,24 +4,6 @@ import { scrollToSection } from "../../lib/useSmoothScroll";
 import Sigil from "../ui/Sigil";
 import { identity } from "../../data/content";
 
-/**
- * The chapter rail: a slab of carved stone across the top of the descent.
- *
- * The active chapter comes from the store's section index, which the scroll
- * engine already maintains, so this subscribes to *discrete* section changes
- * rather than to scroll. It re-renders six times over the whole page instead of
- * on every frame, which is the entire reason that index exists.
- *
- * The slab itself is drawn with layered gradients rather than an image: a lit
- * top edge, a shadowed base, and a masonry joint pattern in a repeating
- * gradient. No network request, no decode, and it tints with the theme.
- *
- * Every control carries min-h-11. A 34px chapter row is comfortable with a
- * mouse and a coin-toss with a thumb, and this is the one piece of chrome that
- * is on screen for the whole descent.
- */
-
-/** Masonry: a lit top edge, a dark base, and vertical joints struck into it. */
 const STONE = {
   backgroundImage: [
     "linear-gradient(to bottom, rgba(255,235,205,0.07) 0 1px, transparent 1px)",
@@ -52,7 +34,6 @@ function ChapterButton({ section, active, onSelect, compact = false }) {
         </span>
         <span>{section.label}</span>
 
-        {/* Molten underline, struck only under the chapter you are in. */}
         <span
           aria-hidden="true"
           className={`absolute inset-x-2 -bottom-px h-px origin-left bg-gradient-to-r
@@ -65,8 +46,6 @@ function ChapterButton({ section, active, onSelect, compact = false }) {
 }
 
 function StoneNav() {
-  // Seeded from the store rather than 0, so a reload part-way down the page
-  // does not light the wrong chapter until the first crossing.
   const [active, setActive] = useState(frame.section);
   const [lit, setLit] = useState(false);
   const [open, setOpen] = useState(false);
@@ -75,13 +54,6 @@ function StoneNav() {
 
   useEffect(() => subscribe(setActive), []);
 
-  // The bar is bare stone over the hero and lights up once you are inside.
-  //
-  // The same listener writes the depth gauge, straight to the node. Lenis
-  // scrolls the real document, so a plain scroll listener sees every frame of
-  // it, and a transform written by hand costs nothing; routing this through
-  // state would rerender the whole rail on every pixel of the descent, which
-  // is the one thing the store's discrete section index exists to avoid.
   useEffect(() => {
     const onScroll = () => {
       setLit(window.scrollY > window.innerHeight * 0.5);
@@ -101,7 +73,6 @@ function StoneNav() {
     };
   }, []);
 
-  // Escape closes the panel and hands focus back to the control that opened it.
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
@@ -121,20 +92,17 @@ function StoneNav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <div
-        className={`relative border-b transition-colors duration-500 ${
+        className={`relative border-b transition-all duration-500 ${
           lit ? "border-ember/25" : "border-white/5"
-        }`}
+        } ${open ? "backdrop-blur-md bg-[#120d18]/90" : ""}`}
         style={{
           ...STONE,
-          backgroundColor: "#120d18",
+          backgroundColor: open ? "rgba(18, 13, 24, 0.90)" : "#120d18",
           boxShadow: lit
             ? "0 10px 30px -18px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(255,77,0,0.18)"
             : "0 8px 24px -20px rgba(0,0,0,0.8)",
         }}
       >
-        {/* Depth gauge. Heat creeping along the underside of the slab, but
-            struck only as far as you have actually descended, so how much is
-            left is readable at a glance without a number to parse. */}
         <span
           ref={gauge}
           aria-hidden="true"
@@ -156,10 +124,6 @@ function StoneNav() {
             onClick={() => select(SECTIONS[0].id)}
             className="group -ml-2 flex min-h-11 items-center gap-2.5 px-2.5 font-display text-[0.7rem] font-black tracking-[0.22em] text-bone uppercase"
           >
-            {/* The struck sigil, the same object as the favicon and the gate
-                that opened the page. It replaces a rotated <span> holding a
-                counter-rotated letter, which could never be given a bevel, a
-                lit facet or a rim that glows on approach. */}
             <span
               aria-hidden="true"
               className="relative flex h-7 w-7 shrink-0 items-center justify-center"
@@ -170,7 +134,6 @@ function StoneNav() {
             <span className="sr-only">Back to the top</span>
           </button>
 
-          {/* Full rail from lg up. Six chapters do not fit honestly below that. */}
           <ul className="hidden items-center gap-1 lg:flex">
             {SECTIONS.map((section, i) => (
               <ChapterButton
@@ -183,7 +146,6 @@ function StoneNav() {
           </ul>
 
           <div className="flex items-center gap-3">
-            {/* Depth read-out: which chamber, of how many. */}
             <span
               aria-hidden="true"
               className="hidden font-display text-[0.58rem] tracking-[0.3em] text-smoke uppercase sm:inline"
@@ -217,15 +179,11 @@ function StoneNav() {
           </div>
         </nav>
 
-        {/* Panel below lg. Height-animated rather than mounted and unmounted so
-            it can open smoothly, and marked inert while closed: a collapsed
-            panel is still in the tab order otherwise, and tabbing into buttons
-            nobody can see is worse than having no animation at all. */}
         <div
           id="chapter-panel"
           inert={!open}
-          className={`overflow-hidden border-t transition-[max-height,opacity] duration-400 lg:hidden ${
-            open ? "max-h-[26rem] border-iron/60 opacity-100" : "max-h-0 border-transparent opacity-0"
+          className={`overflow-hidden border-t transition-[max-height,opacity] duration-400 lg:hidden backdrop-blur-md ${
+            open ? "max-h-[26rem] border-iron/60 opacity-100 bg-[#120d18]/90" : "max-h-0 border-transparent opacity-0"
           }`}
         >
           <ul className="mx-auto flex w-full max-w-6xl flex-col px-3 py-2 sm:px-4">

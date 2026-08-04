@@ -7,19 +7,6 @@ import { chronicle } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Section V: Infernal Chronicle.
- *
- * A timeline whose spine is molten and fills downward as you scroll, so the
- * page's own descent is what writes the record. The scrub is tied to the
- * entries container rather than the whole section, so the line finishes at the
- * last entry instead of trailing off through the footer.
- *
- * Entries run down one side rather than alternating. Alternating looks lively
- * in a mockup and reads badly in practice: the eye has to cross the spine on
- * every row, and it collapses to a single column on mobile anyway, so the
- * desktop layout ends up being the odd one out.
- */
 function Chronicle({ env }) {
   const section = useRef(null);
 
@@ -48,20 +35,7 @@ function Chronicle({ env }) {
         },
       });
 
-      // The entries themselves have no entrance, deliberately.
-      //
-      // They had one: nodes popping down the spine in sequence with the text
-      // sliding out after them. On paper that is the section's own metaphor,
-      // a record being written. In practice the spine is already drawing
-      // itself against the scroll immediately to the left, and a second timed
-      // motion running across it turned a calm timeline into two animations
-      // competing for the same few hundred pixels.
-      //
-      // The scrubbed spine is the animation here. It is tied to the reader's
-      // own scrolling rather than to a clock, so it can never be out of step
-      // with them, and the rows it passes stay still and legible.
-
-      gsap.from(".chronicle-sigil", {
+gsap.from(".chronicle-sigil", {
         y: 26,
         opacity: 0,
         duration: 0.7,
@@ -118,7 +92,7 @@ function Chronicle({ env }) {
         </header>
 
         <ol className="chronicle-entries relative mt-16 space-y-10 sm:mt-20 sm:space-y-12">
-          {/* Molten spine, written downward by the scroll. */}
+          {}
           <span
             aria-hidden="true"
             className="chronicle-spine absolute inset-y-2 left-[7px] w-px
@@ -127,7 +101,7 @@ function Chronicle({ env }) {
 
           {chronicle.entries.map((entry) => (
             <li key={entry.title} className="chronicle-entry relative pl-10 sm:pl-14">
-              {/* Node struck on the spine. */}
+              {}
               <span
                 aria-hidden="true"
                 className="chronicle-node absolute top-1.5 left-0 flex h-4 w-4 rotate-45
@@ -149,9 +123,7 @@ function Chronicle({ env }) {
                 {entry.title}
               </h3>
 
-              {/* Display, not blackletter. "University School of Automation and
-                  Robotics, GGSIPU" set in blackletter is decoration at the
-                  expense of anyone actually reading it. */}
+              {}
               <p className="mt-1.5 font-display text-[0.9rem] tracking-[0.06em] text-brimstone/85">
                 {entry.org}
               </p>
@@ -163,7 +135,7 @@ function Chronicle({ env }) {
           ))}
         </ol>
 
-        {/* Undated honours, kept out of the timeline so the spine stays honest. */}
+        {}
         <div className="chronicle-sigils mt-20">
           <h3 className="font-display text-[0.65rem] tracking-[0.4em] text-hellfire uppercase">
             {chronicle.honoursTitle}
@@ -182,7 +154,7 @@ function Chronicle({ env }) {
                   transition-[border-color,transform] duration-300
                   hover:-translate-y-0.5 hover:border-ember/60"
               >
-                {/* Seal pressed into the corner. */}
+                {}
                 <span
                   aria-hidden="true"
                   className="absolute top-4 right-4 h-2 w-2 rotate-45 border border-ember/70

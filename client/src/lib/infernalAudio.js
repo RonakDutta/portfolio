@@ -1,45 +1,11 @@
 import { frame, subscribe, SECTIONS } from "./store";
 
-/**
- * The sound of the shaft.
- *
- * The brief was atmosphere, not a soundtrack, and the previous version missed
- * it in a specific way worth writing down: every layer was noise. Filtered
- * noise, distorted noise, high-passed noise. Noise has no pitch, so nothing
- * ever resolved, and the result read as tape hiss with a rumble under it
- * rather than as a place.
- *
- * Three things fix that, and they are the whole design:
- *
- *   A pitch centre. A bare fifth on D, held under everything. No third, so it
- *   commits to neither major nor minor and never sounds like a chord
- *   progression that forgot to progress. It is what gives the noise something
- *   to be noise *against*.
- *
- *   A room. Every layer is sent through a convolver loaded with an impulse
- *   response generated at runtime: smoothed noise under an exponential decay,
- *   which is a stone chamber. Dry synthesis on a page about a cavern was the
- *   single largest gap between what this looked like and what it sounded like.
- *
- *   Events. A held drone is wallpaper. Discrete sounds are what make a space
- *   feel inhabited, so lava crust ticks and pops at intervals, and crossing
- *   into a chamber strikes an anvil, tuned lower the deeper you are. The
- *   descent becomes audible rather than merely continuous.
- *
- * It also stops running when it is not heard. The old loop held a
- * requestAnimationFrame callback for the life of the page whether or not
- * anything was audible; this suspends the context on mute and on tab blur, so
- * silence costs nothing.
- */
-
-/** Root of the drone. D1, and its fifth and octave. */
 const DRONE = [
   { hz: 36.71, gain: 0.5, type: "sine", detune: -4 },
   { hz: 55.0, gain: 0.26, type: "sine", detune: 5 },
   { hz: 73.42, gain: 0.15, type: "triangle", detune: -7 },
 ];
 
-/** Struck-bar partials. Inharmonic, which is what makes metal sound like metal. */
 const ANVIL_PARTIALS = [1, 2.76, 5.4, 8.93];
 
 const MASTER_LEVEL = 0.55;
@@ -47,14 +13,6 @@ const FADE = 0.9;
 
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 
-/**
- * A stone chamber as an impulse response.
- *
- * Raw white noise under a decay envelope is the textbook version and it sounds
- * like a tiled bathroom, because real rooms absorb high frequencies far faster
- * than low ones. The one-pole smoothing is what turns it to rock, and the
- * near-silent head gives the ear a pre-delay to read as distance.
- */
 function buildCavern(ctx, seconds = 2.8, decay = 2.4) {
   const rate = ctx.sampleRate;
   const length = Math.floor(rate * seconds);
@@ -77,7 +35,6 @@ function buildCavern(ctx, seconds = 2.8, decay = 2.4) {
   return ir;
 }
 
-/** Four seconds of brown noise, shared by every layer that needs texture. */
 function buildBrown(ctx) {
   const length = ctx.sampleRate * 4;
   const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
@@ -102,16 +59,7 @@ class InfernalAudioEngine {
     this.onVisibility = null;
   }
 
-  /**
-   * Whether to build the cheaper graph.
-   *
-   * Read here rather than passed in from `useEnvironment`, because the only
-   * thing that touches this engine is a toggle button that has no business
-   * knowing about device tiers, and threading `env` through it to set one
-   * boolean would be the tail wagging the dog. Deliberately conservative: a
-   * coarse pointer or four cores or fewer.
-   */
-  get lean() {
+get lean() {
     if (typeof navigator === "undefined") return false;
     return (
       (navigator.hardwareConcurrency ?? 8) <= 4 ||
@@ -119,9 +67,7 @@ class InfernalAudioEngine {
     );
   }
 
-  // ── Graph ───────────────────────────────────────────────────────────────
-
-  init() {
+init() {
     if (this.ready) return true;
 
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -132,10 +78,7 @@ class InfernalAudioEngine {
       this.ctx = ctx;
       const t = ctx.currentTime;
 
-      // Master chain. The compressor is a safety limiter: six layers whose
-      // levels are all driven by scroll velocity can and do line up, and
-      // without this that lands as a clipped crack in the speaker.
-      this.master = ctx.createGain();
+this.master = ctx.createGain();
       this.master.gain.setValueAtTime(0, t);
 
       const limiter = ctx.createDynamicsCompressor();
@@ -148,16 +91,10 @@ class InfernalAudioEngine {
       limiter.connect(this.master);
       this.master.connect(ctx.destination);
 
-      // Dry and wet buses. Sub-bass deliberately skips the reverb: convolving
-      // a 30 Hz tone smears it into mud and eats headroom for nothing.
-      this.dry = ctx.createGain();
+this.dry = ctx.createGain();
       this.dry.connect(limiter);
 
-      // A shorter room on a phone. Convolution cost scales with the impulse
-      // length, and 2.8 seconds of stereo tail is the single most expensive
-      // node in this graph. 1.5 still reads as stone; it just reads as a
-      // smaller chamber, which nobody is comparing against anything.
-      const convolver = ctx.createConvolver();
+const convolver = ctx.createConvolver();
       convolver.buffer = buildCavern(ctx, this.lean ? 1.5 : 2.8);
       this.wet = ctx.createGain();
       this.wet.gain.setValueAtTime(0.85, t);
@@ -173,10 +110,7 @@ class InfernalAudioEngine {
 
       this.ready = true;
 
-      // Crossing into a chamber strikes the anvil. Subscribing here rather
-      // than from a component keeps the whole engine out of the React tree,
-      // which is also why nothing in here ever causes a render.
-      this.unsubscribe = subscribe((index) => {
+this.unsubscribe = subscribe((index) => {
         if (!this.muted) this.strike(index / (SECTIONS.length - 1));
       });
 
@@ -194,8 +128,7 @@ class InfernalAudioEngine {
     }
   }
 
-  /** The held fifth. Detuned pairs beat against each other so it breathes. */
-  buildDrone(t) {
+buildDrone(t) {
     const ctx = this.ctx;
     this.droneGain = ctx.createGain();
     this.droneGain.gain.setValueAtTime(0.22, t);
@@ -223,8 +156,7 @@ class InfernalAudioEngine {
     this.droneGain.connect(this.dry);
     this.droneGain.connect(this.wet);
 
-    // Slow swell, so the bed is never a flat sustained note.
-    const swell = ctx.createOscillator();
+const swell = ctx.createOscillator();
     swell.frequency.setValueAtTime(0.055, t);
     const swellDepth = ctx.createGain();
     swellDepth.gain.setValueAtTime(0.07, t);
@@ -233,8 +165,7 @@ class InfernalAudioEngine {
     swell.start();
   }
 
-  /** The furnace itself: brown noise, opening up as the descent deepens. */
-  buildBreath(t) {
+buildBreath(t) {
     const ctx = this.ctx;
     const source = ctx.createBufferSource();
     source.buffer = this.brown;
@@ -263,8 +194,7 @@ class InfernalAudioEngine {
     drift.start();
   }
 
-  /** Tectonic sub-bass, answering to scroll velocity. Dry only. */
-  buildRumble(t) {
+buildRumble(t) {
     const ctx = this.ctx;
     this.rumbleGain = ctx.createGain();
     this.rumbleGain.gain.setValueAtTime(0, t);
@@ -295,8 +225,7 @@ class InfernalAudioEngine {
     this.rumbleOscB.start();
   }
 
-  /** Stone dragging on stone, also velocity-driven. */
-  buildGrit(t) {
+buildGrit(t) {
     const ctx = this.ctx;
     const source = ctx.createBufferSource();
     source.buffer = this.brown;
@@ -317,13 +246,7 @@ class InfernalAudioEngine {
     source.start();
   }
 
-  // ── Events ──────────────────────────────────────────────────────────────
-
-  /**
-   * A single tick of cooling crust. Short enough to be a transient rather than
-   * a note; the reverb is what turns it into a sound with a room around it.
-   */
-  crackle(at, energy) {
+crackle(at, energy) {
     const ctx = this.ctx;
     const osc = ctx.createOscillator();
     osc.type = "square";
@@ -349,15 +272,7 @@ class InfernalAudioEngine {
     osc.stop(at + 0.2);
   }
 
-  /**
-   * The anvil, struck on entering a chamber.
-   *
-   * `depth` runs 0 at the gates to 1 at the circle, and drops the fundamental
-   * roughly an octave across the descent, so the page sounds like it is going
-   * somewhere. Partials are inharmonic and each decays at its own rate, with
-   * the high ones dying first, which is what a struck bar actually does.
-   */
-  strike(depth = 0) {
+strike(depth = 0) {
     if (!this.ready || this.muted) return;
     const ctx = this.ctx;
     const at = ctx.currentTime + 0.02;
@@ -383,8 +298,7 @@ class InfernalAudioEngine {
       osc.stop(at + life + 0.1);
     }
 
-    // The hammer itself, as opposed to what it set ringing.
-    const hit = ctx.createBufferSource();
+const hit = ctx.createBufferSource();
     hit.buffer = this.brown;
     hit.loop = false;
     hit.playbackRate.setValueAtTime(2.4, at);
@@ -406,10 +320,7 @@ class InfernalAudioEngine {
     hit.stop(at + 0.2);
   }
 
-  // ── Transport ───────────────────────────────────────────────────────────
-
-  /** Returns the new audible state, so a caller cannot get out of step. */
-  toggle() {
+toggle() {
     if (!this.init()) return false;
 
     this.muted = !this.muted;
@@ -423,7 +334,7 @@ class InfernalAudioEngine {
     );
 
     if (this.muted) {
-      // Let the fade finish before the context stops, or it cuts off mid-ramp.
+      
       cancelAnimationFrame(this.raf);
       this.raf = 0;
       this.fadeOut = setTimeout(() => {
@@ -434,19 +345,14 @@ class InfernalAudioEngine {
       this.ctx.resume();
       this.nextCrackle = now + 0.4;
       this.startLoop();
-      // A struck note on arrival, so turning it on is an event and not just a
-      // hiss appearing. Pitched to where the reader currently is.
-      this.strike(frame.section / (SECTIONS.length - 1));
+
+this.strike(frame.section / (SECTIONS.length - 1));
     }
 
     return !this.muted;
   }
 
-  /**
-   * Reads the scroll state that the rest of the page already maintains and
-   * moves the layers to match. Only alive while something is audible.
-   */
-  startLoop() {
+startLoop() {
     if (this.raf) return;
 
     const update = () => {
@@ -459,8 +365,7 @@ class InfernalAudioEngine {
       const depth = frame.scroll;
       const speed = Math.abs(frame.velocity);
 
-      // Deeper is hotter and more open, not just louder.
-      this.breathFilter.frequency.setTargetAtTime(110 + depth * 210, now, 0.2);
+this.breathFilter.frequency.setTargetAtTime(110 + depth * 210, now, 0.2);
       this.breathGain.gain.setTargetAtTime(0.2 + depth * 0.14, now, 0.3);
       this.droneGain.gain.setTargetAtTime(0.22 + depth * 0.1, now, 0.4);
 
@@ -477,10 +382,7 @@ class InfernalAudioEngine {
         0.1,
       );
 
-      // Crust ticks over regardless, and quickens when you are moving through
-      // it. Scheduled against the audio clock with a lookahead rather than a
-      // timer, so it stays even when the main thread is busy.
-      if (now + 0.1 > this.nextCrackle) {
+if (now + 0.1 > this.nextCrackle) {
         const energy = Math.min(1, speed * 0.16);
         this.crackle(Math.max(now, this.nextCrackle), energy);
         this.nextCrackle =

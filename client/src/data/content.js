@@ -1,7 +1,4 @@
-/**
- * All copy lives here. Sections are presentation only, so swapping your details
- * in should never mean touching a component.
- */
+
 
 export const identity = {
   name: "Ronak Dutta",
@@ -16,11 +13,11 @@ export const identity = {
 };
 
 export const gates = {
-  /** Blackletter eyebrow above the lockup. Dante, via the obvious route. */
+  
   eyebrow: "Abandon all hope, ye who enter",
-  /** Carved down the left pier of the gate. */
+  
   ghost: "INFERNO",
-  /** Carved down the right pier. Roman year, as a foundation stone would be. */
+  
   mark: "MMXXVI",
   tagline:
     "Six chambers below, a record of everything built, broken and rebuilt. Descend at your own pace.",
@@ -30,28 +27,15 @@ export const gates = {
 };
 
 export const fallen = {
-  /**
-   * The photo, in two widths and two formats.
-   *
-   * `fallback` is what every browser can read and what the niche uses if the
-   * WebP sources are unavailable; `webp` is what almost all of them will
-   * actually take, at roughly a third of the bytes. If the file is ever
-   * missing the niche falls back to a carved stone slab rather than a hole,
-   * so a broken path is never a broken layout.
-   *
-   * Replacing the photo means dropping a new one in and re-running the sizes.
-   * It reads best at roughly 4:5, framed head and shoulders, since the arch
-   * crops the top corners hard.
-   */
+  
   portrait: {
     fallback: "/portrait.jpg",
     webp: [
       { src: "/portrait-560.webp", width: 560 },
       { src: "/portrait.webp", width: 1000 },
     ],
-    // Rendered at 28rem on desktop and 84% of the viewport below that, which
-    // is what tells the browser it can take the 560 on a phone.
-    sizes: "(min-width: 1024px) 28rem, 84vw",
+
+sizes: "(min-width: 1024px) 28rem, 84vw",
   },
   portraitAlt: "Ronak Dutta",
 
@@ -63,8 +47,7 @@ export const fallen = {
     "Alongside that I am finishing a B.Tech in Industrial Internet of Things at University School of Automation and Robotics, GGSIPU. Most of what I know came from building projects end to end and then finding out what broke.",
   ],
 
-  /** Shown as a definition list. Keep the values short, they are set in caps. */
-  facts: [
+facts: [
     { term: "Based in", value: "New Delhi, India" },
     { term: "Currently", value: "Software Development Intern, RARS Innoventa" },
     { term: "Working in", value: "React, Node.js, Express, PostgreSQL" },
@@ -100,19 +83,7 @@ export const chambers = {
   headlineSub: "what I have built",
   lede: "Three rooms below, each one a thing that shipped and the work it took.",
 
-  /**
-   * Edit, reorder, add or delete freely. The section renders whatever is in
-   * this array, at any length, and the roman numerals renumber themselves.
-   *
-   *   name     required, the project title
-   *   kind     required, one line under the title
-   *   summary  required, a short paragraph
-   *   work     optional, what you actually did on it
-   *   stack    optional, tags along the bottom
-   *   links    optional, [{ label, href }]. Leave the array off entirely and
-   *            no links render, rather than dead buttons pointing nowhere.
-   */
-  projects: [
+projects: [
     {
       name: "Business 4.0",
       kind: "Community meetup platform",
@@ -173,11 +144,7 @@ export const chronicle = {
   headlineSub: "the record so far",
   lede: "Where I have been, earliest first, in the order it happened.",
 
-  /**
-   * Same rules as the chambers: edit, reorder or extend freely, the timeline
-   * renders whatever is here. `detail` is optional.
-   */
-  entries: [
+entries: [
     {
       period: "2022",
       title: "CBSE Class XII",
@@ -202,8 +169,7 @@ export const chronicle = {
     },
   ],
 
-  /** Undated, so they sit below the timeline rather than inside it. */
-  honoursTitle: "Sigils",
+honoursTitle: "Sigils",
   honours: [
     {
       name: "Smart India Hackathon",
@@ -225,16 +191,7 @@ export const summoning = {
   headlineSub: "call and I answer",
   lede: "The descent ends here. If you have something worth building, the circle is drawn.",
 
-  /**
-   * Direct links only, no contact form. A form with no backend behind it is a
-   * lie: it looks like it sent and it did not. Add one when there is something
-   * to receive it.
-   *
-   * Your phone number is on your resume but deliberately not here, since a
-   * resume goes to people you chose and a website goes to everyone. Add it to
-   * this array if you want it public.
-   */
-  channels: [
+channels: [
     {
       label: "Email",
       value: "ronakdutta100@gmail.com",
@@ -251,6 +208,5 @@ export const summoning = {
   cta: { label: "Send word", href: "mailto:ronakdutta100@gmail.com" },
   closing: "Ronak Dutta, New Delhi",
 
-  /** The way back up, so the descent is a loop rather than a dead end. */
-  ascend: "Return to the surface",
+ascend: "Return to the surface",
 };

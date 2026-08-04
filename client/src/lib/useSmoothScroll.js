@@ -25,9 +25,8 @@ export function useSmoothScroll({ reducedMotion, isMobile }) {
     lenis.on("scroll", (e) => {
       const progress = e.progress ?? 0;
       frame.scroll = progress;
-      // Clamp velocity to zero at scroll boundaries to prevent
-      // phantom jitter when the scrollbar is held at the edge.
-      const atBoundary = progress <= 0.001 || progress >= 0.999;
+
+const atBoundary = progress <= 0.001 || progress >= 0.999;
       frame.velocity = atBoundary ? 0 : (e.velocity ?? 0);
       ScrollTrigger.update();
     });
@@ -66,24 +65,11 @@ export function useSmoothScroll({ reducedMotion, isMobile }) {
   }, []);
 }
 
-/**
- * Height of the fixed chapter rail, measured rather than hard-coded, so the
- * offset stays right if the bar's padding or type size ever changes.
- */
 function navOffset() {
   const bar = document.querySelector("header nav");
   return bar ? -Math.round(bar.getBoundingClientRect().height) - 8 : 0;
 }
 
-/**
- * Scroll to a section and hand it focus.
- *
- * The offset matters: landing a section flush with the viewport top puts its
- * heading underneath the fixed rail. The focus matters more. Without it a
- * keyboard user who activates a chapter link is moved visually but their tab
- * position stays back in the nav, so the next Tab returns them to where they
- * started instead of into the section they asked for.
- */
 export function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
@@ -91,7 +77,6 @@ export function scrollToSection(id) {
   if (window.__lenis) window.__lenis.scrollTo(target, { offset: navOffset(), duration: 1.4 });
   else target.scrollIntoView({ behavior: "smooth", block: "start" });
 
-  // preventScroll, or the browser jumps to the element and undoes the tween.
-  if (target.tabIndex < 0) target.tabIndex = -1;
+if (target.tabIndex < 0) target.tabIndex = -1;
   target.focus({ preventScroll: true });
 }

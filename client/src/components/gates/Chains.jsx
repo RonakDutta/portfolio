@@ -4,20 +4,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Chains hanging across the gate, which snap as you scroll past.
- *
- * Each chain is split into two groups at its break point. Scrolling scrubs a
- * timeline that first loads the chain with tension, then drops the lower half.
- * Because it's scrubbed rather than fired, scrolling back up re-forges it. A
- * one-shot break would leave the hero permanently wrecked for anyone who
- * scrolls up, which is exactly what people do on a site like this.
- */
+const PITCH = 26; 
+const RY = 18; 
 
-const PITCH = 26; // vertical spacing between link centres
-const RY = 18; // link half-height; > PITCH/2 so links interlock
-
-/** One chain link. Alternating links turn 90deg, as real chain does. */
 function Link({ y, edgeOn, stroke }) {
   return (
     <ellipse
@@ -39,11 +28,9 @@ function Chain({ x, links, breakAt, drift, scale = 1, registry }) {
   const lower = useRef(null);
   const spark = useRef(null);
 
-  // Hand the refs up so the parent can build one timeline for every chain.
-  useLayoutEffect(() => {
-    // Captured now, so cleanup splices the same array this pushed into even if
-    // the parent has since swapped the ref.
-    const list = registry.current;
+useLayoutEffect(() => {
+
+const list = registry.current;
     const entry = {
       upper: upper.current,
       lower: lower.current,
@@ -82,7 +69,7 @@ function Chain({ x, links, breakAt, drift, scale = 1, registry }) {
         ))}
       </g>
 
-      {/* Sparks at the fracture, revealed for a few frames as it gives. */}
+      {}
       <g ref={spark} opacity="0">
         <circle
           cx="0"
@@ -108,7 +95,6 @@ function Chain({ x, links, breakAt, drift, scale = 1, registry }) {
   );
 }
 
-/** x position, link count, where it snaps, and which way the tail swings. */
 const CHAINS = [
   { x: 90, links: 15, breakAt: 8, drift: -70, scale: 1 },
   { x: 215, links: 10, breakAt: 5, drift: -40, scale: 0.76 },
@@ -121,7 +107,7 @@ function Chains({ triggerRef, reducedMotion }) {
   const root = useRef(null);
 
   useLayoutEffect(() => {
-    // Reduced motion: the chains simply hang, intact and still.
+    
     if (reducedMotion || !triggerRef.current) return;
 
     const ctx = gsap.context(() => {
@@ -141,14 +127,12 @@ function Chains({ triggerRef, reducedMotion }) {
 
       chains.forEach(({ upper, lower, spark, drift }, i) => {
         const sway = drift > 0 ? 4 : -4;
-        const at = 0.3 + i * 0.06; // stagger so they don't all give at once
+        const at = 0.3 + i * 0.06; 
 
-        // Tension: the whole chain leans, and the lower half sags away.
-        tl.to(upper, { rotation: sway, ease: "none", duration: at }, 0);
+tl.to(upper, { rotation: sway, ease: "none", duration: at }, 0);
         tl.to(lower, { rotation: sway * 1.6, ease: "none", duration: at }, 0);
 
-        // The break.
-        tl.to(spark, { opacity: 1, duration: 0.04, ease: "none" }, at);
+tl.to(spark, { opacity: 1, duration: 0.04, ease: "none" }, at);
         tl.to(spark, { opacity: 0, duration: 0.16, ease: "none" }, at + 0.04);
         tl.to(
           lower,
@@ -162,7 +146,7 @@ function Chains({ triggerRef, reducedMotion }) {
           },
           at,
         );
-        // Freed of the weight, the stub recoils the other way.
+        
         tl.to(
           upper,
           { rotation: -sway * 2.2, ease: "power2.out", duration: 0.5 },

@@ -21,10 +21,6 @@
       onload="this.onload=null;this.rel='stylesheet'"
     />
 
-    <!-- Deliberately standalone: no bundle, no framework, no build step beyond
-         having the sigil injected. A 404 is served when something has already
-         gone wrong, and it is the one page that should not be able to fail for
-         a second reason on the way. -->
     <style>
       *,
       *::before,
@@ -51,8 +47,6 @@
         -webkit-font-smoothing: antialiased;
       }
 
-      /* The shaft, banked hot at the bottom, same as the live scene falls back
-         to when WebGL is unavailable. */
       .ground {
         position: fixed;
         inset: 0;
@@ -82,12 +76,6 @@
       main {
         position: relative;
         max-width: 34rem;
-      }
-
-      .sigil {
-        width: 74px;
-        height: 74px;
-        filter: drop-shadow(0 0 24px rgba(255, 77, 0, 0.45));
       }
 
       .code {
@@ -174,13 +162,11 @@
           color 0.35s ease,
           border-color 0.35s ease;
       }
-      /* The same cold-iron-until-you-touch-it fill the buttons on the site
-         use, done with one pseudo-element instead of a spring. */
       .back::before {
         content: "";
         position: absolute;
         inset: 0;
-        z-index: -1;
+        z-index: 0;
         background: linear-gradient(to top, #ff2d00, #ff4d00 55%, #ff8a1f);
         transform: scaleY(0);
         transform-origin: 50% 100%;
@@ -188,16 +174,25 @@
       }
       .back:hover,
       .back:focus-visible {
-        color: #0b0810;
-        border-color: rgba(255, 138, 31, 0.9);
+        color: #ffffff;
+        border-color: rgba(255, 192, 97, 0.9);
       }
       .back:hover::before,
       .back:focus-visible::before {
         transform: scaleY(1);
       }
+      .back span,
+      .back svg {
+        position: relative;
+        z-index: 1;
+      }
       .back svg {
         width: 11px;
         height: 14px;
+        transition: transform 0.3s ease;
+      }
+      .back:hover svg {
+        transform: translateY(-2px);
       }
 
       :focus-visible {
@@ -205,8 +200,6 @@
         outline-offset: 3px;
       }
 
-      /* Embers drifting up the shaft. Purely decorative, and the first thing
-         to go when motion is unwelcome. */
       .ember {
         position: fixed;
         bottom: -10px;
@@ -259,8 +252,6 @@
     <span class="ember" style="left: 91%; --dx: -30px; animation-duration: 13s; animation-delay: 4.2s"></span>
 
     <main>
-      <!--SIGIL-->
-
       <p class="code">404</p>
 
       <h1>You have strayed from the path</h1>
@@ -273,7 +264,7 @@
       </p>
 
       <a class="back" href="/">
-        Return to the gates
+        <span>Return to the gates</span>
         <svg viewBox="0 0 12 16" aria-hidden="true" fill="none">
           <path
             d="M6 16V3M1 8l5-6 5 6"

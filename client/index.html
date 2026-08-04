@@ -12,11 +12,7 @@
     <meta name="color-scheme" content="dark" />
     <link rel="canonical" href="%VITE_SITE_URL%/" />
 
-    <!-- How the link renders when it is pasted into Slack, WhatsApp or a DM,
-         which is how most people will actually meet this page. A purpose-built
-         1200x630 card, not the portrait: a 3:4 photo gets centre-cropped to a
-         band across the chest by every one of them. -->
-    <meta property="og:type" content="website" />
+<meta property="og:type" content="website" />
     <meta property="og:url" content="%VITE_SITE_URL%/" />
     <meta property="og:site_name" content="Ronak Dutta" />
     <meta
@@ -52,10 +48,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Loaded without blocking the render. Three families over two hosts is
-         around half a second of blocked paint on a mid-range phone, and the
-         threshold below is covering the screen for exactly that window, so the
-         swap happens where nobody can see it. -->
+    
     <link
       rel="preload"
       as="style"
@@ -100,19 +93,7 @@
       }
     </script>
 
-    <!-- ── Threshold ──────────────────────────────────────────────────────
-         The gate that covers the page while three.js and the fonts arrive.
-
-         It lives here rather than in a React component so that it is painted
-         by the HTML parser, before a single byte of JavaScript has run. That
-         is the whole point: mounting it from React would put the black flash
-         it exists to remove *in front of it*.
-
-         React does not re-render this markup. `Threshold.jsx` adopts these
-         nodes and drives them with GSAP, then removes them. The CSS below is
-         only what has to be right before the stylesheet loads: the stone, the
-         rim drawing itself, and the bar creeping while the bundle downloads. -->
-    <style>
+<style>
       html {
         background: #05030a;
       }
@@ -155,7 +136,7 @@
         right: 0;
         box-shadow: inset 1px 0 0 rgba(255, 122, 24, 0.28);
       }
-      /* Heat trapped in the seam between the leaves. */
+      
       #th-seam {
         position: absolute;
         top: 0;
@@ -187,8 +168,7 @@
         height: 84px;
         filter: drop-shadow(0 0 22px rgba(255, 77, 0, 0.45));
       }
-      /* 167 is the perimeter of the diamond, so the rim draws itself in one
-         continuous stroke from the top vertex. */
+      
       .th-sigil .sigil-rim {
         stroke-dasharray: 167;
         stroke-dashoffset: 167;
@@ -227,8 +207,7 @@
         box-shadow: 0 0 12px rgba(255, 77, 0, 0.8);
         animation: th-creep 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
-      /* Movement while the bundle is still in flight. GSAP takes over from
-         whatever value this has reached, so the bar never jumps backwards. */
+      
       @keyframes th-creep {
         to {
           transform: scaleX(0.4);
@@ -261,16 +240,12 @@
   <body>
     <div id="root"></div>
 
-    <!-- aria-hidden: this is scenery. The page underneath is already in the
-         accessibility tree and reachable, so a screen reader is never held at
-         a door it cannot see. -->
-    <div id="threshold" aria-hidden="true">
+<div id="threshold" aria-hidden="true">
       <div class="th-half th-left"></div>
       <div class="th-half th-right"></div>
       <div id="th-seam"></div>
       <div class="th-core">
-        <!-- Injected from public/favicon.svg at build time by the
-             inline-sigil plugin, so the mark has one source of truth. -->
+        
         <!--SIGIL-->
         <div class="th-bar"><i id="th-fill"></i></div>
         <p class="th-word">Abandon all hope</p>
@@ -278,7 +253,7 @@
     </div>
 
     <noscript>
-      <!-- Nothing is coming to open the gate, so take it down. -->
+      
       <style>
         #threshold {
           display: none;

@@ -8,18 +8,6 @@ import { arsenal } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Section III: Arsenal.
- *
- * An inventory, not a card grid. The grid version put five panels of unequal
- * height into two ragged rows, and with the tag counts running from two to
- * five, nothing lined up with anything: it read as scattered boxes rather than
- * a rack wall.
- *
- * Rows fix that. Every group label sits in the same fixed left column, every
- * set of tags starts on the same x, and the rule between rows carries the eye
- * straight down. Alignment is what makes an armoury look kept.
- */
 function Arsenal({ env }) {
   const section = useRef(null);
 
@@ -27,11 +15,8 @@ function Arsenal({ env }) {
     if (env.reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // An armoury is hung, so this section arrives from above rather than
-      // below: the header drops and settles with a little weight behind it,
-      // which is the opposite of every other heading on the page and reads
-      // that way even though the distance is small.
-      gsap.from(".arsenal-rise", {
+
+gsap.from(".arsenal-rise", {
         y: -34,
         opacity: 0,
         duration: 1,
@@ -40,8 +25,7 @@ function Arsenal({ env }) {
         scrollTrigger: { trigger: section.current, start: "top 70%" },
       });
 
-      // The forge line burns downward as the rack comes into view.
-      gsap.from(".arsenal-spine", {
+gsap.from(".arsenal-spine", {
         scaleY: 0,
         transformOrigin: "50% 0%",
         ease: "none",
@@ -57,11 +41,8 @@ function Arsenal({ env }) {
         gsap
           .timeline({ scrollTrigger: { trigger: rack, start: "top 88%" } })
           .from(rack, { x: -24, opacity: 0, duration: 0.7, ease: "expo.out" })
-          // Tags settle onto the rail, each a moment after the last. Straight
-          // down and square: an earlier version rotated them in from -5deg,
-          // and a row of hard-edged plates caught mid-tilt reads as a layout
-          // fault rather than as motion. On a rack, things hang level.
-          .from(
+
+.from(
             rack.querySelectorAll(".arsenal-tag"),
             {
               y: -12,
@@ -85,7 +66,7 @@ function Arsenal({ env }) {
       aria-labelledby="arsenal-title"
       className="relative isolate flex min-h-screen items-center py-28 sm:py-36 overflow-x-clip"
     >
-      {/* Copy floor. */}
+      {}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-20"
@@ -95,7 +76,7 @@ function Arsenal({ env }) {
         }}
       />
 
-      {/* The forge itself, banked under the rack and breathing. */}
+      {}
       <div
         aria-hidden="true"
         className="animate-pulse-glow pointer-events-none absolute inset-x-0 bottom-0 -z-20 h-1/2"
@@ -129,7 +110,7 @@ function Arsenal({ env }) {
         </header>
 
         <div className="arsenal-rows relative mt-16 sm:mt-20">
-          {/* Molten spine down the left of the whole rack. */}
+          {}
           <span
             aria-hidden="true"
             className="arsenal-spine absolute inset-y-0 left-0 hidden w-px
@@ -144,7 +125,7 @@ function Arsenal({ env }) {
                   sm:grid-cols-[minmax(0,11rem)_minmax(0,1fr)] sm:gap-8 sm:py-7"
               >
                 <div className="flex items-baseline gap-3 sm:pt-2.5">
-                  {/* Rune struck on the rack rail. */}
+                  {}
                   <span
                     aria-hidden="true"
                     className="mt-1 h-1.5 w-1.5 shrink-0 rotate-45 border border-ember/80 bg-ember/25"

@@ -10,14 +10,6 @@ import { identity, gates } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Section I: Gates of Hell.
- *
- * Depth is built from four layers moving at different rates: lava (WebGL, moves
- * with the camera), the stone gate, the chains, and the type. The gate lags the
- * type on scroll, which is what makes you feel like you're passing through the
- * opening rather than sliding a background behind it.
- */
 function Gates({ env }) {
   const section = useRef(null);
   const arch = useRef(null);
@@ -28,12 +20,8 @@ function Gates({ env }) {
     let release = () => {};
 
     const ctx = gsap.context(() => {
-      // ── Entrance ────────────────────────────────────────────────────────
-      // Built paused and held until the threshold parts. `from` tweens still
-      // render their start state immediately, so the lockup is already struck
-      // down out of sight behind the closed gate; what waits is the rise. Play
-      // it on mount instead and the whole entrance happens behind the door.
-      if (!env.reducedMotion) {
+
+if (!env.reducedMotion) {
         const intro = gsap
           .timeline({ defaults: { ease: "expo.out" }, paused: true })
           .from(".gate-rise", {
@@ -49,9 +37,7 @@ function Gates({ env }) {
         release = onCrossed(() => intro.play());
       }
 
-      // ── Parallax ────────────────────────────────────────────────────────
-      // The gate is heavy and drags; the type is light and leaves first.
-      const tl = gsap.timeline({
+const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section.current,
           start: "top top",
@@ -60,9 +46,7 @@ function Gates({ env }) {
         },
       });
 
-      // GSAP owns this transform outright. A Tailwind `scale-*` class on the
-      // same element would be clobbered the moment the tween writes.
-      gsap.set(arch.current, { scale: 1.06, transformOrigin: "50% 42%" });
+gsap.set(arch.current, { scale: 1.06, transformOrigin: "50% 42%" });
       tl.to(arch.current, { yPercent: 12, scale: 1.14, ease: "none" }, 0);
       tl.to(content.current, { yPercent: -38, opacity: 0, ease: "none" }, 0);
       tl.to(cue.current, { opacity: 0, duration: 0.2, ease: "none" }, 0);
@@ -82,12 +66,7 @@ function Gates({ env }) {
       aria-labelledby="gates-title"
       className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden"
     >
-      {/* Architecture, in two nested layers on purpose.
-          Outer is static and carries the fade, so the wall always dissolves at
-          the same point in the *section*. The section clips at its own bottom
-          edge, and an opaque wall meeting bright lava there reads as a seam.
-          Inner is what parallaxes; a fade baked into the moving layer would
-          slide out of position as it travels. */}
+      {}
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -102,10 +81,7 @@ function Gates({ env }) {
         </div>
       </div>
 
-      {/* Carved into the piers, running bottom to top. This is where the
-          ghost word went: the piers are the one part of the frame that is
-          empty at every viewport, so an inscription here never has to fight
-          the lockup for width the way full-width type behind it did. */}
+      {}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center sm:left-6"
@@ -134,8 +110,7 @@ function Gates({ env }) {
 
       <Chains triggerRef={section} reducedMotion={env.reducedMotion} />
 
-      {/* Local scrim. The lava behind runs to white-hot, and centred type needs
-          its own floor of darkness to stay readable over it. */}
+      {}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
@@ -145,9 +120,7 @@ function Gates({ env }) {
         }}
       />
 
-      {/* max-w-3xl keeps the lockup inside the arch springers, and the bottom
-          padding stops centred content colliding with the scroll cue on
-          short viewports. */}
+      {}
       <div
         ref={content}
         className="relative mx-auto w-full max-w-3xl px-6 pt-16 sm:pt-24 lg:pt-28 pb-20 text-center sm:pb-24"
@@ -167,10 +140,7 @@ function Gates({ env }) {
           <span className="h-px flex-1 bg-gradient-to-l from-transparent to-ember/60" />
         </div>
 
-        {/* The lockup. Nothing is set behind it any more: a full-width ghost
-            word has no width left to give once the viewport narrows, so it ends
-            up printed through the name. The word moved to the piers instead,
-            where there is always empty stone and never a collision. */}
+        {}
         <div className="relative">
           <span
             aria-hidden="true"
@@ -182,8 +152,7 @@ function Gates({ env }) {
           />
 
           <h1 id="gates-title" className="relative">
-            {/* One clean string for assistive tech; the split lines below are
-                decorative so a screen reader never hears the name twice. */}
+            {}
             <span className="sr-only">
               {identity.name}, {identity.role} from {identity.region}
             </span>
@@ -200,8 +169,7 @@ function Gates({ env }) {
           </h1>
         </div>
 
-        {/* Two lines on a phone. Set on one line at this tracking, the phrase
-            wraps wherever it runs out of room and splits "New Delhi" in half. */}
+        {}
         <div className="overflow-hidden">
           <p className="gate-rise mt-6 flex flex-col items-center gap-1 font-display text-[0.68rem] tracking-[0.26em] text-parchment uppercase sm:mt-7 sm:flex-row sm:justify-center sm:gap-0 sm:text-xs sm:tracking-[0.42em]">
             <span>{identity.role}</span>
@@ -241,7 +209,7 @@ function Gates({ env }) {
         </div>
       </div>
 
-      {/* Scroll cue. CSS-only animation, so no JS runs to keep this alive. */}
+      {}
       <div
         ref={cue}
         aria-hidden="true"

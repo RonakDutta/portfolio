@@ -1,13 +1,6 @@
-/**
- * Shared GLSL chunks.
- *
- * Octave counts are interpolated into the source as literals rather than passed
- * as a uniform, so the loop unrolls at compile time and low-tier devices get a
- * genuinely cheaper shader instead of a branch they still pay for.
- */
 
-/** Gradient (Perlin-style) 3D noise. ~40 ALU, no texture lookups. */
-export const noise3D = /* glsl */ `
+
+export const noise3D =  `
 vec3 hash33(vec3 p) {
   p = vec3(dot(p, vec3(127.1, 311.7, 74.7)),
            dot(p, vec3(269.5, 183.3, 246.1)),
@@ -32,15 +25,7 @@ float gnoise(vec3 p) {
 }
 `;
 
-/**
- * Fractal brownian motion with a compile-time octave count.
- *
- * Emit it more than once under different names to get a cheap variant for the
- * detail layers (warp, soot) and an expensive one for the silhouette layer that
- * actually needs the octaves. Halving the noise calls in the lava fragment is
- * the difference between comfortable and marginal on integrated graphics.
- */
-export const fbm = (octaves = 4, name = "fbm") => /* glsl */ `
+export const fbm = (octaves = 4, name = "fbm") =>  `
 float ${name}(vec3 p) {
   float sum = 0.0;
   float amp = 0.5;
@@ -53,8 +38,7 @@ float ${name}(vec3 p) {
 }
 `;
 
-/** Cheap Gaussian-ish falloff used for every heat bloom in the project. */
-export const bloomFalloff = /* glsl */ `
+export const bloomFalloff =  `
 float bloom(float dist, float radius) {
   float x = dist / radius;
   return exp(-x * x);

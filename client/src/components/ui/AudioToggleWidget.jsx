@@ -1,21 +1,6 @@
 import { memo, useState } from "react";
 import { infernalAudio } from "../../lib/infernalAudio";
 
-/**
- * The switch for the ambience.
- *
- * The indicator is four struck bars rather than a speaker emoji. Emoji render
- * in whatever colour and shape the operating system decides, which on this
- * page meant a glossy blue-grey iOS speaker sitting on a wrought-iron disc,
- * the one element on the site drawn by somebody else. Bars are drawn here, in
- * ember, and they move with the sound instead of merely labelling it.
- *
- * `aria-pressed` rather than a label that changes underneath the user: the
- * control is a toggle, and a button whose accessible name flips between "Mute"
- * and "Unmute" is read as a different button each time it is pressed.
- */
-
-/** Height and phase per bar, so they never rise as a block. */
 const BARS = [
   { x: 3, h: 8, delay: "0s" },
   { x: 7.5, h: 13, delay: "0.19s" },
@@ -30,9 +15,8 @@ function AudioToggleWidget() {
   const toggle = () => {
     const next = infernalAudio.toggle();
     setActive(next);
-    // A browser with no Web Audio at all reports false forever. Say so once
-    // rather than leaving a control that visibly does nothing.
-    if (!next && !infernalAudio.ready) setAvailable(false);
+
+if (!next && !infernalAudio.ready) setAvailable(false);
   };
 
   if (!available) return null;
@@ -62,11 +46,8 @@ function AudioToggleWidget() {
             width="2.4"
             height={bar.h}
             rx="0.6"
-            // Silent bars keep their height. Collapsing them to a third looked
-            // right in the abstract and rendered as four 2px specks under a
-            // diagonal line, which reads as a smudge rather than as a control.
-            // Colour and the strike carry the state; the shape stays legible.
-            className={
+
+className={
               active
                 ? "animate-ember-bar origin-bottom fill-ember"
                 : "fill-smoke transition-colors duration-300 group-hover:fill-parchment"
@@ -79,7 +60,7 @@ function AudioToggleWidget() {
           />
         ))}
 
-        {/* Struck through while silent. */}
+        {}
         <line
           x1="1"
           y1="17.5"
