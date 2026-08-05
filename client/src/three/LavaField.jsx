@@ -1,5 +1,6 @@
 
 import { useMemo, useRef } from "react";
+/* eslint-disable react-hooks/immutability -- React Three Fiber frame callbacks intentionally mutate Three.js meshes and shader uniforms outside React state. */
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { frame, damp, clamp01 } from "../lib/store";

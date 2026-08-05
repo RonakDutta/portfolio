@@ -50,7 +50,7 @@ const fromLeft = index % 2 === 0;
     return () => ctx.revert();
   }, [reducedMotion, index]);
 
-  const { name, kind, summary, work, stack, links } = project;
+  const { name, kind, summary, impact, work, stack, links } = project;
 
   return (
     <article
@@ -89,6 +89,12 @@ const fromLeft = index % 2 === 0;
           </h3>
 
           <p className="chamber-line mt-2 font-blackletter text-lg text-brimstone/85">{kind}</p>
+
+          {impact ? (
+            <p className="chamber-line mt-5 border-l border-ember/50 pl-4 font-display text-[0.65rem] font-bold tracking-[0.18em] text-hellfire uppercase">
+              {impact}
+            </p>
+          ) : null}
 
           {stack?.length ? (
             <ul className="chamber-line mt-6 flex flex-wrap gap-x-3 gap-y-2">

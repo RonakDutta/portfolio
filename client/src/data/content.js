@@ -20,7 +20,7 @@ export const gates = {
   
   mark: "MMXXVI",
   tagline:
-    "Six chambers below, a record of everything built, broken and rebuilt. Descend at your own pace.",
+    "Full-stack engineer building production-ready React and Node.js systems with fast interfaces, reliable backends and careful product thinking.",
   cta: { label: "Contact Me", target: "summoning" },
   secondary: { label: "View Resume", href: "/resume.pdf" },
   scrollCue: "Descend",
@@ -81,7 +81,7 @@ export const arsenal = {
 export const chambers = {
   headline: "Chambers",
   headlineSub: "what I have built",
-  lede: "Three rooms below, each one a thing that shipped and the work it took.",
+  lede: "Selected builds with the product problem, engineering work and stack called out clearly.",
 
 projects: [
     {
@@ -89,6 +89,7 @@ projects: [
       kind: "Community meetup platform",
       summary:
         "A membership platform where members sign up, log in and RSVP to events, with a separate admin role for the organisers running them.",
+      impact: "Membership, RSVP and admin workflows shipped end to end",
       work: [
         "Built JWT authentication with a separate admin role for organisers.",
         "Created an admin panel to add, edit and cancel events and upload images, with photos on Cloudinary and event data in PostgreSQL.",
@@ -104,6 +105,7 @@ projects: [
       kind: "Cab booking application",
       summary:
         "A booking system with three distinct sides to it: customers hailing rides, drivers accepting them, and admins watching the fleet.",
+      impact: "Three-sided ride platform with payments and operations tooling",
       work: [
         "Implemented a multi-tier RBAC system managing separate authentication flows for admins, drivers and customers via JWT.",
         "Built an admin dashboard for revenue tracking, plus fleet management with real-time driver assignment and automated WhatsApp confirmations.",
@@ -129,6 +131,7 @@ projects: [
       kind: "This portfolio",
       summary:
         "The site you are reading. Six chambers and one continuous fall, with your scroll position driving every layer of the scene at once.",
+      impact: "Cinematic portfolio with accessible fallbacks for motion-sensitive users",
       work: [
         "Built the scroll engine on Lenis and GSAP ScrollTrigger sharing a single animation loop, since separate loops are what make this kind of site stutter.",
         "Kept scroll and pointer state out of React entirely, so scrolling never costs a rerender.",
@@ -189,7 +192,7 @@ honoursTitle: "Sigils",
 export const summoning = {
   headline: "Summoning Circle",
   headlineSub: "call and I answer",
-  lede: "The descent ends here. If you have something worth building, the circle is drawn.",
+  lede: "Available for internships, freelance builds and ambitious product work. Share the problem, the constraints and the timeline.",
 
 channels: [
     {
@@ -205,7 +208,7 @@ channels: [
     },
   ],
 
-  cta: { label: "Send word", href: "mailto:ronakdutta100@gmail.com" },
+  cta: { label: "Send word", href: "mailto:ronakdutta100@gmail.com?subject=Project%20inquiry%20for%20Ronak" },
   closing: "Ronak Dutta, New Delhi",
 
 ascend: "Return to the surface",

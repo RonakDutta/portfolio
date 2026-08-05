@@ -8,6 +8,8 @@ import { clamp01 } from "../lib/store";
 
 const _target = new THREE.Vector3();
 
+/* eslint-disable react-hooks/immutability -- React Three Fiber frame callbacks intentionally mutate Three.js camera objects outside React state. */
+
 export default function CameraRig({ isMobile = false, coarsePointer = false }) {
   const { camera } = useThree();
   const shake = useRef(0);

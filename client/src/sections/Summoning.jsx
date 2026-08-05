@@ -74,8 +74,8 @@ gsap.from(".summon-rise", {
       setCopied(value);
       setTimeout(() => setCopied(""), 2000);
     } catch {
-
-}
+      // Clipboard access can be denied; the mailto link remains available.
+    }
   };
 
   return (
