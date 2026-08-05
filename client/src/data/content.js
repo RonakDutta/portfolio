@@ -20,7 +20,7 @@ export const gates = {
   
   mark: "MMXXVI",
   tagline:
-    "Six chambers below, a record of everything built, broken and rebuilt. Descend at your own pace.",
+    "Full-stack engineer building production-ready React and Node.js systems with fast interfaces, reliable backends and careful product thinking.",
   cta: { label: "Contact Me", target: "summoning" },
   secondary: { label: "View Resume", href: "/resume.pdf" },
   scrollCue: "Descend",
@@ -81,7 +81,7 @@ export const arsenal = {
 export const chambers = {
   headline: "Chambers",
   headlineSub: "what I have built",
-  lede: "Three rooms below, each one a thing that shipped and the work it took.",
+  lede: "Selected builds with the product problem, engineering work and stack called out clearly.",
 
 projects: [
     {
@@ -189,7 +189,7 @@ honoursTitle: "Sigils",
 export const summoning = {
   headline: "Summoning Circle",
   headlineSub: "call and I answer",
-  lede: "The descent ends here. If you have something worth building, the circle is drawn.",
+  lede: "Available for internships, freelance builds and ambitious product work. Share the problem, the constraints and the timeline.",
 
 channels: [
     {
@@ -205,7 +205,7 @@ channels: [
     },
   ],
 
-  cta: { label: "Send word", href: "mailto:ronakdutta100@gmail.com" },
+  cta: { label: "Send word", href: "mailto:ronakdutta100@gmail.com?subject=Project%20inquiry%20for%20Ronak" },
   closing: "Ronak Dutta, New Delhi",
 
 ascend: "Return to the surface",

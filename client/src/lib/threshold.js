@@ -22,7 +22,7 @@ export function markCrossed() {
   try {
     sessionStorage.setItem(SESSION_KEY, "1");
   } catch {
-    
+    // Storage can be unavailable in private browsing or strict browser modes.
   }
   for (const fn of crossWaiters) fn();
   crossWaiters.clear();
