@@ -1,8 +1,20 @@
 import { readFileSync } from "node:fs";
+import { env as processEnv } from "node:process";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+
+function siteUrlFallback() {
+  const siteUrl = (processEnv.VITE_SITE_URL || "https://ronakdutta.vercel.app").replace(/\/$/, "");
+
+  return {
+    name: "site-url-fallback",
+    config() {
+      processEnv.VITE_SITE_URL = siteUrl;
+    },
+  };
+}
 
 function inlineSigil() {
   const source = fileURLToPath(new URL("./public/favicon.svg", import.meta.url));
@@ -66,7 +78,7 @@ configureServer(server) {
 export default defineConfig({
 
 appType: "mpa",
-  plugins: [inlineSigil(), notFoundFallback(), react(), tailwindcss()],
+  plugins: [siteUrlFallback(), inlineSigil(), notFoundFallback(), react(), tailwindcss()],
   build: {
     target: "es2022",
     cssCodeSplit: true,
