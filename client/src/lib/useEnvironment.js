@@ -19,8 +19,6 @@ export function useEnvironment() {
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const isMobile = useMediaQuery("(max-width: 768px)");
   const coarsePointer = useMediaQuery("(pointer: coarse)");
-  const saveData =
-    typeof navigator !== "undefined" && Boolean(navigator.connection?.saveData);
 
   const [tier] = useState(() => {
     if (typeof navigator === "undefined") return "high";
@@ -45,8 +43,7 @@ const lean = isMobile || quality === "low";
       isMobile,
       coarsePointer,
       quality,
-      saveData,
-      enable3D: !reducedMotion && !saveData && !(isMobile && quality === "low"),
+      enable3D: !reducedMotion,
 
 dpr:
         isMobile
@@ -64,6 +61,6 @@ lavaDetail: lean ? "plain" : "rich",
 
 canvasFps: isMobile ? 30 : 0,
     }),
-    [reducedMotion, isMobile, coarsePointer, quality, lean, saveData],
+    [reducedMotion, isMobile, coarsePointer, quality, lean],
   );
 }
