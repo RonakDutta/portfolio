@@ -52,16 +52,6 @@ gsap.from(".chambers-part", {
         }}
       />
 
-      <div
-        aria-hidden="true"
-        className="lava-rift pointer-events-none absolute inset-x-0 top-[14%] -z-10 h-40 sm:top-[18%] sm:h-56"
-      />
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-[6%] -z-10 h-56 bg-[radial-gradient(50%_70%_at_50%_100%,rgba(255,77,0,0.22),rgba(139,15,22,0.10)_44%,transparent_78%)]"
-      />
-
       <div className="mx-auto w-full max-w-5xl px-6">
         <header className="mx-auto max-w-2xl text-center">
           <SectionMark roman="IV" label="Chambers" className="chambers-rise justify-center" />

@@ -55,16 +55,12 @@ const fromLeft = index % 2 === 0;
   return (
     <article
       ref={root}
-      className="lava-card clip-plaque group relative isolate overflow-hidden border border-iron/70
-        bg-gradient-to-br from-[#17101c]/95 via-[#14080a]/95 to-[#09060e]/95
-        transition-[border-color,box-shadow,transform] duration-500
-        hover:-translate-y-1 hover:border-ember/55 hover:shadow-[0_0_70px_-24px_rgba(255,77,0,0.9)]"
+      className="clip-plaque group relative isolate overflow-hidden border border-iron/70
+        bg-gradient-to-br from-[#15111c]/95 to-[#09060e]/95
+        transition-[border-color,box-shadow] duration-500
+        hover:border-ember/45 hover:shadow-[0_0_60px_-24px_rgba(255,77,0,0.85)]"
     >
-      <span
-        aria-hidden="true"
-        className="lava-card__flow absolute inset-x-0 bottom-0 h-1 opacity-80"
-      />
-
+      {}
       <span
         aria-hidden="true"
         className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-transparent
@@ -105,9 +101,8 @@ const fromLeft = index % 2 === 0;
               {stack.map((tech) => (
                 <li
                   key={tech}
-                  className="border border-iron/80 bg-void/25 px-2.5 py-1 font-display text-[0.6rem]
-                    tracking-[0.16em] text-parchment uppercase transition-colors duration-300
-                    group-hover:border-ember/35 group-hover:text-hellfire"
+                  className="border border-iron/80 px-2.5 py-1 font-display text-[0.6rem]
+                    tracking-[0.16em] text-parchment uppercase"
                 >
                   {tech}
                 </li>
