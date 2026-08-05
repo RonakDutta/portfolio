@@ -386,3 +386,53 @@ html {
     transition-duration: 0.01ms !important;
   }
 }
+
+@layer components {
+  .lava-rift {
+    opacity: 0.72;
+    background:
+      radial-gradient(60% 100% at 50% 50%, rgba(255, 138, 31, 0.22), transparent 62%),
+      linear-gradient(90deg, transparent, rgba(255, 77, 0, 0.2) 18%, rgba(255, 192, 97, 0.46) 50%, rgba(255, 77, 0, 0.18) 82%, transparent),
+      repeating-linear-gradient(104deg, transparent 0 28px, rgba(255, 77, 0, 0.12) 29px 31px, transparent 32px 74px);
+    filter: blur(0.2px);
+    mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 70%, transparent);
+  }
+
+  .lava-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.56;
+    background:
+      radial-gradient(34rem 14rem at 12% 100%, rgba(255, 77, 0, 0.18), transparent 58%),
+      radial-gradient(28rem 12rem at 92% 0%, rgba(255, 138, 31, 0.13), transparent 56%);
+    transition: opacity 0.35s var(--ease-descent);
+  }
+
+  .lava-card:hover::before {
+    opacity: 0.9;
+  }
+
+  .lava-card__flow {
+    background: linear-gradient(90deg, transparent, rgba(139, 15, 22, 0.75), var(--color-ember), var(--color-hellfire), var(--color-ember), rgba(139, 15, 22, 0.75), transparent);
+    background-size: 220% 100%;
+    box-shadow: 0 0 22px rgba(255, 77, 0, 0.48);
+    animation: lava-flow 5s linear infinite;
+  }
+}
+
+@keyframes lava-flow {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 220% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lava-card__flow {
+    animation: none;
+  }
+}
