@@ -142,6 +142,12 @@ projects: [
         "PostgreSQL",
         "SpaCy",
       ],
+      links: [
+        {
+          label: "View Project",
+          href: "https://github.com/RonakDutta",
+        },
+      ],
     },
   ],
 };
