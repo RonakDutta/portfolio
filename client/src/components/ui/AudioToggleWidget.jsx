@@ -9,6 +9,9 @@ const BARS = [
 ];
 
 function AudioToggleWidget() {
+  // Hidden for now per user request
+  return null;
+
   const [active, setActive] = useState(false);
   const [available, setAvailable] = useState(true);
 

@@ -125,16 +125,23 @@ projects: [
       ],
     },
     {
-      name: "Descent",
-      kind: "This portfolio",
+      name: "ATS Workplace",
+      kind: "AI-Powered Recruitment Suite",
       summary:
-        "The site you are reading. Six chambers and one continuous fall, with your scroll position driving every layer of the scene at once.",
+        "A microservice-based applicant tracking system automating high-volume recruitment workflows, candidate analysis, and semantic NLP resume scoring.",
       work: [
-        "Built the scroll engine on Lenis and GSAP ScrollTrigger sharing a single animation loop, since separate loops are what make this kind of site stutter.",
-        "Kept scroll and pointer state out of React entirely, so scrolling never costs a rerender.",
-        "Falls back to a still, high-contrast layout for anyone who asks for reduced motion.",
+        "Architected a microservice-based ATS featuring a React frontend, a Node.js API gateway, and a Python-based ML engine.",
+        "Developed a high-performance NLP pipeline using FastAPI, SpaCy, and Hugging Face Transformers for real-time candidate analysis and semantic resume scoring.",
+        "Engineered an automated screening system that generates AI-driven candidate summaries and ranking metrics, significantly reducing manual review time.",
       ],
-      stack: ["React", "Vite", "Tailwind CSS", "GSAP"],
+      stack: [
+        "React",
+        "Node.js",
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "SpaCy",
+      ],
     },
   ],
 };
