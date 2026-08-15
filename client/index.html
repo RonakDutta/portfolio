@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#05030a" />
+    <meta name="theme-color" content="#020202" />
     <meta
       name="description"
       content="Ronak Dutta, software engineer in New Delhi. Full-stack work in React, Node.js and PostgreSQL. Selected projects, experience and contact."
@@ -17,7 +17,7 @@
     <meta property="og:site_name" content="Ronak Dutta" />
     <meta
       property="og:title"
-      content="Ronak Dutta, Software Engineer in New Delhi"
+      content="Ronak Dutta — Software Engineer, New Delhi"
     />
     <meta
       property="og:description"
@@ -33,7 +33,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Ronak Dutta, Software Engineer in New Delhi"
+      content="Ronak Dutta — Software Engineer, New Delhi"
     />
     <meta
       name="twitter:description"
@@ -48,20 +48,16 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Inter:wght@300..600&family=JetBrains+Mono:wght@400..500&display=swap"
-      onload="
-        this.onload = null;
-        this.rel = 'stylesheet';
-      "
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..500&family=Inter:wght@300..600&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Inter:wght@300..600&family=JetBrains+Mono:wght@400..500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..500&family=Inter:wght@300..600&display=swap"
       />
     </noscript>
 
@@ -96,145 +92,103 @@
       }
     </script>
 
+    <!-- The curtain. Painted by the parser, not by React, so there is never a
+         white flash in front of the thing that exists to remove it. -->
     <style>
       html {
-        background: #05030a;
+        background: #020202;
       }
-      #threshold {
+      #curtain {
         position: fixed;
         inset: 0;
         z-index: 100;
         overflow: hidden;
-        font-family: Cinzel, Georgia, serif;
+        background: #020202;
       }
-      .th-half {
+      .cu-half {
         position: absolute;
         top: 0;
         bottom: 0;
         width: 50.5%;
-        background:
-          linear-gradient(
-            to bottom,
-            rgba(255, 235, 205, 0.05) 0 1px,
-            transparent 1px
-          ),
-          repeating-linear-gradient(
-            0deg,
-            rgba(0, 0, 0, 0.5) 0 1px,
-            transparent 1px 84px
-          ),
-          radial-gradient(
-            120% 90% at 50% 120%,
-            rgba(185, 138, 82, 0.1) 0%,
-            transparent 62%
-          ),
-          linear-gradient(to bottom, #191320 0%, #0d0913 60%, #170e14 100%);
+        background: #020202;
         will-change: transform;
       }
-      .th-left {
+      .cu-left {
         left: 0;
-        box-shadow: inset -1px 0 0 rgba(185, 138, 82, 0.24);
       }
-      .th-right {
+      .cu-right {
         right: 0;
-        box-shadow: inset 1px 0 0 rgba(185, 138, 82, 0.24);
       }
-
-      #th-seam {
+      #cu-seam {
         position: absolute;
         top: 0;
         bottom: 0;
         left: 50%;
-        width: 2px;
-        margin-left: -1px;
+        width: 1px;
+        margin-left: -0.5px;
         background: linear-gradient(
           to bottom,
           transparent,
-          rgba(185, 138, 82, 0.5) 30%,
-          rgba(233, 205, 168, 0.75) 50%,
-          rgba(185, 138, 82, 0.5) 70%,
+          rgba(176, 141, 69, 0.5) 40%,
+          rgba(225, 196, 135, 0.85) 50%,
+          rgba(176, 141, 69, 0.5) 60%,
           transparent
         );
-        opacity: 0.5;
+        opacity: 0;
       }
-      .th-core {
+      .cu-core {
         position: absolute;
         inset: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 2rem;
+        gap: 1.75rem;
       }
-      .th-sigil {
-        width: 84px;
-        height: 84px;
-        filter: drop-shadow(0 0 18px rgba(185, 138, 82, 0.38));
+      .cu-name {
+        margin: 0;
+        font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
+        font-weight: 300;
+        font-size: clamp(1.5rem, 5vw, 2.25rem);
+        letter-spacing: 0.34em;
+        text-indent: 0.34em;
+        text-transform: uppercase;
+        color: #f5f2ea;
       }
-
-      .th-sigil .sigil-rim {
-        stroke-dasharray: 167;
-        stroke-dashoffset: 167;
-        animation: th-strike 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
-      }
-      .th-sigil .sigil-letter,
-      .th-sigil .sigil-rule,
-      .th-sigil .sigil-facet {
-        opacity: 0;
-        animation: th-emerge 0.7s ease-out 0.85s forwards;
-      }
-      @keyframes th-strike {
-        to {
-          stroke-dashoffset: 0;
-        }
-      }
-      @keyframes th-emerge {
-        to {
-          opacity: 1;
-        }
-      }
-      .th-bar {
+      .cu-bar {
         position: relative;
-        width: min(200px, 44vw);
-        height: 2px;
-        background: rgba(255, 255, 255, 0.08);
+        width: min(160px, 38vw);
+        height: 1px;
+        background: rgba(245, 242, 234, 0.1);
         overflow: hidden;
       }
-      #th-fill {
+      #cu-fill {
         display: block;
         height: 100%;
         width: 100%;
         transform: scaleX(0);
         transform-origin: 0 50%;
-        background: linear-gradient(90deg, #4a3720, #b98a52 55%, #dcae74);
-        box-shadow: 0 0 10px rgba(185, 138, 82, 0.55);
-        animation: th-creep 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        background: linear-gradient(90deg, #6f542a, #c6a15b 60%, #e1c487);
+        animation: cu-creep 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
-
-      @keyframes th-creep {
+      @keyframes cu-creep {
         to {
           transform: scaleX(0.4);
         }
       }
-      .th-word {
+      .cu-word {
         margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
         font-size: 0.6rem;
-        letter-spacing: 0.42em;
-        text-indent: 0.42em;
+        font-weight: 500;
+        letter-spacing: 0.3em;
+        text-indent: 0.3em;
         text-transform: uppercase;
-        color: #8a8290;
+        color: #6f6b64;
       }
       @media (prefers-reduced-motion: reduce) {
-        .th-sigil .sigil-rim,
-        .th-sigil .sigil-letter,
-        .th-sigil .sigil-rule,
-        .th-sigil .sigil-facet,
-        #th-fill {
+        #cu-fill {
           animation: none;
-          stroke-dashoffset: 0;
-          opacity: 1;
-        }
-        #th-fill {
           transform: scaleX(0.4);
         }
       }
@@ -243,20 +197,20 @@
   <body>
     <div id="root"></div>
 
-    <div id="threshold" aria-hidden="true">
-      <div class="th-half th-left"></div>
-      <div class="th-half th-right"></div>
-      <div id="th-seam"></div>
-      <div class="th-core">
-        <!--SIGIL-->
-        <div class="th-bar"><i id="th-fill"></i></div>
-        <p class="th-word">Ronak Dutta</p>
+    <div id="curtain" aria-hidden="true">
+      <div class="cu-half cu-left"></div>
+      <div class="cu-half cu-right"></div>
+      <div id="cu-seam"></div>
+      <div class="cu-core">
+        <p class="cu-name">Ronak Dutta</p>
+        <div class="cu-bar"><i id="cu-fill"></i></div>
+        <p class="cu-word">Software Engineer</p>
       </div>
     </div>
 
     <noscript>
       <style>
-        #threshold {
+        #curtain {
           display: none;
         }
       </style>
@@ -264,8 +218,8 @@
         style="
           padding: 4rem;
           font-family: Georgia, serif;
-          color: #d9cfc0;
-          background: #05030a;
+          color: #e8e3d8;
+          background: #020202;
         "
       >
         <h1>Ronak Dutta</h1>

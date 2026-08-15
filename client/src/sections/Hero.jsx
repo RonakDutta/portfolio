@@ -1,55 +1,54 @@
 import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import GateArch from "../components/gates/GateArch";
-import Chains from "../components/gates/Chains";
-import EmberField from "../components/ui/EmberField";
-import ForgedButton from "../components/ui/ForgedButton";
+import Portrait from "../components/media/Portrait";
+import GoldArc from "../components/ui/GoldArc";
+import Button from "../components/ui/Button";
 import { scrollToSection } from "../lib/useSmoothScroll";
 import { onCrossed } from "../lib/threshold";
 import { identity, hero } from "../data/content";
 
-gsap.registerPlugin(ScrollTrigger);
-
+/**
+ * The campaign plate.
+ *
+ * On `lg` the name and the portrait share grid cells so the type crosses in
+ * front of the image — the layering is what makes it read as art direction
+ * rather than two columns side by side. Below `lg` it becomes portrait, then
+ * name, then copy, which is the same composition read top to bottom.
+ */
 function Hero({ env }) {
   const section = useRef(null);
-  const arch = useRef(null);
-  const content = useRef(null);
-  const cue = useRef(null);
+  const portrait = useRef(null);
 
   useLayoutEffect(() => {
     let release = () => {};
 
     const ctx = gsap.context(() => {
-      if (!env.reducedMotion) {
-        const intro = gsap
-          .timeline({ defaults: { ease: "expo.out" }, paused: true })
-          .from(".hero-rise", {
-            yPercent: 110,
-            opacity: 0,
-            duration: 1.4,
-            stagger: 0.1,
-          })
-          .from(".hero-rule", { scaleX: 0, duration: 1.2 }, 0.45)
-          .from(".hero-rail", { opacity: 0, duration: 1.6 }, 0.55);
+      if (env.reducedMotion) return;
 
-        release = onCrossed(() => intro.play());
-      }
+      // Slow, heavy, and in one direction. Nothing bounces.
+      const intro = gsap
+        .timeline({ defaults: { ease: "expo.out" }, paused: true })
+        .from(".hero-mask > *", {
+          yPercent: 108,
+          duration: 1.7,
+          stagger: 0.11,
+        })
+        .from(portrait.current, { opacity: 0, duration: 2 }, 0.15)
+        .fromTo(
+          ".hero-plate",
+          { clipPath: "inset(0% 0% 100% 0%)" },
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 1.9 },
+          0.15,
+        )
+        .from(".hero-rule", { scaleX: 0, duration: 1.4 }, 0.6)
+        .from(
+          ".hero-fade",
+          { opacity: 0, y: 18, duration: 1.1, stagger: 0.09 },
+          0.75,
+        )
+        .from(".hero-arc", { opacity: 0, duration: 2.4 }, 0.4);
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.5,
-        },
-      });
-
-      gsap.set(arch.current, { scale: 1.06, transformOrigin: "50% 42%" });
-      tl.to(arch.current, { yPercent: 10, scale: 1.12, ease: "none" }, 0);
-      tl.to(content.current, { yPercent: -32, opacity: 0, ease: "none" }, 0);
-      tl.to(cue.current, { opacity: 0, duration: 0.2, ease: "none" }, 0);
-      tl.to(".hero-rail", { opacity: 0, ease: "none" }, 0);
+      release = onCrossed(() => intro.play());
     }, section);
 
     return () => {
@@ -60,164 +59,119 @@ function Hero({ env }) {
 
   return (
     <section
-      id="gates"
+      id="hero"
       ref={section}
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden"
+      className="relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden
+        pt-28 pb-14 sm:pt-32 lg:pt-24 lg:pb-20"
     >
-      {/* Stone architecture, faded out before it meets the next section. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10"
-        style={{
-          maskImage:
-            "linear-gradient(to bottom, #000 0%, #000 68%, transparent 96%)",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, #000 0%, #000 68%, transparent 96%)",
-        }}
-      >
-        <div ref={arch} className="absolute inset-x-0 -top-[2%] -bottom-[30%]">
-          <GateArch narrow={env.isMobile} />
-        </div>
-      </div>
-
-      <Chains triggerRef={section} reducedMotion={env.reducedMotion} />
-
-      <EmberField
-        count={8}
-        reducedMotion={env.reducedMotion}
-        isMobile={env.isMobile}
-        className="-z-10"
+      <GoldArc
+        className="hero-arc top-1/2 right-[-18%] aspect-square w-[86vmin] -translate-y-1/2
+          opacity-70 lg:right-[-8%] lg:w-[62vmin]"
+        rings={3}
       />
 
-      {/* Marginalia set into the walls. Architectural, not decorative. */}
-      {[
-        { side: "left", text: hero.railLeft, flip: true },
-        { side: "right", text: hero.railRight, flip: false },
-      ].map(({ side, text, flip }) => (
+      <div className="mx-auto grid w-full max-w-[104rem] items-center gap-0 px-6 sm:px-10 lg:grid-cols-12">
+        {/* The plate. Right of centre on desktop so the type has something to
+            cross in front of; full-bleed above `lg`, with the name pulled up
+            over its lower edge so the phone gets the same layered composition
+            rather than a stack of centred boxes. */}
         <div
-          key={side}
-          aria-hidden="true"
-          className={`pointer-events-none absolute inset-y-0 z-10 hidden items-center sm:flex
-            ${side === "left" ? "left-6" : "right-6"}`}
+          ref={portrait}
+          className="hero-plate relative order-1 -mx-6 sm:-mx-10
+            lg:order-2 lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:mx-0
+            lg:w-full lg:max-w-[28rem] lg:justify-self-end xl:max-w-[32rem]"
         >
-          <span className="hero-rail flex flex-col items-center gap-4">
-            <span className="h-16 w-px bg-gradient-to-b from-transparent to-bronze/35" />
-            <span
-              className={`font-mono text-[0.62rem] tracking-[0.42em] text-parchment/45 uppercase
-                [writing-mode:vertical-rl] ${flip ? "rotate-180" : ""}`}
-            >
-              {text}
-            </span>
-            <span className="h-16 w-px bg-gradient-to-t from-transparent to-bronze/35" />
-          </span>
+          <Portrait
+            portrait={hero.portrait}
+            initials={identity.initials}
+            reducedMotion={env.reducedMotion}
+            priority
+          />
         </div>
-      ))}
 
-      {/* Keeps the type off the stone without washing the whole frame out. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(56% 44% at 50% 54%, rgba(5,4,9,0.94) 0%, rgba(5,4,9,0.7) 48%, transparent 80%)",
-        }}
-      />
-
-      <div
-        ref={content}
-        className="relative mx-auto w-full max-w-3xl px-6 pt-20 pb-24 text-center sm:pt-24"
-      >
-        <h1 id="hero-title">
-          <span className="sr-only">
-            {identity.name} — {identity.role}, {identity.region}
-          </span>
-
-          <span aria-hidden="true" className="block overflow-hidden pb-[0.06em]">
-            <span
-              className="text-lit hero-rise block font-display
-                text-[clamp(2.75rem,10.5vw,8.5rem)] leading-[0.92] font-bold
-                tracking-[0.005em] uppercase"
-            >
-              {identity.given}
+        {/* Type. Sits above the plate in the stacking order on every size. */}
+        <div className="relative z-10 order-2 -mt-16 sm:-mt-24 lg:order-1 lg:col-span-8
+            lg:col-start-1 lg:row-start-1 lg:mt-0 lg:self-center">
+          <h1 id="hero-title">
+            <span className="sr-only">
+              {identity.name} — {identity.role}, {identity.region}
             </span>
-          </span>
-          <span aria-hidden="true" className="block overflow-hidden pb-[0.06em]">
-            <span
-              className="text-lit hero-rise block font-display
-                text-[clamp(2.75rem,10.5vw,8.5rem)] leading-[0.92] font-bold
-                tracking-[0.005em] uppercase"
-            >
-              {identity.family}
-            </span>
-          </span>
-        </h1>
 
-        <div
-          aria-hidden="true"
-          className="hero-rule mx-auto mt-8 h-px w-full max-w-sm origin-center
-            bg-gradient-to-r from-transparent via-bronze/50 to-transparent"
-        />
+            {[identity.given, identity.family].map((word, i) => (
+              <span
+                key={word}
+                aria-hidden="true"
+                className="hero-mask block overflow-hidden pb-[0.04em]"
+              >
+                <span
+                  className={`text-lit block font-display font-light uppercase
+                    text-[clamp(3.4rem,14.5vw,13rem)] leading-[0.82] tracking-[0.005em]
+                    ${i === 1 ? "lg:pl-[0.14em]" : ""}`}
+                >
+                  {word}
+                </span>
+              </span>
+            ))}
+          </h1>
 
-        <div className="overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="hero-rule mt-9 h-px w-full max-w-lg origin-left bg-gradient-to-r
+              from-gold/60 via-gold/25 to-transparent lg:mt-11"
+          />
+
           <p
             aria-hidden="true"
-            className="hero-rise mt-6 flex flex-col items-center gap-1.5 font-mono
-              text-[0.68rem] tracking-[0.3em] text-bronze-lit uppercase
-              sm:flex-row sm:justify-center sm:gap-4 sm:text-[0.72rem]"
+            className="hero-fade mt-7 flex flex-wrap items-center gap-x-5 gap-y-1 eyebrow text-gold-light"
           >
             <span>{identity.role}</span>
-            <span className="hidden h-3 w-px bg-slate sm:block" />
-            <span className="text-parchment/70">{identity.region}</span>
+            <span className="h-3 w-px bg-line" />
+            <span className="text-stone">{identity.region}</span>
           </p>
+
+          <p className="hero-fade mt-7 max-w-lg text-pearl/85">
+            {hero.statement}
+          </p>
+
+          <div className="hero-fade mt-10 flex flex-col items-stretch gap-3.5 sm:flex-row sm:items-center sm:gap-5">
+            <Button
+              variant="solid"
+              magnetic={env.pointerFx}
+              onClick={() => scrollToSection(hero.primary.target)}
+            >
+              {hero.primary.label}
+            </Button>
+            <Button
+              href={hero.secondary.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              magnetic={env.pointerFx}
+            >
+              {hero.secondary.label}
+            </Button>
+          </div>
         </div>
-
-        <p className="hero-rise mx-auto mt-7 max-w-lg text-balance text-parchment">
-          {hero.intro}
-        </p>
-
-        <div
-          className="hero-rise mx-auto mt-10 flex w-full max-w-xs flex-col items-stretch gap-3
-            sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:justify-center sm:gap-4"
-        >
-          <ForgedButton onClick={() => scrollToSection(hero.primary.target)}>
-            {hero.primary.label}
-          </ForgedButton>
-          <ForgedButton
-            variant="ghost"
-            href={hero.secondary.href}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {hero.secondary.label}
-          </ForgedButton>
-        </div>
-
-        {/* Email in plain sight. A recruiter should never have to scroll for it. */}
-        <p className="hero-rise mt-7">
-          <a
-            href={`mailto:${identity.email}`}
-            className="inline-flex min-h-11 items-center font-mono text-[0.72rem]
-              tracking-[0.08em] text-parchment/75 underline decoration-bronze/40
-              underline-offset-[6px] transition-colors duration-300
-              hover:text-bone hover:decoration-bronze"
-          >
-            {identity.email}
-          </a>
-        </p>
       </div>
 
-      <div
-        ref={cue}
-        aria-hidden="true"
-        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3
-          [@media(max-height:800px)]:hidden"
-      >
-        <span className="font-mono text-[0.6rem] tracking-[0.36em] text-parchment/50 uppercase">
+      {/* Footer rail: the email in plain sight, and the scroll cue. */}
+      <div className="hero-fade mx-auto mt-14 flex w-full max-w-[104rem] items-end justify-between gap-6 px-6 sm:px-10 lg:mt-16">
+        <a
+          href={`mailto:${identity.email}`}
+          className="link-rule min-h-11 eyebrow-sm inline-flex items-center text-stone
+            transition-colors duration-500 hover:text-ivory"
+        >
+          {identity.email}
+        </a>
+
+        <span
+          aria-hidden="true"
+          className="hidden shrink-0 items-center gap-4 eyebrow-sm text-mute sm:flex"
+        >
           {hero.scrollCue}
-        </span>
-        <span className="relative block h-12 w-px bg-gradient-to-b from-transparent via-bronze/40 to-transparent">
-          <span className="animate-ember-fall absolute left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-hellfire shadow-[0_0_8px_2px_rgba(255,148,72,0.55)]" />
+          <span className="relative block h-10 w-px overflow-hidden bg-line">
+            <span className="animate-cue-fall absolute inset-0 bg-gold" />
+          </span>
         </span>
       </div>
     </section>

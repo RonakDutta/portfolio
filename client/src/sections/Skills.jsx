@@ -1,12 +1,17 @@
 import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ForgedTag from "../components/ui/ForgedTag";
-import SectionHeader from "../components/ui/SectionHeader";
+import SectionHeading from "../components/ui/SectionHeading";
 import { skills } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * A specification sheet, not a badge cloud. Each group is a ruled row: the
+ * category set small and gold on the left, the entries listed as plain type
+ * on the right. Nothing is boxed, nothing is a pill, nothing claims a
+ * percentage.
+ */
 function Skills({ env }) {
   const section = useRef(null);
 
@@ -17,20 +22,32 @@ function Skills({ env }) {
       gsap.from(".skills-rise", {
         y: 24,
         opacity: 0,
-        duration: 0.9,
-        stagger: 0.07,
+        duration: 1,
+        stagger: 0.08,
         ease: "expo.out",
-        scrollTrigger: { trigger: section.current, start: "top 74%" },
+        scrollTrigger: { trigger: section.current, start: "top 76%" },
       });
 
       gsap.utils.toArray(".skills-row").forEach((row) => {
-        gsap.from(row, {
-          y: 18,
-          opacity: 0,
-          duration: 0.7,
-          ease: "power3.out",
-          scrollTrigger: { trigger: row, start: "top 90%" },
-        });
+        gsap
+          .timeline({ scrollTrigger: { trigger: row, start: "top 90%" } })
+          .from(row.querySelector(".skills-rule"), {
+            scaleX: 0,
+            transformOrigin: "0% 50%",
+            duration: 1.1,
+            ease: "expo.out",
+          })
+          .from(
+            row.querySelectorAll(".skills-item"),
+            {
+              y: 14,
+              opacity: 0,
+              duration: 0.7,
+              stagger: 0.045,
+              ease: "power3.out",
+            },
+            0.15,
+          );
       });
     }, section);
 
@@ -39,58 +56,51 @@ function Skills({ env }) {
 
   return (
     <section
-      id="arsenal"
+      id="skills"
       ref={section}
       aria-labelledby="skills-title"
-      className="relative isolate overflow-x-clip py-28 sm:py-36"
+      className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(78% 62% at 50% 50%, rgba(5,4,9,0.96) 0%, rgba(5,4,9,0.86) 56%, rgba(5,4,9,0.45) 100%)",
-        }}
-      />
-
-      <div className="mx-auto w-full max-w-5xl px-6">
-        <SectionHeader
+      <div className="mx-auto w-full max-w-[104rem] px-6 sm:px-10">
+        <SectionHeading
           id="skills-title"
           index={skills.index}
           label={skills.label}
           title={skills.title}
-          lede={skills.lede}
           itemClass="skills-rise"
         />
 
-        {/* A ledger, not a badge cloud: label left, contents right, hairline
-            between. Readable top to bottom at a glance. */}
-        <dl className="mt-16 border-t border-iron sm:mt-20">
+        <dl className="mt-20 sm:mt-28">
           {skills.groups.map((group) => (
-            <div
-              key={group.name}
-              className="skills-row grid items-start gap-4 border-b border-iron py-7
-                sm:grid-cols-[minmax(0,10rem)_minmax(0,1fr)] sm:gap-10"
-            >
-              <dt className="flex items-baseline gap-3">
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 shrink-0 translate-y-[-0.15rem] rotate-45 border border-bronze/70"
-                />
-                <span className="font-mono text-[0.72rem] tracking-[0.24em] text-bone uppercase">
-                  {group.name}
-                </span>
-              </dt>
+            <div key={group.name} className="skills-row relative pt-8 pb-10 sm:pt-10 sm:pb-12">
+              <span
+                aria-hidden="true"
+                className="skills-rule absolute inset-x-0 top-0 h-px bg-line"
+              />
 
-              <dd>
-                <ul className="flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <ForgedTag key={item} label={item} />
-                  ))}
-                </ul>
-              </dd>
+              <div className="grid gap-6 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:gap-14">
+                <dt className="flex items-baseline gap-4">
+                  <span aria-hidden="true" className="h-px w-6 bg-gold/50" />
+                  <span className="eyebrow text-gold-light">{group.name}</span>
+                </dt>
+
+                <dd>
+                  <ul className="flex flex-wrap gap-x-10 gap-y-3">
+                    {group.items.map((item) => (
+                      <li
+                        key={item}
+                        className="skills-item font-display text-[1.35rem] leading-tight
+                          font-light text-pearl sm:text-[1.6rem]"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
             </div>
           ))}
+          <div aria-hidden="true" className="h-px w-full bg-line" />
         </dl>
       </div>
     </section>

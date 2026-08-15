@@ -4,27 +4,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-function inlineSigil() {
-  const source = fileURLToPath(new URL("./public/favicon.svg", import.meta.url));
-
-  return {
-    name: "inline-sigil",
-    transformIndexHtml: {
-      order: "pre",
-      handler(html) {
-        const svg = readFileSync(source, "utf8")
-          .replace(/<\?xml[\s\S]*?\?>/, "")
-          .replace(/<title>[\s\S]*?<\/title>/, "")
-          .replace(/<!--[\s\S]*?-->/g, "")
-          .replace(/<svg /, '<svg class="th-sigil" ')
-          .trim();
-
-        return html.replace("<!--SIGIL-->", svg);
-      },
-    },
-  };
-}
-
 function notFoundFallback() {
   const page = fileURLToPath(new URL("./404.html", import.meta.url));
 
@@ -66,7 +45,7 @@ configureServer(server) {
 export default defineConfig({
 
 appType: "mpa",
-  plugins: [inlineSigil(), notFoundFallback(), react(), tailwindcss()],
+  plugins: [notFoundFallback(), react(), tailwindcss()],
   build: {
     target: "es2022",
     cssCodeSplit: true,
@@ -81,8 +60,6 @@ input: {
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return;
-          if (id.includes("three") || id.includes("@react-three"))
-            return "three";
           if (id.includes("gsap") || id.includes("lenis")) return "motion-core";
           if (id.includes("react")) return "react-vendor";
         },

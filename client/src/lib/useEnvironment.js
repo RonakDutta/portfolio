@@ -20,47 +20,26 @@ export function useEnvironment() {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const coarsePointer = useMediaQuery("(pointer: coarse)");
 
+  // Cheap device read, taken once. Used only to decide whether the heavier
+  // decorative layers are worth painting.
   const [tier] = useState(() => {
     if (typeof navigator === "undefined") return "high";
     const cores = navigator.hardwareConcurrency ?? 4;
     const memory = navigator.deviceMemory ?? 4;
     if (cores <= 4 || memory <= 4) return "low";
-    if (cores <= 8) return "mid";
     return "high";
   });
-
-  const quality = reducedMotion
-    ? "low"
-    : isMobile && tier === "high"
-      ? "mid"
-      : tier;
-
-const lean = isMobile || quality === "low";
 
   return useMemo(
     () => ({
       reducedMotion,
       isMobile,
       coarsePointer,
-      quality,
-      enable3D: !reducedMotion,
-
-dpr:
-        isMobile
-          ? [0.7, 0.85]
-          : quality === "low"
-            ? [1, 1]
-            : quality === "mid"
-              ? [1, 1.25]
-              : [1, 1.5],
-      emberCount: isMobile ? 180 : quality === "low" ? 260 : quality === "mid" ? 700 : 1600,
-      lavaSegments: isMobile ? 40 : quality === "low" ? 32 : quality === "mid" ? 64 : 96,
-      fbmOctaves: isMobile ? 2 : quality === "low" ? 2 : quality === "mid" ? 3 : 4,
-
-lavaDetail: lean ? "plain" : "rich",
-
-canvasFps: isMobile ? 30 : 0,
+      // Pointer-driven flourishes: only where there is a real cursor and the
+      // visitor has not asked for less movement.
+      pointerFx: !coarsePointer && !reducedMotion,
+      lightweight: tier === "low" || reducedMotion,
     }),
-    [reducedMotion, isMobile, coarsePointer, quality, lean],
+    [reducedMotion, isMobile, coarsePointer, tier],
   );
 }

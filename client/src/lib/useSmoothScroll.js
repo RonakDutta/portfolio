@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { frame, setSection, SECTIONS } from "./store";
+import { setSection, SECTIONS } from "./store";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,7 +14,7 @@ export function useSmoothScroll({ reducedMotion, isMobile }) {
     }
 
     const lenis = new Lenis({
-      duration: isMobile ? 0.9 : 1.15,
+      duration: isMobile ? 0.9 : 1.25,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       syncTouch: false,
@@ -22,14 +22,7 @@ export function useSmoothScroll({ reducedMotion, isMobile }) {
       wheelMultiplier: 0.95,
     });
 
-    lenis.on("scroll", (e) => {
-      const progress = e.progress ?? 0;
-      frame.scroll = progress;
-
-const atBoundary = progress <= 0.001 || progress >= 0.999;
-      frame.velocity = atBoundary ? 0 : (e.velocity ?? 0);
-      ScrollTrigger.update();
-    });
+    lenis.on("scroll", ScrollTrigger.update);
 
     const raf = (time) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);

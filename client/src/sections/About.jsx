@@ -1,12 +1,17 @@
 import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import PortraitNiche from "../components/about/PortraitNiche";
-import SectionHeader from "../components/ui/SectionHeader";
-import { identity, about } from "../data/content";
+import SectionHeading from "../components/ui/SectionHeading";
+import { about } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * An editorial spread. The statement runs across the full measure in display
+ * serif; the biography and the metadata sit below it in two unequal columns,
+ * separated by a hairline. No portrait here — the hero already carries it,
+ * and repeating it would halve its impact.
+ */
 function About({ env }) {
   const section = useRef(null);
 
@@ -16,24 +21,27 @@ function About({ env }) {
     const ctx = gsap.context(() => {
       gsap
         .timeline({
-          scrollTrigger: { trigger: section.current, start: "top 70%" },
+          scrollTrigger: { trigger: section.current, start: "top 72%" },
+        })
+        .from(".about-rise", {
+          y: 26,
+          opacity: 0,
+          duration: 1.1,
+          stagger: 0.08,
+          ease: "expo.out",
         })
         .from(
-          ".about-frame",
-          { y: 32, opacity: 0, duration: 1.1, ease: "expo.out" },
-          0,
+          ".about-statement > *",
+          { yPercent: 105, duration: 1.4, stagger: 0.08, ease: "expo.out" },
+          0.1,
         )
-        .from(
-          ".about-rise",
-          { y: 24, opacity: 0, duration: 0.9, stagger: 0.07, ease: "expo.out" },
-          0.15,
-        );
+        .from(".about-rule", { scaleX: 0, duration: 1.2, ease: "expo.out" }, 0.5);
 
       gsap.from(".about-fact", {
+        y: 16,
         opacity: 0,
-        y: 14,
-        duration: 0.7,
-        stagger: 0.06,
+        duration: 0.8,
+        stagger: 0.07,
         ease: "power3.out",
         scrollTrigger: { trigger: ".about-facts", start: "top 88%" },
       });
@@ -44,64 +52,56 @@ function About({ env }) {
 
   return (
     <section
-      id="fallen"
+      id="about"
       ref={section}
       aria-labelledby="about-title"
-      className="relative isolate overflow-x-clip py-28 sm:py-36"
+      className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(76% 60% at 50% 50%, rgba(5,4,9,0.95) 0%, rgba(5,4,9,0.82) 56%, rgba(5,4,9,0.4) 100%)",
-        }}
-      />
+      <div className="mx-auto w-full max-w-[104rem] px-6 sm:px-10">
+        <SectionHeading
+          index={about.index}
+          label={about.label}
+          itemClass="about-rise"
+        />
 
-      <div className="mx-auto w-full max-w-6xl px-6">
-        <div
-          className="grid items-start gap-14 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)] lg:gap-20"
+        {/* The statement, broken by hand so the line endings are deliberate
+            rather than whatever the viewport happens to produce. */}
+        <h2
+          id="about-title"
+          className="about-statement mt-12 max-w-5xl font-display text-[clamp(1.9rem,5vw,4rem)] leading-[1.12] font-light text-ivory sm:mt-16"
         >
-          <div className="about-frame lg:sticky lg:top-28">
-            <PortraitNiche
-              portrait={about.portrait}
-              alt={about.portraitAlt}
-              initials={identity.initials}
-              reducedMotion={env.reducedMotion}
-            />
+          <span className="block overflow-hidden pb-[0.06em]">
+            <span className="block">{about.statement}</span>
+          </span>
+        </h2>
+
+        <div
+          aria-hidden="true"
+          className="about-rule mt-16 h-px w-full origin-left bg-line sm:mt-20"
+        />
+
+        <div className="mt-14 grid gap-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-24">
+          <div className="space-y-6">
+            {about.body.map((para) => (
+              <p key={para.slice(0, 24)} className="about-rise max-w-prose">
+                {para}
+              </p>
+            ))}
           </div>
 
-          <div>
-            <SectionHeader
-              id="about-title"
-              index={about.index}
-              label={about.label}
-              title={about.title}
-              lede={about.lede}
-              itemClass="about-rise"
-            />
-
-            <div className="mt-9 space-y-5">
-              {about.body.map((para) => (
-                <p key={para.slice(0, 24)} className="about-rise max-w-prose">
-                  {para}
-                </p>
-              ))}
-            </div>
-
-            <dl className="about-facts mt-12 grid gap-px border border-iron/70 bg-iron/70 sm:grid-cols-2">
-              {about.facts.map((fact) => (
-                <div key={fact.term} className="about-fact bg-obsidian px-5 py-4">
-                  <dt className="font-mono text-[0.62rem] tracking-[0.24em] text-bronze uppercase">
-                    {fact.term}
-                  </dt>
-                  <dd className="mt-2 text-[0.95rem] leading-relaxed text-bone">
-                    {fact.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+          <dl className="about-facts space-y-8">
+            {about.facts.map((fact) => (
+              <div
+                key={fact.term}
+                className="about-fact border-t border-line pt-5"
+              >
+                <dt className="eyebrow-sm text-gold">{fact.term}</dt>
+                <dd className="mt-3 font-display text-[1.3rem] leading-snug font-light text-ivory sm:text-[1.45rem]">
+                  {fact.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>

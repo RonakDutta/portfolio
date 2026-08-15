@@ -1,19 +1,18 @@
-
-
-const SESSION_KEY = "descent:crossed";
+const SESSION_KEY = "curtain:opened";
 
 let crossed =
-  typeof document === "undefined" || !document.getElementById("threshold");
+  typeof document === "undefined" || !document.getElementById("curtain");
 
-const crossWaiters = new Set();
+const waiters = new Set();
 
+/** Runs `fn` once the curtain has opened — or immediately if it already has. */
 export function onCrossed(fn) {
   if (crossed) {
     fn();
     return () => {};
   }
-  crossWaiters.add(fn);
-  return () => crossWaiters.delete(fn);
+  waiters.add(fn);
+  return () => waiters.delete(fn);
 }
 
 export function markCrossed() {
@@ -22,10 +21,10 @@ export function markCrossed() {
   try {
     sessionStorage.setItem(SESSION_KEY, "1");
   } catch {
-    
+    /* Private mode. The curtain simply performs again. */
   }
-  for (const fn of crossWaiters) fn();
-  crossWaiters.clear();
+  for (const fn of waiters) fn();
+  waiters.clear();
 }
 
 export function alreadyCrossed() {
@@ -34,23 +33,4 @@ export function alreadyCrossed() {
   } catch {
     return false;
   }
-}
-
-let sceneReady = false;
-const sceneWaiters = new Set();
-
-export function markSceneReady() {
-  if (sceneReady) return;
-  sceneReady = true;
-  for (const fn of sceneWaiters) fn();
-  sceneWaiters.clear();
-}
-
-export function onSceneReady(fn) {
-  if (sceneReady) {
-    fn();
-    return () => {};
-  }
-  sceneWaiters.add(fn);
-  return () => sceneWaiters.delete(fn);
 }

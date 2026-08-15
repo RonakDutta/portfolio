@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#05030a" />
+    <meta name="theme-color" content="#020202" />
     <meta name="color-scheme" content="dark" />
     <meta name="robots" content="noindex" />
-    <title>Lost — Ronak Dutta</title>
+    <title>Page not found — Ronak Dutta</title>
 
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -17,7 +17,7 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Inter:wght@300..600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..600&family=Inter:wght@300..600&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     />
 
@@ -28,7 +28,7 @@
         box-sizing: border-box;
       }
       html {
-        background: #05030a;
+        background: #020202;
         color-scheme: dark;
       }
       body {
@@ -37,9 +37,9 @@
         display: grid;
         place-items: center;
         padding: 2rem 1.5rem;
-        color: #ddd3c4;
+        color: #e8e3d8;
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
-        font-weight: 500;
+        font-weight: 300;
         font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.2rem);
         line-height: 1.7;
         text-align: center;
@@ -53,12 +53,11 @@
         z-index: -2;
         background: radial-gradient(
           120% 80% at 50% 118%,
-          #ff5a1f 0%,
-          #6d2a08 16%,
-          #1a1016 42%,
-          #050409 78%
+          rgba(176, 141, 69, 0.16) 0%,
+          rgba(111, 84, 42, 0.06) 30%,
+          transparent 68%
         );
-        opacity: 0.32;
+        opacity: 1;
       }
       .vignette {
         position: fixed;
@@ -68,9 +67,9 @@
           radial-gradient(
             115% 75% at 50% 42%,
             transparent 30%,
-            rgba(5, 4, 9, 0.72) 100%
+            rgba(2, 2, 2, 0.74) 100%
           ),
-          linear-gradient(to bottom, rgba(5, 4, 9, 0.9) 0%, transparent 35%);
+          linear-gradient(to bottom, rgba(2, 2, 2, 0.9) 0%, transparent 35%);
       }
 
       main {
@@ -80,17 +79,17 @@
 
       .code {
         margin: 1.75rem 0 0;
-        font-family: Cinzel, ui-serif, Georgia, serif;
-        font-weight: 700;
+        font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
+        font-weight: 300;
         font-size: clamp(4.5rem, 22vw, 9rem);
         line-height: 0.86;
         letter-spacing: -0.02em;
         background: linear-gradient(
           180deg,
-          #f6f0e4 0%,
-          #ddd3c2 42%,
-          #b3a390 78%,
-          #8a7863 100%
+          #fbf8f1 0%,
+          #efeade 34%,
+          #b9b3a6 72%,
+          #6d675d 100%
         );
         -webkit-background-clip: text;
         background-clip: text;
@@ -100,19 +99,19 @@
 
       h1 {
         margin: 0.75rem 0 0;
-        font-family: Cinzel, ui-serif, Georgia, serif;
+        font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
         font-weight: 700;
         font-size: clamp(1.1rem, 4.2vw, 1.5rem);
         line-height: 1.2;
         letter-spacing: 0.02em;
-        color: #e4dccf;
+        color: #f5f2ea;
         text-wrap: balance;
       }
 
       p {
         margin: 1.25rem auto 0;
         max-width: 26rem;
-        color: #b9aea0;
+        color: #b8b3a8;
         text-wrap: pretty;
       }
 
@@ -127,16 +126,16 @@
       .rule span:last-child {
         height: 1px;
         flex: 1;
-        background: linear-gradient(90deg, transparent, rgba(185, 138, 82, 0.5));
+        background: linear-gradient(90deg, transparent, rgba(176, 141, 69, 0.45));
       }
       .rule span:last-child {
-        background: linear-gradient(270deg, transparent, rgba(185, 138, 82, 0.5));
+        background: linear-gradient(270deg, transparent, rgba(176, 141, 69, 0.45));
       }
       .rule i {
         width: 7px;
         height: 7px;
         rotate: 45deg;
-        border: 1px solid rgba(185, 138, 82, 0.6);
+        border: 1px solid rgba(176, 141, 69, 0.55);
       }
 
       .back {
@@ -147,13 +146,13 @@
         min-height: 2.75rem;
         margin-top: 2.25rem;
         padding: 0.9rem 2rem;
-        border: 1px solid rgba(185, 138, 82, 0.55);
-        background: linear-gradient(to bottom, #16121c, #0b0910);
-        color: #e4dccf;
-        font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 0.7rem;
+        border: 1px solid rgba(198, 161, 91, 0.9);
+        background: #c6a15b;
+        color: #020202;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        font-size: 0.62rem;
         font-weight: 500;
-        letter-spacing: 0.2em;
+        letter-spacing: 0.26em;
         text-transform: uppercase;
         text-decoration: none;
         overflow: hidden;
@@ -166,15 +165,15 @@
         position: absolute;
         inset: 0;
         z-index: 0;
-        background: linear-gradient(to top, #c98b3f, #dcae74 55%, #f0d3a6);
+        background: #e1c487;
         transform: scaleY(0);
         transform-origin: 50% 100%;
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .back:hover,
       .back:focus-visible {
-        color: #050409;
-        border-color: rgba(220, 174, 116, 0.85);
+        color: #020202;
+        border-color: rgba(225, 196, 135, 1);
       }
       .back:hover::before,
       .back:focus-visible::before {
@@ -195,43 +194,11 @@
       }
 
       :focus-visible {
-        outline: 2px solid #dcae74;
+        outline: 1px solid #d4af70;
         outline-offset: 3px;
       }
 
-      .ember {
-        position: fixed;
-        bottom: -10px;
-        width: 2px;
-        height: 2px;
-        border-radius: 50%;
-        background: #ffc48a;
-        box-shadow: 0 0 8px 2px rgba(255, 148, 72, 0.4);
-        opacity: 0;
-        animation: rise linear infinite;
-        z-index: -1;
-      }
-      @keyframes rise {
-        0% {
-          transform: translate3d(0, 0, 0) scale(1);
-          opacity: 0;
-        }
-        12% {
-          opacity: 0.5;
-        }
-        86% {
-          opacity: 0.35;
-        }
-        100% {
-          transform: translate3d(var(--dx, 0), -70vh, 0) scale(0.3);
-          opacity: 0;
-        }
-      }
-
       @media (prefers-reduced-motion: reduce) {
-        .ember {
-          display: none;
-        }
         .back,
         .back::before {
           transition: none;
@@ -243,27 +210,20 @@
     <div class="ground"></div>
     <div class="vignette"></div>
 
-    <span class="ember" style="left: 12%; --dx: 26px; animation-duration: 9s"></span>
-    <span class="ember" style="left: 27%; --dx: -18px; animation-duration: 11s; animation-delay: 1.4s"></span>
-    <span class="ember" style="left: 44%; --dx: 32px; animation-duration: 8s; animation-delay: 3.1s"></span>
-    <span class="ember" style="left: 63%; --dx: -24px; animation-duration: 12s; animation-delay: 0.7s"></span>
-    <span class="ember" style="left: 79%; --dx: 20px; animation-duration: 10s; animation-delay: 2.3s"></span>
-    <span class="ember" style="left: 91%; --dx: -30px; animation-duration: 13s; animation-delay: 4.2s"></span>
 
     <main>
       <p class="code">404</p>
 
-      <h1>You have strayed from the path</h1>
+      <h1>This page does not exist</h1>
 
       <div class="rule"><span></span><i></i><span></span></div>
 
       <p>
-        There is no chamber at this door. Six were cut into the shaft, and this
-        is not one of them.
+        The link may be out of date, or the page may have moved.
       </p>
 
       <a class="back" href="/">
-        <span>Return to the gates</span>
+        <span>Back to the homepage</span>
         <svg viewBox="0 0 12 16" aria-hidden="true" fill="none">
           <path
             d="M6 16V3M1 8l5-6 5 6"

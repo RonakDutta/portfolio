@@ -2,23 +2,24 @@ import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ProjectCase from "../components/work/ProjectCase";
-import SectionHeader from "../components/ui/SectionHeader";
+import SectionHeading from "../components/ui/SectionHeading";
 import { work } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function Work({ env }) {
   const section = useRef(null);
+  const [featured, ...rest] = work.projects;
 
   useLayoutEffect(() => {
     if (env.reducedMotion) return;
 
     const ctx = gsap.context(() => {
       gsap.from(".work-rise", {
-        y: 26,
+        y: 24,
         opacity: 0,
-        duration: 0.9,
-        stagger: 0.07,
+        duration: 1,
+        stagger: 0.08,
         ease: "expo.out",
         scrollTrigger: { trigger: section.current, start: "top 76%" },
       });
@@ -29,37 +30,35 @@ function Work({ env }) {
 
   return (
     <section
-      id="chambers"
+      id="work"
       ref={section}
       aria-labelledby="work-title"
-      className="relative isolate overflow-x-clip py-28 sm:py-36"
+      className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
     >
-      {/* Darkest section on the page: the screenshots are the only light. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(80% 62% at 50% 40%, rgba(5,4,9,0.985) 0%, rgba(5,4,9,0.94) 58%, rgba(5,4,9,0.6) 100%)",
-        }}
-      />
-
-      <div className="mx-auto w-full max-w-6xl px-6">
-        <SectionHeader
+      <div className="mx-auto w-full max-w-[104rem] px-6 sm:px-10">
+        <SectionHeading
           id="work-title"
           index={work.index}
           label={work.label}
           title={work.title}
-          lede={work.lede}
           itemClass="work-rise"
         />
 
-        <div className="mt-20 space-y-28 sm:mt-24 sm:space-y-36">
-          {work.projects.map((project, i) => (
+        {/* The flagship gets the full measure and its own masthead line. */}
+        <div className="mt-20 sm:mt-28">
+          <p className="work-rise mb-10 flex items-center gap-5 eyebrow-sm text-gold-light sm:mb-12">
+            <span aria-hidden="true" className="h-px w-14 bg-gold/40" />
+            {work.featuredLabel}
+          </p>
+          <ProjectCase project={featured} index={0} env={env} />
+        </div>
+
+        <div className="mt-32 space-y-32 sm:mt-44 sm:space-y-44">
+          {rest.map((project, i) => (
             <ProjectCase
               key={project.slug}
               project={project}
-              index={i}
+              index={i + 1}
               env={env}
             />
           ))}
