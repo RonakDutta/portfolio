@@ -105,7 +105,8 @@ function Hero({ env }) {
               className="hero-mask -mt-1 sm:-mt-2 block overflow-hidden pb-[0.14em]"
             >
               <span className="text-foil animate-foil block font-accent italic text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.12] font-normal tracking-tight">
-                {hero.headline.line2}
+                <span>systems &</span>{" "}
+                <span className="block sm:inline">modern</span>
               </span>
             </span>
             <span
