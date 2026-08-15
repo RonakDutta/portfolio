@@ -134,7 +134,7 @@ function Hero({ env }) {
               <Action
                 variant="solid"
                 onClick={() => scrollToSection(hero.primary.target)}
-                arrow="down"
+                arrow={null}
                 className="w-full sm:w-auto"
               >
                 {hero.primary.label}
@@ -147,6 +147,7 @@ function Hero({ env }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="Open PDF"
+                arrow={null}
                 className="w-full sm:w-auto"
               >
                 {hero.secondary.label}

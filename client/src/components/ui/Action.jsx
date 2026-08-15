@@ -38,7 +38,7 @@ function Action({
     >
       <span
         className={`relative flex min-h-12 items-center justify-center gap-3 overflow-hidden
-          px-7 py-3.5 eyebrow-sm transition-colors duration-500
+          px-7 py-3.5 font-sans text-sm font-medium tracking-normal transition-colors duration-500
           ease-[cubic-bezier(0.16,1,0.3,1)]
           ${solid ? "bg-brass text-ink" : "bg-ink text-brass-lit group-hover:text-ink"}`}
         style={{ clipPath: NOTCH }}

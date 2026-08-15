@@ -324,7 +324,7 @@ function Contact() {
                 />
 
                 <div className="mt-6">
-                  <Action variant="solid" type="submit">
+                  <Action variant="solid" type="submit" arrow={null}>
                     {contact.sendLabel}
                   </Action>
                 </div>

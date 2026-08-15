@@ -84,7 +84,7 @@ export const work = {
   title: "Selected",
   script: "work",
 
-  openLabel: "Open it",
+  openLabel: "View Live",
   sourceLabel: "Code",
 
   projects: [
@@ -155,7 +155,14 @@ export const work = {
         "Integrated Razorpay for payments and built driver onboarding workflows.",
       ],
 
-      stack: ["React", "Node.js", "Express", "PostgreSQL", "Twilio", "Razorpay"],
+      stack: [
+        "React",
+        "Node.js",
+        "Express",
+        "PostgreSQL",
+        "Twilio",
+        "Razorpay",
+      ],
 
       liveUrl: "https://safarsaathi-frontend.vercel.app/",
       githubUrl: null,
