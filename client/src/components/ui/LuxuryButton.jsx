@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef } from "react";
+import { memo, useRef } from "react";
 
 /**
  * 24K Hardware Luxury Button
@@ -8,7 +8,6 @@ function LuxuryButton({
   href,
   onClick,
   variant = "outline",
-  magnetic = false,
   className = "",
   ...rest
 }) {
@@ -16,34 +15,15 @@ function LuxuryButton({
   const node = useRef(null);
   const solid = variant === "gold";
 
-  const pull = useCallback(
-    (event) => {
-      if (!magnetic || !node.current) return;
-      const r = node.current.getBoundingClientRect();
-      const clamp = (v) => Math.max(-7, Math.min(7, v));
-      const x = clamp((event.clientX - (r.left + r.width / 2)) * 0.16);
-      const y = clamp((event.clientY - (r.top + r.height / 2)) * 0.2);
-      node.current.style.transform = `translate(${x}px, ${y}px)`;
-    },
-    [magnetic],
-  );
-
-  const release = useCallback(() => {
-    if (node.current) node.current.style.transform = "";
-  }, []);
-
   return (
     <Tag
       ref={node}
       href={href}
       onClick={onClick}
       type={href ? undefined : "button"}
-      onPointerMove={magnetic ? pull : undefined}
-      onPointerLeave={magnetic ? release : undefined}
-      onBlur={magnetic ? release : undefined}
       className={`group relative isolate inline-flex min-h-12 items-center justify-center gap-3.5
         overflow-hidden rounded-xl px-7 py-3.5 eyebrow-sm font-semibold transition-all
-        duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform cursor-pointer
+        duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer
         ${
           solid
             ? "border border-gold-white/40 text-void shadow-[0_0_18px_rgba(212,175,55,0.22)] hover:shadow-[0_0_26px_rgba(255,217,102,0.34)]"
@@ -77,12 +57,6 @@ function LuxuryButton({
       />
 
       <span className="relative tracking-[0.2em]">{children}</span>
-
-      <span
-        aria-hidden="true"
-        className={`h-px w-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
-          group-hover:w-7 ${solid ? "bg-void/60" : "bg-gold-metal"}`}
-      />
     </Tag>
   );
 }

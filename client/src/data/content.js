@@ -12,20 +12,23 @@ export const identity = {
   region: "New Delhi, India",
   email: "ronakdutta100@gmail.com",
   github: "https://github.com/RonakDutta",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/ronak-dutta",
   resume: "/resume.pdf",
 };
 
 export const hero = {
-  /* Deliberately almost nothing. Greeting, name, role, place, two buttons.
-     The stack, the internship and the degree all live further down the page. */
-  greeting: "Hi, I’m",
-  name: "Ronak Dutta.",
+  headline: {
+    line1: "Building scalable",
+    line2: "systems & modern",
+    line3: "web experiences.",
+  },
+  introGreeting: "Hi, I’m",
+  introRole: "a software engineer from New Delhi.",
   role: "Software Engineer",
   location: "New Delhi, India",
 
   primary: { label: "View Work", target: "work" },
-  secondary: { label: "Résumé", href: "/resume.pdf" },
+  secondary: { label: "Resume", href: "/resume.pdf" },
 
   scrollCue: "Scroll",
 
@@ -42,7 +45,7 @@ export const hero = {
 
 export const about = {
   index: "01",
-  label: "About",
+  label: "Profile & Background",
   title: "About",
 
   body: [
@@ -60,10 +63,9 @@ export const about = {
 
 export const work = {
   index: "02",
-  label: "Work",
+  label: "Portfolio",
   title: "Selected",
   accent: "Work",
-  featuredLabel: "Featured Project",
 
   projects: [
     {
@@ -146,7 +148,7 @@ export const work = {
 
 export const skills = {
   index: "03",
-  label: "Skills",
+  label: "Tech Stack & Toolkit",
   title: "Skills",
   accent: "",
 
@@ -167,7 +169,7 @@ export const skills = {
 
 export const experience = {
   index: "04",
-  label: "Experience",
+  label: "Career & Timeline",
   title: "Experience",
   accent: "",
 
@@ -203,7 +205,7 @@ export const experience = {
 
 export const achievements = {
   index: "05",
-  label: "Achievements",
+  label: "Honours & Credentials",
   title: "Achievements",
   accent: "",
 
@@ -228,7 +230,7 @@ export const achievements = {
 
 export const contact = {
   index: "06",
-  label: "Contact",
+  label: "Get In Touch",
   title: "Contact",
   accent: "",
   lede: "Open to software engineering roles. Email is the fastest way to reach me.",
@@ -248,9 +250,9 @@ export const contact = {
       value: "github.com/RonakDutta",
       href: "https://github.com/RonakDutta",
     },
-    { label: "Résumé", value: "resume.pdf", href: "/resume.pdf" },
+    { label: "Resume", value: "resume.pdf", href: "/resume.pdf" },
   ],
 
-  closing: "Ronak Dutta — New Delhi, India",
+  closing: "Designed & Engineered by Ronak Dutta",
   backToTop: "Back to top",
 };

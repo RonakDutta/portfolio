@@ -19,8 +19,8 @@ gsap.registerPlugin(ScrollTrigger);
  * y 262-1225 / x 115-885. The vignette below is centred on where the face
  * lands in that window — change CROP and the vignette has to move with it.
  */
-const CROP = 1.3;
-const ORIGIN = "50% 91%";
+const CROP = 1.0;
+const ORIGIN = "50% 50%";
 
 function PortraitPlate({
   portrait,

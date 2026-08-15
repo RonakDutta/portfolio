@@ -46,7 +46,7 @@ export default function App() {
         {/* Achievements has no nav entry; the spy holds on Experience through
             it, which is where it sits in the reading order. */}
         <Achievements />
-        <Contact env={env} />
+        <Contact />
       </main>
     </>
   );

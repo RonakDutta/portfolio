@@ -47,14 +47,25 @@ export function useSmoothScroll({ reducedMotion, isMobile }) {
   }, [reducedMotion, isMobile]);
 
   useEffect(() => {
-    const triggers = SECTIONS.map((section, i) =>
-      ScrollTrigger.create({
+    const triggers = SECTIONS.map((section, i) => {
+      const isFirst = i === 0;
+      const isLast = i === SECTIONS.length - 1;
+      const isExperience = section.id === "experience";
+
+      return ScrollTrigger.create({
         trigger: `#${section.id}`,
-        start: "top 55%",
-        end: "bottom 55%",
+        start: isFirst ? "top top" : isLast ? "top 70%" : "top 55%",
+        end: isLast
+          ? "bottom bottom"
+          : isExperience
+            ? () => {
+                const ach = document.getElementById("achievements");
+                return ach ? `+=${ach.offsetHeight + 120}` : "bottom 55%";
+              }
+            : "bottom 55%",
         onToggle: ({ isActive }) => isActive && setSection(i),
-      }),
-    );
+      });
+    });
 
     const onLoad = () => ScrollTrigger.refresh();
     window.addEventListener("load", onLoad);

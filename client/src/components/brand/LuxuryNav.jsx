@@ -4,7 +4,7 @@ import { scrollToSection } from "../../lib/useSmoothScroll";
 import Monogram from "./Monogram";
 import { identity } from "../../data/content";
 
-const LINKS = SECTIONS.slice(1);
+const LINKS = SECTIONS;
 
 function NavLink({ section, active, onSelect, compact = false }) {
   return (
@@ -106,7 +106,7 @@ function LuxuryNav() {
               <NavLink
                 key={section.id}
                 section={section}
-                active={i + 1 === active}
+                active={i === active}
                 onSelect={select}
               />
             ))}
@@ -121,7 +121,7 @@ function LuxuryNav() {
                 text-champagne transition-all duration-300
                 hover:border-gold-metal hover:bg-gold-metal hover:text-void hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] sm:inline-flex"
             >
-              Résumé ↗
+              Resume ↗
             </a>
 
             <button
@@ -167,7 +167,7 @@ function LuxuryNav() {
               <NavLink
                 key={section.id}
                 section={section}
-                active={i + 1 === active}
+                active={i === active}
                 onSelect={select}
                 compact
               />
@@ -183,7 +183,7 @@ function LuxuryNav() {
                 <span aria-hidden="true" className="text-[0.6rem] font-mono text-mute">
                   06
                 </span>
-                Résumé ↗
+                Resume ↗
               </a>
             </li>
           </ul>

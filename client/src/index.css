@@ -146,7 +146,7 @@
     #d4af37 78%,
     #845a14 100%
   );
-  background-size: 200% 100%;
+  background-size: 240% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -324,10 +324,10 @@
 
 @keyframes foil-sweep {
   0% {
-    background-position: 160% 0;
+    background-position: 0% 50%;
   }
   100% {
-    background-position: -60% 0;
+    background-position: 100% 50%;
   }
 }
 
@@ -383,7 +383,7 @@
   animation: ribbon-sway ease-in-out infinite;
 }
 .animate-foil {
-  animation: foil-sweep 9s linear infinite;
+  animation: foil-sweep 7s ease-in-out infinite alternate;
 }
 .animate-glow-breathe {
   animation: glow-breathe 11s ease-in-out infinite;

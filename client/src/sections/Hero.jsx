@@ -86,45 +86,53 @@ function Hero({ env }) {
             <span>{hero.role}</span>
           </p>
 
-          {/* Greeting small, name large. The size jump is what stops this
-              reading as the centred "Hello, I'm ___" template — it is a person
-              introducing themselves, with the name as the visual anchor. */}
-          <h1 id="hero-title" className="mt-6">
+          {/* Big Statement Headline */}
+          <h1 id="hero-title" className="mt-5">
             <span className="sr-only">
-              {identity.name}, {hero.role} in {hero.location}.
+              {hero.headline.line1} {hero.headline.line2} {hero.headline.line3} {identity.name}, {hero.role} in {hero.location}.
             </span>
 
             <span
               aria-hidden="true"
-              className="hero-mask block overflow-hidden pb-[0.08em]"
+              className="hero-mask block overflow-hidden pb-[0.04em]"
             >
-              <span className="block font-display text-[clamp(1.6rem,4vw,3rem)] leading-[1] font-light text-sand/85 italic">
-                {hero.greeting}
+              <span className="text-ivory-lit block font-display text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.03] font-semibold tracking-[0.01em]">
+                {hero.headline.line1}
+              </span>
+            </span>
+            <span
+              aria-hidden="true"
+              className="hero-mask -mt-1 block overflow-hidden pb-[0.04em] sm:-mt-2"
+            >
+              <span className="text-foil animate-foil block font-display text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.03] font-semibold tracking-[0.01em]">
+                {hero.headline.line2}
               </span>
             </span>
             <span
               aria-hidden="true"
               className="hero-mask -mt-1 block overflow-hidden pb-[0.08em] sm:-mt-2"
             >
-              <span className="text-foil animate-foil block font-display text-[clamp(3rem,10.5vw,8.5rem)] leading-[0.94] font-semibold tracking-[0.01em]">
-                {hero.name}
+              <span className="text-ivory-lit block font-display text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.03] font-semibold tracking-[0.01em]">
+                {hero.headline.line3}
               </span>
             </span>
           </h1>
 
           <div
             aria-hidden="true"
-            className="hero-rule rule-gold mt-7 h-px w-full max-w-sm origin-left lg:mt-9"
+            className="hero-rule rule-gold mt-6 h-px w-full max-w-sm origin-left lg:mt-7"
           />
 
-          <p className="hero-fade mt-6 eyebrow-sm text-sand/75">
-            {hero.location}
+          {/* Intro Subtitle */}
+          <p className="hero-fade mt-5 max-w-xl text-[1.05rem] sm:text-[1.18rem] leading-relaxed text-sand/90 font-light">
+            {hero.introGreeting}{" "}
+            <strong className="font-semibold text-ivory">{identity.name}</strong>,{" "}
+            {hero.introRole}
           </p>
 
-          <div className="hero-fade mt-9 flex flex-col items-stretch gap-3.5 sm:flex-row sm:items-center sm:gap-5">
+          <div className="hero-fade mt-8 flex flex-col items-stretch gap-3.5 sm:flex-row sm:items-center sm:gap-5">
             <LuxuryButton
               variant="gold"
-              magnetic={env.pointerFx}
               onClick={() => scrollToSection(hero.primary.target)}
             >
               {hero.primary.label}
@@ -133,7 +141,6 @@ function Hero({ env }) {
               href={hero.secondary.href}
               target="_blank"
               rel="noopener noreferrer"
-              magnetic={env.pointerFx}
             >
               {hero.secondary.label}
             </LuxuryButton>

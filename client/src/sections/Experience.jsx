@@ -27,8 +27,8 @@ function Entry({ year, period, title, org, detail, as: Heading = "h4" }) {
       <div>
         <p
           aria-hidden="true"
-          className="font-display text-[clamp(2.6rem,6vw,4.2rem)] leading-[0.9] font-normal text-slate
-            transition-colors duration-500 group-hover:text-gold-dark"
+          className="font-display text-[clamp(2.6rem,6vw,4.2rem)] leading-[0.9] font-normal text-gold-metal/90 sm:text-slate
+            transition-colors duration-500 sm:group-hover:text-gold-metal"
         >
           {year}
         </p>

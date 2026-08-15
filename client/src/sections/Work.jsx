@@ -11,7 +11,7 @@ function Work({ env }) {
     <section
       id="work"
       aria-labelledby="work-title"
-      className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
+      className="relative isolate overflow-x-clip py-20 sm:py-28 lg:py-36"
     >
       <div className="mx-auto w-full max-w-[108rem] px-6 sm:px-10">
         <SectionTitle
@@ -23,25 +23,8 @@ function Work({ env }) {
           itemClass="reveal"
         />
 
-        <div className="mt-16 sm:mt-24">
-          <div data-reveal className="mb-10 flex items-center gap-3">
-            <span className="h-2 w-2 rotate-45 bg-gold-metal" />
-            <span className="eyebrow-sm text-gold-bright tracking-[0.24em]">
-              {work.featuredLabel}
-            </span>
-            <span
-              aria-hidden="true"
-              className="h-px flex-1 max-w-xs"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(255,217,102,0.9), rgba(179,134,40,0))",
-              }}
-            />
-          </div>
+        <div className="mt-14 sm:mt-20 space-y-24 sm:space-y-32">
           <ProjectShowcase project={featured} index={0} env={env} />
-        </div>
-
-        <div className="mt-20 space-y-20 sm:mt-28 sm:space-y-28">
           {rest.map((project, i) => (
             <ProjectShowcase key={project.slug} project={project} index={i + 1} env={env} />
           ))}

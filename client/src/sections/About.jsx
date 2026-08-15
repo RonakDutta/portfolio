@@ -28,10 +28,18 @@ function About() {
 
         <div aria-hidden="true" className="ab-rule mt-10 h-px w-full origin-left rule-gold sm:mt-14" />
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-20">
-          <div className="space-y-6 text-[1.05rem] leading-relaxed text-sand/90 font-normal">
+        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-20 lg:items-start">
+          <div className="space-y-6 text-[1.05rem] leading-relaxed text-sand/90 font-normal lg:space-y-8 lg:text-[1.2rem] lg:leading-[1.85] lg:max-w-2xl">
             {about.body.map((para, i) => (
-              <p key={i} data-reveal className="max-w-prose">
+              <p
+                key={i}
+                data-reveal
+                className={
+                  i === 0
+                    ? "max-w-prose text-ivory/95 font-light lg:max-w-none"
+                    : "max-w-prose text-sand/85 font-light lg:max-w-none"
+                }
+              >
                 {para}
               </p>
             ))}
