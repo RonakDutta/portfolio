@@ -38,7 +38,7 @@ function Atmosphere({ env }) {
       />
 
       <div
-        className={`absolute -top-[24%] left-[46%] aspect-square w-[120vmax] -translate-x-1/2 blur-[100px] ${
+        className={`absolute -top-[24%] left-[46%] aspect-square w-[120vmax] -translate-x-1/2 ${
           still ? "" : "animate-glow-breathe"
         }`}
         style={{
@@ -58,7 +58,7 @@ function Atmosphere({ env }) {
       {/* Volumetric bloom pooling low in the frame — it gives the black a
           floor and stops the lower half reading as empty. */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[55vh] blur-[70px]"
+        className="absolute inset-x-0 bottom-0 h-[55vh]"
         style={{
           background:
             "radial-gradient(70% 100% at 50% 120%, rgba(212,175,55,0.12) 0%, rgba(132,90,20,0.04) 44%, transparent 76%)",

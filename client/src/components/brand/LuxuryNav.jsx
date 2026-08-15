@@ -117,7 +117,7 @@ function LuxuryNav() {
               href={identity.resume}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden min-h-10 items-center rounded-lg border border-gold-dark/60 bg-coal/50 px-5 eyebrow-sm
+              className="hidden min-h-11 items-center rounded-lg border border-gold-dark/60 bg-coal/50 px-5 eyebrow-sm
                 text-champagne transition-all duration-300
                 hover:border-gold-metal hover:bg-gold-metal hover:text-void hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] sm:inline-flex"
             >

@@ -63,7 +63,7 @@ function PortraitPlate({
           subject rather than from behind the page. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -inset-x-[18%] -inset-y-[10%] -z-10 blur-[70px]"
+        className="pointer-events-none absolute -inset-x-[18%] -inset-y-[10%] -z-10 blur-[48px]"
         style={{
           background:
             "radial-gradient(closest-side, rgba(212,175,55,0.34) 0%, rgba(140,101,8,0.16) 46%, transparent 76%)",

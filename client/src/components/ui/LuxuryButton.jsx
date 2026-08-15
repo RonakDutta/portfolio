@@ -46,8 +46,8 @@ function LuxuryButton({
         duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform cursor-pointer
         ${
           solid
-            ? "border border-gold-white/40 text-void shadow-[0_0_24px_rgba(212,175,55,0.35)] hover:shadow-[0_0_35px_rgba(255,217,102,0.55)]"
-            : "border border-gold-dark/45 bg-carbon/70 text-champagne backdrop-blur-md hover:border-gold-metal hover:text-gold-white hover:shadow-[0_0_24px_rgba(212,175,55,0.2)]"
+            ? "border border-gold-white/40 text-void shadow-[0_0_18px_rgba(212,175,55,0.22)] hover:shadow-[0_0_26px_rgba(255,217,102,0.34)]"
+            : "border border-gold-dark/45 bg-carbon/90 text-champagne hover:border-gold-metal hover:text-gold-white hover:shadow-[0_0_24px_rgba(212,175,55,0.2)]"
         }
         ${className}`}
       {...rest}

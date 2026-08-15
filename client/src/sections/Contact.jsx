@@ -1,6 +1,4 @@
-import { memo, useLayoutEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { memo, useState } from "react";
 import SectionTitle from "../components/typography/SectionTitle";
 import GoldGeometry from "../components/atmosphere/GoldGeometry";
 import GoldAurora from "../components/atmosphere/GoldAurora";
@@ -9,30 +7,14 @@ import { scrollToSection } from "../lib/useSmoothScroll";
 import { SECTIONS } from "../lib/store";
 import { contact, identity } from "../data/content";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const stripScheme = (href) =>
   href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 
 function Contact({ env }) {
-  const section = useRef(null);
   const [copied, setCopied] = useState("");
 
   const channels = contact.channels.filter((c) => c.href);
 
-  useLayoutEffect(() => {
-    if (env.reducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap
-        .timeline({ scrollTrigger: { trigger: section.current, start: "top 70%" } })
-        .from(".ct-rise", { y: 28, opacity: 0, duration: 1.15, stagger: 0.08, ease: "expo.out" })
-        .from(".ct-geo", { opacity: 0, duration: 2.2, ease: "power2.out" }, 0)
-        .from(".ct-card", { y: 20, opacity: 0, duration: 0.85, ease: "power3.out" }, 0.4);
-    }, section);
-
-    return () => ctx.revert();
-  }, [env.reducedMotion]);
 
   const copy = async (value) => {
     try {
@@ -47,7 +29,6 @@ function Contact({ env }) {
   return (
     <section
       id="contact"
-      ref={section}
       aria-labelledby="contact-title"
       className="relative isolate overflow-hidden py-28 sm:py-40 lg:py-52"
     >
@@ -57,7 +38,7 @@ function Contact({ env }) {
 
       <GoldGeometry
         variant="orbit"
-        className="ct-geo top-1/2 left-1/2 aspect-square w-[150vmin] -translate-x-1/2 -translate-y-1/2 opacity-55 lg:w-[96vmin]"
+        data-reveal className="top-1/2 left-1/2 aspect-square w-[150vmin] -translate-x-1/2 -translate-y-1/2 opacity-55 lg:w-[96vmin]"
       />
 
       <div className="relative mx-auto w-full max-w-[108rem] px-6 sm:px-10">
@@ -66,22 +47,22 @@ function Contact({ env }) {
           index={contact.index}
           label={contact.label}
           title={contact.title}
-          itemClass="ct-rise"
+          itemClass="reveal"
         />
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20">
           <div>
-            <p className="ct-rise max-w-md text-[1.08rem] leading-relaxed text-sand/90 font-light">
+            <p data-reveal className="max-w-md text-[1.08rem] leading-relaxed text-sand/90 font-light">
               {contact.lede}
             </p>
-            <div className="ct-rise mt-8">
+            <div data-reveal className="mt-8">
               <LuxuryButton variant="gold" href={contact.cta.href} magnetic={env.pointerFx}>
                 {contact.cta.label} ↗
               </LuxuryButton>
             </div>
           </div>
 
-          <div className="ct-card rounded-2xl border border-gold-dark/25 bg-carbon/70 p-6 sm:p-8 backdrop-blur-md">
+          <div className="ct-card rounded-2xl border border-gold-dark/25 bg-carbon/85 p-6 sm:p-8">
             <h3 className="eyebrow-sm text-gold-metal mb-6 flex items-center gap-2">
               <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal" />
               Links & Contact Information
@@ -106,7 +87,7 @@ function Contact({ env }) {
                         href={channel.href}
                         target={external ? "_blank" : undefined}
                         rel={external ? "noreferrer noopener" : undefined}
-                        className="truncate text-sm font-medium text-ivory transition-colors hover:text-gold-white"
+                        className="flex min-h-11 min-w-0 flex-1 items-center truncate text-sm font-medium text-ivory transition-colors hover:text-gold-white"
                       >
                         {value}
                         {external ? <span className="sr-only"> (opens in a new tab)</span> : null}
@@ -116,10 +97,10 @@ function Contact({ env }) {
                         <button
                           type="button"
                           onClick={() => copy(channel.value)}
-                          className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-gold-dark/30 bg-carbon px-2.5 py-1 eyebrow-sm text-[0.62rem] text-sand/80 transition-all hover:border-gold-metal hover:text-gold-white cursor-pointer"
+                          className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center gap-1.5 rounded-md border border-gold-dark/30 bg-carbon px-3 eyebrow-sm text-[0.62rem] text-sand/80 transition-all hover:border-gold-metal hover:text-gold-white cursor-pointer"
                         >
                           {copied === channel.value ? (
-                            <span className="text-gold-bright">✓ Copied</span>
+                            <span className="text-gold-bright">Copied</span>
                           ) : (
                             <span>Copy</span>
                           )}
@@ -137,7 +118,7 @@ function Contact({ env }) {
           {copied ? "Copied to clipboard" : ""}
         </p>
 
-        <footer className="ct-rise mt-24 flex flex-col items-start justify-between gap-6 border-t border-gold-dark/20 pt-8 sm:flex-row sm:items-center">
+        <footer data-reveal className="mt-24 flex flex-col items-start justify-between gap-6 border-t border-gold-dark/20 pt-8 sm:flex-row sm:items-center">
           <p className="eyebrow-sm text-mute">
             {contact.closing}
             <span aria-hidden="true" className="mx-3 text-gold-dark/40">/</span>

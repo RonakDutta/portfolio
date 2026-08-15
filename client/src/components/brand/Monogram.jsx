@@ -3,10 +3,18 @@ import { memo, useId } from "react";
 /**
  * The RD mark.
  *
- * Drawn rather than set: an R and a D sharing one stem inside a thin gold
- * lozenge, so it reads as a maker's mark on metal rather than as two letters
- * in a box. The bowl of the R and the bowl of the D are the same curve at
- * different scales, which is what keeps it looking designed instead of typed.
+ * Drawn rather than set: an R and a D as two stems with the same bowl curve
+ * at two scales, inside a cut lozenge.
+ *
+ * Everything is laid out against a 56x56 box whose centre is (28, 28), and
+ * both the lozenge and the letter group are centred on it:
+ *
+ *   lozenge   x 2 -> 54,  y 2 -> 54    centre 28, 28
+ *   letters   x 14 -> 42, y 17 -> 39   centre 28, 28
+ *
+ * The previous version had the letter group sitting at x 17 -> 46, which put
+ * it 3.5 units right of centre — visible as an off-centre mark in the nav.
+ * If you edit the glyphs, keep the group symmetric about x = 28.
  */
 function Monogram({ className = "", title }) {
   const uid = useId().replace(/:/g, "");
@@ -25,35 +33,39 @@ function Monogram({ className = "", title }) {
     >
       <defs>
         <linearGradient id={ramp} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#fff5c7" />
-          <stop offset="34%" stopColor="#f0d58a" />
-          <stop offset="64%" stopColor="#d4af37" />
-          <stop offset="100%" stopColor="#8c6508" />
+          <stop offset="0%" stopColor="#fff8dc" />
+          <stop offset="32%" stopColor="#f3e5ab" />
+          <stop offset="64%" stopColor="#e5be48" />
+          <stop offset="100%" stopColor="#b38628" />
         </linearGradient>
         <linearGradient id={rim} x1="0" y1="0" x2="0.4" y2="1">
-          <stop offset="0%" stopColor="#f0d58a" stopOpacity="0.9" />
-          <stop offset="55%" stopColor="#8c6508" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#6f4700" stopOpacity="0.7" />
+          <stop offset="0%" stopColor="#f3e5ab" stopOpacity="0.85" />
+          <stop offset="55%" stopColor="#b38628" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#6f4700" stopOpacity="0.65" />
         </linearGradient>
       </defs>
 
-      {/* Lozenge: a rectangle with two opposing corners cut, which reads as a
-          stamped bezel at 28px as well as at 200px. */}
+      {/* Lozenge: a square with two opposing corners cut, centred on 28,28. */}
       <path
-        d="M12 1.5 H54.5 V44 L44 54.5 H1.5 V12 Z"
+        d="M13 2 H54 V43 L43 54 H2 V13 Z"
         stroke={`url(#${rim})`}
         strokeWidth="1.1"
       />
 
-      <g stroke={`url(#${ramp})`} strokeWidth="2.6" strokeLinecap="square">
-        {/* Shared stem. */}
-        <path d="M17 15.5 V40.5" />
-        {/* R: bowl, then the leg kicking out from the waist. */}
-        <path d="M17 15.5 H24.5 A6.2 6.2 0 0 1 24.5 28 H17" />
-        <path d="M23.5 28 L29.5 40.5" />
-        {/* D: the same bowl, taller, hung off the second stem. */}
-        <path d="M33.5 15.5 V40.5" />
-        <path d="M33.5 15.5 H37.5 A12.5 12.5 0 0 1 37.5 40.5 H33.5" />
+      <g
+        stroke={`url(#${ramp})`}
+        strokeWidth="2.4"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      >
+        {/* R — stem, bowl, leg. */}
+        <path d="M14 17 V39" />
+        <path d="M14 17 H21 A5 5 0 0 1 21 27 H14" />
+        <path d="M20 27 L26 39" />
+
+        {/* D — stem and the same bowl curve, taller. */}
+        <path d="M30 17 V39" />
+        <path d="M30 17 H33 A9 11 0 0 1 33 39 H30" />
       </g>
     </svg>
   );

@@ -55,11 +55,19 @@ function GoldAurora({ still = false, intensity = 1 }) {
       className="absolute inset-0 overflow-hidden mix-blend-screen"
       style={{ opacity: intensity }}
     >
+      {/* No blur filter here on purpose. These are radial gradients that
+          already fade to transparent well inside their own box, so a 130px
+          CSS blur added nothing visually and forced a very large surface to
+          re-rasterise on every animation frame. `will-change` promotes each
+          field to its own layer so the transform is composited, not painted. */}
       {FIELDS.map((f, i) => (
         <div
           key={i}
-          className={`absolute rounded-full blur-[90px] sm:blur-[130px] ${still ? "" : f.cls}`}
-          style={f.style}
+          className={`absolute rounded-full ${still ? "" : f.cls}`}
+          style={{
+            ...f.style,
+            willChange: still ? undefined : "transform, opacity",
+          }}
         />
       ))}
     </div>

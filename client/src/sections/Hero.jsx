@@ -83,24 +83,31 @@ function Hero({ env }) {
                   "linear-gradient(90deg, rgba(229,190,72,0.95), rgba(179,134,40,0))",
               }}
             />
-            <span>{identity.name}</span>
-            <span aria-hidden="true" className="text-gold-dark/60">·</span>
-            <span className="text-sand/80">{hero.location}</span>
+            <span>{hero.role}</span>
           </p>
 
+          {/* Greeting small, name large. The size jump is what stops this
+              reading as the centred "Hello, I'm ___" template — it is a person
+              introducing themselves, with the name as the visual anchor. */}
           <h1 id="hero-title" className="mt-6">
             <span className="sr-only">
-              {identity.name} — {hero.role}, {hero.location}.
+              {identity.name}, {hero.role} in {hero.location}.
             </span>
 
-            <span aria-hidden="true" className="hero-mask block overflow-hidden pb-[0.06em]">
-              <span className="text-ivory-lit block font-display text-[clamp(2.8rem,9.5vw,7.8rem)] leading-[0.92] font-semibold tracking-[0.03em] uppercase">
-                Software
+            <span
+              aria-hidden="true"
+              className="hero-mask block overflow-hidden pb-[0.08em]"
+            >
+              <span className="block font-display text-[clamp(1.6rem,4vw,3rem)] leading-[1] font-light text-sand/85 italic">
+                {hero.greeting}
               </span>
             </span>
-            <span aria-hidden="true" className="hero-mask block overflow-hidden pb-[0.06em]">
-              <span className="text-foil animate-foil block font-display text-[clamp(2.8rem,9.5vw,7.8rem)] leading-[0.92] font-semibold tracking-[0.03em] uppercase">
-                Engineer
+            <span
+              aria-hidden="true"
+              className="hero-mask -mt-1 block overflow-hidden pb-[0.08em] sm:-mt-2"
+            >
+              <span className="text-foil animate-foil block font-display text-[clamp(3rem,10.5vw,8.5rem)] leading-[0.94] font-semibold tracking-[0.01em]">
+                {hero.name}
               </span>
             </span>
           </h1>
@@ -110,8 +117,8 @@ function Hero({ env }) {
             className="hero-rule rule-gold mt-7 h-px w-full max-w-sm origin-left lg:mt-9"
           />
 
-          <p className="hero-fade mt-6 text-[1.1rem] leading-relaxed text-sand/80 font-light max-w-md">
-            {hero.tagline}
+          <p className="hero-fade mt-6 eyebrow-sm text-sand/75">
+            {hero.location}
           </p>
 
           <div className="hero-fade mt-9 flex flex-col items-stretch gap-3.5 sm:flex-row sm:items-center sm:gap-5">
@@ -134,14 +141,9 @@ function Hero({ env }) {
         </div>
       </div>
 
-      {/* Footer rail */}
+      {/* Footer rail. The name and location moved up into the composition, so
+          all that is left down here is the address and the scroll cue. */}
       <div className="hero-fade mx-auto mt-12 flex w-full max-w-[108rem] flex-wrap items-end justify-between gap-5 px-6 sm:px-10 lg:mt-10">
-        <p className="eyebrow-sm flex flex-wrap items-center gap-x-4 gap-y-1 text-mute">
-          <span className="font-semibold text-ivory">{identity.name}</span>
-          <span aria-hidden="true" className="h-3 w-px bg-line" />
-          <span>{hero.location}</span>
-        </p>
-
         <a
           href={`mailto:${identity.email}`}
           className="gold-underline inline-flex min-h-11 items-center eyebrow-sm text-sand

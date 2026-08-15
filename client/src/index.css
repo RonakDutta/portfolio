@@ -249,6 +249,28 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Scroll reveals. Visible by default; `js-reveal` on <html> is only added once
+   the observer in lib/reveal.js is running, so a failure to observe leaves
+   content on screen instead of blank.
+--------------------------------------------------------------------------- */
+
+[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease-cine),
+    transform 0.9s var(--ease-cine);
+}
+
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+
+.js-reveal [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------------------
    Atmosphere motion
 --------------------------------------------------------------------------- */
 

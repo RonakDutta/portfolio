@@ -1,41 +1,14 @@
-import { memo, useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { memo } from "react";
 import SectionTitle from "../components/typography/SectionTitle";
 import GoldGeometry from "../components/atmosphere/GoldGeometry";
 import { about } from "../data/content";
 
-gsap.registerPlugin(ScrollTrigger);
+function About() {
 
-function About({ env }) {
-  const section = useRef(null);
-
-  useLayoutEffect(() => {
-    if (env.reducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap
-        .timeline({ scrollTrigger: { trigger: section.current, start: "top 72%" } })
-        .from(".ab-rise", { y: 26, opacity: 0, duration: 1.1, stagger: 0.08, ease: "expo.out" })
-        .from(".ab-rule", { scaleX: 0, duration: 1.3, ease: "expo.out" }, 0.35);
-
-      gsap.from(".ab-fact", {
-        y: 18,
-        opacity: 0,
-        duration: 0.85,
-        stagger: 0.08,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".ab-facts", start: "top 88%" },
-      });
-    }, section);
-
-    return () => ctx.revert();
-  }, [env.reducedMotion]);
 
   return (
     <section
       id="about"
-      ref={section}
       aria-labelledby="about-title"
       className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
     >
@@ -50,7 +23,7 @@ function About({ env }) {
           index={about.index}
           label={about.label}
           title={about.title}
-          itemClass="ab-rise"
+          itemClass="reveal"
         />
 
         <div aria-hidden="true" className="ab-rule mt-10 h-px w-full origin-left rule-gold sm:mt-14" />
@@ -58,17 +31,18 @@ function About({ env }) {
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-20">
           <div className="space-y-6 text-[1.05rem] leading-relaxed text-sand/90 font-normal">
             {about.body.map((para, i) => (
-              <p key={i} className="ab-rise max-w-prose">
+              <p key={i} data-reveal className="max-w-prose">
                 {para}
               </p>
             ))}
           </div>
 
-          <dl className="ab-facts grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-1">
+          <dl className="grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-1">
             {about.facts.map((fact) => (
               <div
                 key={fact.term}
-                className="ab-fact group relative rounded-xl border border-gold-dark/25 bg-carbon/60 p-6 backdrop-blur-md transition-all duration-500 hover:border-gold-metal/50 hover:bg-carbon/90"
+                data-reveal
+                className="border-t border-gold-dark/25 pt-5"
               >
                 <dt className="eyebrow-sm text-gold-metal/90 font-medium tracking-[0.24em]">
                   {fact.term}

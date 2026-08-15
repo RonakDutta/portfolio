@@ -1,37 +1,15 @@
-import { memo, useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { memo } from "react";
 import ProjectShowcase from "../components/projects/ProjectShowcase";
 import SectionTitle from "../components/typography/SectionTitle";
 import { work } from "../data/content";
 
-gsap.registerPlugin(ScrollTrigger);
-
 function Work({ env }) {
-  const section = useRef(null);
   const [featured, ...rest] = work.projects;
 
-  useLayoutEffect(() => {
-    if (env.reducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      gsap.from(".wk-rise", {
-        y: 26,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.08,
-        ease: "expo.out",
-        scrollTrigger: { trigger: section.current, start: "top 76%" },
-      });
-    }, section);
-
-    return () => ctx.revert();
-  }, [env.reducedMotion]);
 
   return (
     <section
       id="work"
-      ref={section}
       aria-labelledby="work-title"
       className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
     >
@@ -42,11 +20,11 @@ function Work({ env }) {
           label={work.label}
           title={work.title}
           accent={work.accent}
-          itemClass="wk-rise"
+          itemClass="reveal"
         />
 
         <div className="mt-16 sm:mt-24">
-          <div className="wk-rise mb-10 flex items-center gap-3">
+          <div data-reveal className="mb-10 flex items-center gap-3">
             <span className="h-2 w-2 rotate-45 bg-gold-metal" />
             <span className="eyebrow-sm text-gold-bright tracking-[0.24em]">
               {work.featuredLabel}

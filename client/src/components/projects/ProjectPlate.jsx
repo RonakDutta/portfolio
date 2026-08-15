@@ -43,7 +43,7 @@ function ProjectPlate({
       {/* Aurora behind the frame. */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -inset-x-[6%] -inset-y-[22%] -z-10 blur-[70px]"
+        className="pointer-events-none absolute -inset-x-[6%] -inset-y-[22%] -z-10 blur-[48px]"
         style={{
           background:
             "radial-gradient(closest-side, rgba(212,175,55,0.2) 0%, rgba(140,101,8,0.09) 46%, transparent 76%)",

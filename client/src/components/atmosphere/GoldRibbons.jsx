@@ -86,8 +86,8 @@ function GoldRibbons({ still = false, className = "" }) {
             opacity: still ? r.lo : undefined,
             animationDuration: r.dur,
             animationDelay: r.delay,
-            filter: r.blur ? `blur(${r.blur}px)` : undefined,
             transformOrigin: "50% 50%",
+            willChange: still ? undefined : "transform, opacity",
           }}
         />
       ))}

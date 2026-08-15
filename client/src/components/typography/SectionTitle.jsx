@@ -19,6 +19,7 @@ function SectionTitle({
   return (
     <header className={className}>
       <p
+        data-reveal
         className={`${itemClass} flex items-center gap-4 eyebrow text-champagne ${
           centred ? "justify-center" : ""
         }`}
@@ -43,6 +44,7 @@ function SectionTitle({
       {title ? (
         <h2
           id={id}
+          data-reveal
           className={`${itemClass} mt-6 font-display ${centred ? "text-center" : ""} ${
             size === "xl"
               ? "text-[clamp(2.8rem,8.5vw,6.5rem)] leading-[0.95] font-semibold tracking-[0.03em] uppercase"

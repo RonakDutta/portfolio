@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useEnvironment } from "./lib/useEnvironment";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
+import { initReveals } from "./lib/reveal";
 import Atmosphere from "./components/atmosphere/Atmosphere";
 import Curtain from "./components/Curtain";
 import LuxuryNav from "./components/brand/LuxuryNav";
@@ -14,6 +16,11 @@ import Contact from "./sections/Contact";
 export default function App() {
   const env = useEnvironment();
   useSmoothScroll(env);
+
+  useEffect(
+    () => initReveals({ reducedMotion: env.reducedMotion }),
+    [env.reducedMotion],
+  );
 
   return (
     <>
@@ -32,13 +39,13 @@ export default function App() {
 
       <main className="relative z-10">
         <Hero env={env} />
-        <About env={env} />
+        <About />
         <Work env={env} />
-        <Skills env={env} />
-        <Experience env={env} />
+        <Skills />
+        <Experience />
         {/* Achievements has no nav entry; the spy holds on Experience through
             it, which is where it sits in the reading order. */}
-        <Achievements env={env} />
+        <Achievements />
         <Contact env={env} />
       </main>
     </>

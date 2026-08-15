@@ -73,9 +73,7 @@ function ProjectShowcase({ project, index, env }) {
               "linear-gradient(90deg, rgba(229,190,72,0.9), rgba(179,134,40,0))",
           }}
         />
-        <span className="inline-flex items-center rounded-full border border-gold-dark/35 bg-coal/70 px-3 py-0.5 text-[0.68rem] font-medium tracking-[0.2em] text-champagne uppercase">
-          {category}
-        </span>
+        <span className="eyebrow-sm text-sand">{category}</span>
       </div>
 
       <h3
@@ -100,16 +98,18 @@ function ProjectShowcase({ project, index, env }) {
       </p>
 
       {stack?.length ? (
-        <div className="show-line mt-6 flex flex-wrap items-center gap-2">
-          {stack.map((tech) => (
-            <span
-              key={tech}
-              className="inline-flex items-center rounded-md border border-gold-dark/25 bg-carbon/80 px-3 py-1 text-xs font-medium text-pearl/90 transition-colors hover:border-gold-metal/50 hover:text-gold-white"
-            >
+        <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 eyebrow-sm text-sand">
+          {stack.map((tech, i) => (
+            <span key={tech} className="flex items-center gap-3">
+              {i > 0 ? (
+                <span aria-hidden="true" className="text-gold-dark">
+                  ·
+                </span>
+              ) : null}
               {tech}
             </span>
           ))}
-        </div>
+        </p>
       ) : null}
     </div>
   );
@@ -117,19 +117,15 @@ function ProjectShowcase({ project, index, env }) {
   const detail = (
     <div>
       {highlights?.length ? (
-        <div className="show-line rounded-xl border border-gold-dark/20 bg-carbon/50 p-6 backdrop-blur-sm">
-          <h4 className="eyebrow-sm flex items-center gap-2.5 text-gold-metal">
-            <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal" />
-            Key Highlights
-          </h4>
-          <ul className="mt-4 space-y-3.5">
+        <div>
+          <h4 className="eyebrow-sm text-mute">Engineering</h4>
+          <ul className="mt-6">
             {highlights.map((line) => (
               <li
                 key={line}
-                className="flex items-start gap-3 text-[0.92rem] leading-relaxed text-sand/85"
+                className="border-t border-gold-dark/20 py-4 text-[0.95rem] leading-relaxed text-sand/85"
               >
-                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold-metal/70" />
-                <span>{line}</span>
+                {line}
               </li>
             ))}
           </ul>
@@ -169,7 +165,7 @@ function ProjectShowcase({ project, index, env }) {
       <article
         ref={root}
         aria-labelledby={headingId}
-        className="relative rounded-2xl border border-gold-dark/25 bg-carbon/30 p-6 sm:p-10 backdrop-blur-sm transition-all duration-700 hover:border-gold-metal/40"
+        className="relative"
       >
         <div className="mb-8 sm:mb-12">{masthead}</div>
         {plate}
@@ -185,7 +181,7 @@ function ProjectShowcase({ project, index, env }) {
     <article
       ref={root}
       aria-labelledby={headingId}
-      className="relative rounded-2xl border border-gold-dark/20 bg-carbon/25 p-6 sm:p-10 backdrop-blur-sm transition-all duration-700 hover:border-gold-metal/40"
+      className="relative"
     >
       <div
         className={`grid gap-10 lg:items-center lg:gap-16 ${

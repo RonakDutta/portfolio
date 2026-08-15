@@ -17,9 +17,12 @@ export const identity = {
 };
 
 export const hero = {
+  /* Deliberately almost nothing. Greeting, name, role, place, two buttons.
+     The stack, the internship and the degree all live further down the page. */
+  greeting: "Hi, I’m",
+  name: "Ronak Dutta.",
   role: "Software Engineer",
   location: "New Delhi, India",
-  tagline: "Building for the web.",
 
   primary: { label: "View Work", target: "work" },
   secondary: { label: "Résumé", href: "/resume.pdf" },
@@ -44,7 +47,7 @@ export const about = {
 
   body: [
     "I am a software engineer based in New Delhi, currently working as a software development intern at RARS Innoventa. My work spans backend services and React interfaces, focusing on product cataloguing, inventory, and order fulfillment systems.",
-    "Alongside work, I am completing a B.Tech in Industrial Internet of Things at GGSIPU. I focus on building reliable full-stack web applications with clean architecture and solid fundamentals.",
+    "Alongside work, I am completing a B.Tech in Industrial Internet of Things at GGSIPU. Most of what I know came from building things and then fixing what broke.",
   ],
 
   facts: [
@@ -228,7 +231,7 @@ export const contact = {
   label: "Contact",
   title: "Contact",
   accent: "",
-  lede: "Open to software engineering opportunities and technical collaborations. The best way to reach me is email.",
+  lede: "Open to software engineering roles. Email is the fastest way to reach me.",
 
   cta: { label: "Send Email", href: "mailto:ronakdutta100@gmail.com" },
 
