@@ -68,13 +68,13 @@ function Hero({ env }) {
 
       <div
         className="mx-auto grid w-full max-w-[102rem] flex-1 items-center gap-8 px-6
-          sm:px-9 lg:grid-cols-12 lg:gap-6"
+          sm:px-9 lg:grid-cols-12 lg:gap-4"
       >
         {/* Portrait */}
         <div
           className="hero-portrait relative order-1 mx-auto w-[min(56vw,16.5rem)] sm:w-[min(50vw,20rem)]
             lg:order-2 lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:mx-0 lg:w-full
-            lg:max-w-[30rem] lg:justify-self-end"
+            lg:max-w-[25rem] lg:justify-self-end xl:max-w-[27rem]"
         >
           <PortraitPlate
             portrait={hero.portrait}
@@ -86,10 +86,9 @@ function Hero({ env }) {
 
         {/* Type */}
         <div className="relative z-10 order-2 lg:order-1 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:self-center">
-          <p className="hero-status flex items-center gap-3 eyebrow-sm text-sand/80">
-            <span className="animate-ember h-1.5 w-1.5 rounded-full bg-ember" />
+          <p className="hero-status text-[0.95rem] text-sand/70">
             {hero.status}
-            <span aria-hidden="true" className="text-brass-deep">
+            <span aria-hidden="true" className="mx-2.5 text-brass/50">
               /
             </span>
             {hero.location}
@@ -102,7 +101,7 @@ function Hero({ env }) {
             </span>
 
             <span aria-hidden="true" className="hero-mask block overflow-hidden">
-              <span className="text-ivory-lit block font-display text-[clamp(2.3rem,7vw,4.4rem)] leading-[1.04] font-normal tracking-[-0.025em]">
+              <span className="text-ivory-lit block font-display text-[clamp(2.3rem,7.4vw,5rem)] leading-[1.04] font-normal tracking-[-0.025em]">
                 {hero.headline.line1}
               </span>
             </span>
@@ -111,7 +110,7 @@ function Hero({ env }) {
               aria-hidden="true"
               className="hero-mask -mt-[0.12em] block overflow-hidden pb-[0.1em]"
             >
-              <span className="script text-leaf block text-[clamp(3.1rem,9.6vw,6.1rem)] leading-[1.02]">
+              <span className="script text-leaf block text-[clamp(3.1rem,10.2vw,6.9rem)] leading-[1.02]">
                 {hero.headline.script}
               </span>
             </span>
@@ -120,7 +119,7 @@ function Hero({ env }) {
               aria-hidden="true"
               className="hero-mask -mt-[0.18em] block overflow-hidden"
             >
-              <span className="text-ivory-lit block font-display text-[clamp(2.3rem,7vw,4.4rem)] leading-[1.04] font-normal tracking-[-0.025em]">
+              <span className="text-ivory-lit block font-display text-[clamp(2.3rem,7.4vw,5rem)] leading-[1.04] font-normal tracking-[-0.025em]">
                 {hero.headline.line2}
               </span>
             </span>
@@ -161,7 +160,7 @@ function Hero({ env }) {
 
       {/* Ticker + scroll cue. Full bleed on purpose: it is the line that tells
           you the page keeps going. */}
-      <div className="hero-fade relative mt-10 lg:mt-6">
+      <div className="hero-fade relative mt-14 lg:mt-20">
         <Marquee items={hero.ticker} duration={48} />
 
         <div className="mx-auto mt-6 flex w-full max-w-[102rem] items-end justify-between gap-5 px-6 sm:px-9">

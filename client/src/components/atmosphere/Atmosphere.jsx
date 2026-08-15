@@ -62,7 +62,7 @@ function Atmosphere({ env }) {
         </>
       )}
 
-      {/* Volumetric bloom pooling low in the frame — it gives the black a floor
+      {/* Volumetric bloom pooling low in the frame. It gives the black a floor
           and stops the lower half reading as empty. */}
       <div
         className="absolute inset-x-0 bottom-0 h-[55vh]"

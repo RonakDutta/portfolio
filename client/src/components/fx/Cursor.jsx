@@ -8,8 +8,8 @@ import gsap from "gsap";
  * over anything carrying `data-cursor`, a spark burst on click, and a thin
  * trail of sparkles behind the pointer.
  *
- * It only ever runs for a real pointer that has not asked for less motion —
- * touch keeps the platform's own behaviour, and the native cursor is only
+ * It only ever runs for a real pointer that has not asked for less motion.
+ * Touch keeps the platform's own behaviour, and the native cursor is only
  * hidden (`has-cursor` on <html>) once this is actually on screen, so a
  * failure here can never leave a visitor with no pointer at all.
  */

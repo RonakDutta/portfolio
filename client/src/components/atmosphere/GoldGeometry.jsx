@@ -4,7 +4,7 @@ import { memo, useId } from "react";
  * The house geometry: thin gold arcs and orbital curves, drawn at three
  * opacities so some are almost subliminal and one or two clearly catch the
  * light. Placed per-section rather than globally, because the point of it is
- * to frame a composition — a background that had it everywhere would just be
+ * to frame a composition, and a background that had it everywhere would just be
  * a texture.
  *
  * `variant` picks the arrangement; all of them share the same stroke language

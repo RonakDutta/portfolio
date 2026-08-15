@@ -13,7 +13,7 @@ import { memo, useId } from "react";
  *   letters   x 14 -> 42, y 17 -> 39   centre 28, 28
  *
  * The previous version had the letter group sitting at x 17 -> 46, which put
- * it 3.5 units right of centre — visible as an off-centre mark in the nav.
+ * it 3.5 units right of centre, visible as an off-centre mark in the nav.
  * If you edit the glyphs, keep the group symmetric about x = 28.
  */
 function Monogram({ className = "", title }) {
@@ -58,12 +58,12 @@ function Monogram({ className = "", title }) {
         strokeLinecap="square"
         strokeLinejoin="miter"
       >
-        {/* R — stem, bowl, leg. */}
+        {/* R: stem, bowl, leg. */}
         <path d="M14 17 V39" />
         <path d="M14 17 H21 A5 5 0 0 1 21 27 H14" />
         <path d="M20 27 L26 39" />
 
-        {/* D — stem and the same bowl curve, taller. */}
+        {/* D: stem and the same bowl curve, taller. */}
         <path d="M30 17 V39" />
         <path d="M30 17 H33 A9 11 0 0 1 33 39 H30" />
       </g>

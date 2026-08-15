@@ -2,7 +2,7 @@
  * Nav model and the scroll-spy channel.
  *
  * Order here must match the order the sections are rendered in, since the spy
- * indexes into this array. Section ids are semantic now — the previous build
+ * indexes into this array. Section ids are semantic now. The previous build
  * used themed ids, and those links are not worth preserving through a full
  * change of identity.
  */

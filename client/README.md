@@ -1,4 +1,4 @@
-# Portfolio — Ronak Dutta
+# Portfolio, Ronak Dutta
 
 A warm near-black stage, brass rather than bullion, and one paper-white sheet
 cut into the middle of the scroll. Type does the work: Fraunces for display,
@@ -31,7 +31,7 @@ npm run lint
 
 ## Type
 
-Four variable faces, latin subsets, self-hosted from `public/fonts` — 164 kB
+Four variable faces, latin subsets, self-hosted from `public/fonts`, 164 kB in
 total. They used to come from Google Fonts, which cost a preconnect, a
 render-blocking stylesheet and a second origin on the critical path. The
 `@font-face` block is at the top of `src/index.css`; `index.html` preloads the
@@ -43,9 +43,9 @@ be synthesised by the browser, so nothing asks for it.
 | Token            | Face            | Used for                                    |
 | ---------------- | --------------- | ------------------------------------------- |
 | `--font-display` | Fraunces        | Every heading, the ledger values, the ticker |
-| `--font-script`  | Ephesis         | Accent words only — never a whole line       |
+| `--font-script`  | Ephesis         | Accent words only, never a whole line        |
 | `--font-sans`    | Instrument Sans | Body copy, form fields                       |
-| `--font-mono`    | JetBrains Mono  | Eyebrows, indices, counters, errors          |
+| `--font-mono`    | JetBrains Mono  | Nav, buttons, indices, counters, errors      |
 
 Ephesis sets a very narrow word space; the `script` utility widens it, or two
 words run together and read as one.
@@ -59,14 +59,14 @@ foundation, off-centre graphite depth, a blurred key light, the aurora, light
 ribbons at a quarter strength, metallic dust and glints, a low bloom, then
 vignette and grain.
 
-Everything is CSS, SVG or a 2D canvas — **there is no WebGL**. Reduced motion
+Everything is CSS, SVG or a 2D canvas. **There is no WebGL.** Reduced motion
 keeps every layer and stops all of them; phones get a thinner dust field, which
 is the only layer with a real per-frame cost.
 
 ## The paper section
 
-Skills is the one light section, and it is deliberate: a dark portfolio that
-stays dark for six screens reads as one long gradient. It is an opaque sheet
+Skills is the one light section, and it is deliberate, because a dark portfolio
+that stays dark for six screens reads as one long gradient. It is an opaque sheet
 (`paper` utility) sitting above the fixed atmosphere at `z-10`, with a
 multiply-blended noise overlay for tooth and a shadow on both edges so it
 reads as laid on the page rather than punched through it.
@@ -78,19 +78,19 @@ reads as laid on the page rather than punched through it.
 Two earlier treatments of `public/portrait.jpg` failed the same way. A
 bordered, vignetted, gold-washed plate put a second dark edge inside a dark
 edge and laid a warm cast over one side of the face. Dissolving all four edges
-into the page instead only moved the problem: the set it was shot on is a
+into the page instead only moved the problem, because the set it was shot on is a
 different black from the one this page is lit in, so a rectangle stayed visible
 whichever way the values fell.
 
 So the edge is deliberate. An arch, a single brass hairline along it, and the
 foot of it dissolving into the page. The only grade left is a touch of
-contrast — no tint over skin. Swapping the photograph needs nothing changed
+contrast, and no tint over skin. Swapping the photograph needs nothing changed
 unless the crop moves the head far off centre, in which case adjust
 `object-top`.
 
 ## The custom cursor
 
-`components/fx/Cursor.jsx` — a brass bead, a ring that lags, a label taken from
+`components/fx/Cursor.jsx` holds a brass bead, a ring that lags, a label taken from
 `data-cursor` on whatever is under it, a spark burst on click, and a sparkle
 trail. Hover state is resolved from the event target, so anything added later
 is picked up for free.
@@ -108,7 +108,7 @@ Each project in `src/data/content.js`:
 {
   slug: "ats-workplace",
   name: "ATS Workplace",
-  category: "AI Recruitment Platform",
+  category: "AI recruitment platform",
   year: "2026",
   featured: true,          // adds the "Featured" tag; layout is unchanged
   image: "/projects/ats-workplace.png",
@@ -134,9 +134,8 @@ is already final and nothing shifts when the asset lands.
 
 There is no backend, so the form does not pretend to have one. It validates in
 the page, then hands a composed message to the visitor's own mail client, and
-the success panel shows the exact text it sent with a copy button — so a
-blocked `mailto:` is a visible fallback rather than a silent failure. The note
-under the button says so before anyone types.
+the success panel shows the exact text it sent with a copy button, so a
+blocked `mailto:` is a visible fallback rather than a silent failure.
 
 ## Before deploying
 
@@ -155,10 +154,15 @@ canonical link, the Open Graph tags and the JSON-LD at build time.
 - **Brass is light and metal, not paint.** It appears as aurora, rim light,
   hairlines, the nav marker and one solid CTA per screen. Large fields stay
   near-black or paper.
-- **Ember is for state, never decoration** — the availability dot, form errors.
+- **Ember is for state, never decoration.** Form errors, and nothing else.
 - **Nothing animates its own fill.** The old build swept a gradient across
   every heading on a timer; a page of shimmering type is the most recognisable
   generated-portfolio tell there is.
+- **No numbered, letter-spaced, all-caps label over a section title.** Six of
+  those down a page is a template tell rather than a design. The titles say
+  what the sections are; small in-section labels are set in the display face at
+  reading size instead.
+- **No em dashes**, in copy or in comments.
 - **Rules are a last resort.** Sections used to open with a hairline and
   separate every row with another, and the page read as ruled rather than
   designed. Experience hangs off one vertical line; About, Achievements and the

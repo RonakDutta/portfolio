@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef } from "react";
 
 /**
- * Metallic dust — the specks you see hanging in a studio spotlight.
+ * Metallic dust: the specks you see hanging in a studio spotlight.
  *
  * Deliberately sparse and slow. A canvas rather than DOM nodes so the whole
  * field is one composited element, and the loop is suspended whenever the tab

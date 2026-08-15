@@ -15,8 +15,8 @@ gsap.registerPlugin(ScrollTrigger);
  * because the set it was shot on is a different black from the one this page is
  * lit in, so a rectangle stayed visible whichever way the values fell.
  *
- * So the edge is deliberate now. An arch — the shape a portrait has hung in
- * since long before websites — with a single brass hairline along it, and the
+ * So the edge is deliberate now. An arch, the shape a portrait has hung in
+ * since long before websites, with a single brass hairline along it, and the
  * foot of it dissolving into the page so the subject is standing in the room
  * rather than sitting in a box. The only grade left is a touch of contrast; no
  * tint over skin.

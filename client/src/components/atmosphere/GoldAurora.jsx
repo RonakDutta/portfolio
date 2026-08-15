@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 /**
- * Golden aurora — the signature layer.
+ * Golden aurora, the signature layer.
  *
  * Three very large, very soft gradient fields on independent slow cycles.
  * Each runs the full ramp (bronze -> gold -> champagne -> white-gold) from its

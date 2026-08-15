@@ -8,7 +8,7 @@ import { skills } from "../data/content";
  * This is the one light section on the site. A dark portfolio that stays dark
  * for six screens reads as one long gradient; cutting a warm sheet into the
  * middle of it gives the scroll a middle, and gives this section a reason to
- * be plain — it is a specification page, not a wall of glowing badges.
+ * be plain: it is a specification page, not a wall of glowing badges.
  */
 function Skills() {
   return (
@@ -32,8 +32,6 @@ function Skills() {
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
           <SectionTitle
             id="skills-title"
-            index={skills.index}
-            label={skills.label}
             title={skills.title}
             script={skills.script}
             tone="paper"
@@ -55,10 +53,7 @@ function Skills() {
               style={{ transitionDelay: `${i * 60}ms` }}
               className={i === skills.groups.length - 1 ? "sm:col-span-2" : ""}
             >
-              <dt className="flex items-baseline gap-3 eyebrow-sm text-espresso-soft">
-                <span className="text-brass-deep">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+              <dt className="font-display text-[1rem] tracking-wide text-brass-deep">
                 {group.name}
               </dt>
 

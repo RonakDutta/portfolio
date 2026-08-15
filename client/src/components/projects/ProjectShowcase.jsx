@@ -76,21 +76,11 @@ function ProjectShowcase({ project, index, env }) {
 
   return (
     <article ref={root} aria-labelledby={headingId} className={`relative ${inset}`}>
-      <div className="show-line flex flex-wrap items-center gap-x-4 gap-y-2 eyebrow-sm">
-        <span className="text-brass">{number}</span>
-        <span
-          aria-hidden="true"
-          className="h-px w-8"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(200,164,92,0.9), rgba(200,164,92,0))",
-          }}
-        />
-        <span className="text-sand/85">{category}</span>
-        {featured ? (
-          <span className="text-brass-lit">Featured</span>
-        ) : null}
-        <span className="ml-auto text-mute">{year}</span>
+      <div className="show-line flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[0.92rem]">
+        <span className="font-mono text-[0.78rem] text-brass">{number}</span>
+        <span className="text-sand/80">{category}</span>
+        {featured ? <span className="text-brass-lit">Featured</span> : null}
+        <span className="ml-auto font-mono text-[0.78rem] text-mute">{year}</span>
       </div>
 
       <h3
@@ -112,7 +102,7 @@ function ProjectShowcase({ project, index, env }) {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor="Open live"
-            aria-label={`${name} — open the live site`}
+            aria-label={`${name}, open the live site`}
             className="block"
           >
             {plate}
@@ -128,7 +118,7 @@ function ProjectShowcase({ project, index, env }) {
         <div className="show-line">
           {stack?.length ? (
             <>
-              <p className="eyebrow-sm text-brass/80">Built with</p>
+              <p className="font-display text-[1.05rem] text-brass/85">Built with</p>
               <ul className="mt-4 flex flex-wrap gap-x-2.5 gap-y-2.5">
                 {stack.map((tech) => (
                   <li
@@ -171,7 +161,7 @@ function ProjectShowcase({ project, index, env }) {
 
         {highlights?.length ? (
           <div className="show-line">
-            <p className="eyebrow-sm text-brass/80">How it was built</p>
+            <p className="font-display text-[1.05rem] text-brass/85">How it was built</p>
             <ul className="mt-4 space-y-4">
               {highlights.map((line, i) => (
                 <li

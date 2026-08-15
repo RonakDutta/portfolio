@@ -77,7 +77,7 @@ function SiteNav() {
             className="group -ml-1 flex min-h-11 items-center gap-3 px-1"
           >
             <Monogram className="h-9 w-9 transition-transform duration-500 group-hover:scale-105" />
-            <span className="sr-only">{identity.name} — back to the top</span>
+            <span className="sr-only">{identity.name}, back to the top</span>
             <span className="hidden font-display text-[0.95rem] tracking-tight text-pearl sm:block">
               {identity.family}
             </span>
@@ -110,8 +110,7 @@ function SiteNav() {
           </ul>
 
           <div className="flex items-center gap-4">
-            <span className="hidden items-center gap-2.5 eyebrow-sm text-sand/70 xl:flex">
-              <span className="animate-ember h-1.5 w-1.5 rounded-full bg-ember" />
+            <span className="hidden eyebrow-sm text-sand/60 xl:block">
               {hero.status}
             </span>
 

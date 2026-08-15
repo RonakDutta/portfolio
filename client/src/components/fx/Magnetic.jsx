@@ -5,7 +5,7 @@ import gsap from "gsap";
  * Pulls its child a little way toward the pointer, then lets it spring back.
  *
  * The wrapper is `inline-block` so it never changes the layout of whatever it
- * is put around, and every listener is skipped when `active` is false — touch
+ * is put around, and every listener is skipped when `active` is false. Touch
  * has no hover to answer, and it would only fight the tap.
  */
 export default function Magnetic({

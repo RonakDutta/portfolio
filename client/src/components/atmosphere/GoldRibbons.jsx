@@ -1,7 +1,7 @@
 import { memo, useId } from "react";
 
 /**
- * Gold light ribbons — long-exposure light trails crossing the frame.
+ * Gold light ribbons: long-exposure light trails crossing the frame.
  *
  * Each ribbon is a single wide bezier stroked with a gradient that fades to
  * nothing at both ends, so it reads as light passing through rather than as a

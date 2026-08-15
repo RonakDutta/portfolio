@@ -12,7 +12,7 @@ const CEILING_MS = 4000;
  * Drives the overture that `index.html` painted, then removes it.
  *
  * It holds until the display faces are ready, so Fraunces and Ephesis never
- * swap in front of the visitor, and it performs once per session — a returning
+ * swap in front of the visitor, and it performs once per session. A returning
  * visitor gets a plain fade instead of the whole show again.
  *
  * The exit is a single upward wipe rather than two halves parting: the sheet

@@ -19,8 +19,6 @@ function About() {
       <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
           id="about-title"
-          index={about.index}
-          label={about.label}
           title={about.title}
           script={about.script}
         />
@@ -54,10 +52,7 @@ function About() {
           <dl className="grid grid-cols-1 gap-x-10 gap-y-9 self-start sm:grid-cols-2 lg:grid-cols-1 lg:gap-y-8">
             {about.facts.map((fact, i) => (
               <div key={fact.term} data-reveal style={{ transitionDelay: `${i * 70}ms` }}>
-                <dt className="flex items-center gap-2.5 eyebrow-sm text-brass/80">
-                  <span aria-hidden="true" className="h-1 w-1 rotate-45 bg-brass/70" />
-                  {fact.term}
-                </dt>
+                <dt className="text-[0.88rem] text-brass/80">{fact.term}</dt>
                 <dd className="mt-2.5 font-display text-[1.3rem] leading-snug text-ivory lg:text-[1.45rem]">
                   {fact.value}
                 </dd>

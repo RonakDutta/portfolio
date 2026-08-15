@@ -26,7 +26,7 @@ export function useSmoothScroll({ reducedMotion, isMobile }) {
 
     // Lenis only emits for scrolls it drives. Keyboard paging, dragging the
     // scrollbar, find-in-page and programmatic scrollIntoView all move the
-    // document without it — and because every reveal on this page is a
+    // document without it, and because every reveal on this page is a
     // gsap.from(), a ScrollTrigger that never updates leaves its content
     // stuck at opacity 0. Listening natively as well makes that impossible.
     const syncTriggers = () => ScrollTrigger.update();

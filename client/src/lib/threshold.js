@@ -5,7 +5,7 @@ let crossed =
 
 const waiters = new Set();
 
-/** Runs `fn` once the curtain has opened — or immediately if it already has. */
+/** Runs `fn` once the curtain has opened, or immediately if it already has. */
 export function onCrossed(fn) {
   if (crossed) {
     fn();

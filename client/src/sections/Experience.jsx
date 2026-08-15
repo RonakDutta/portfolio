@@ -18,7 +18,7 @@ function Entry({ year, period, title, org, detail, as: Heading = "h4" }) {
           border border-brass bg-ink transition-colors duration-500 group-hover:bg-brass"
       />
 
-      <p className="eyebrow-sm text-brass/85">{period}</p>
+      <p className="text-[0.88rem] text-brass/85">{period}</p>
 
       <Heading className="mt-3 font-display text-[clamp(1.4rem,3.4vw,2.05rem)] leading-tight font-normal text-ivory">
         {title}
@@ -65,16 +65,14 @@ function Experience() {
       <div className="mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
           id="experience-title"
-          index={experience.index}
-          label={experience.label}
           title={experience.title}
           script={experience.script}
         />
 
         <div className="mt-14 grid gap-14 sm:mt-20 lg:grid-cols-2 lg:gap-24">
           <div>
-            <p data-reveal className="mb-8 eyebrow-sm text-sand/70">
-              Work
+            <p data-reveal className="mb-8 font-display text-[1.1rem] text-sand/70">
+              {experience.workTitle}
             </p>
             <Timeline>
               {experience.roles.map((role) => (
@@ -84,7 +82,7 @@ function Experience() {
           </div>
 
           <div>
-            <p data-reveal className="mb-8 eyebrow-sm text-sand/70">
+            <p data-reveal className="mb-8 font-display text-[1.1rem] text-sand/70">
               {experience.educationTitle}
             </p>
             <Timeline>

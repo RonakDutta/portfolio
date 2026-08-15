@@ -4,7 +4,7 @@ import { memo, useCallback, useRef, useState } from "react";
  * The screenshot, shot like product photography.
  *
  * The frame is now a single hairline and a deep shadow rather than the 3px
- * gradient bezel it had before — that bezel put a bright metallic edge around
+ * gradient bezel it had before. That bezel put a bright metallic edge around
  * every capture and was the loudest thing in the section.
  *
  * Space is reserved from a fixed ratio (2.104:1, matching the source captures)
@@ -111,7 +111,7 @@ function ProjectPlate({
 
 /**
  * Shown until a real capture exists. States what it is rather than faking a
- * product UI — a fabricated screenshot would misrepresent the work.
+ * product UI, because a fabricated screenshot would misrepresent the work.
  */
 function Placeholder({ label }) {
   return (
@@ -134,7 +134,7 @@ function Placeholder({ label }) {
         }}
       />
 
-      <p className="relative eyebrow-sm text-brass/70">Capture pending</p>
+      <p className="relative text-[0.9rem] text-brass/70">Capture pending</p>
       {label ? (
         <p className="script relative max-w-[24ch] px-6 text-center text-[2rem] leading-none text-mute">
           {label}

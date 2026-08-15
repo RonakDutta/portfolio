@@ -4,7 +4,7 @@ import { Fragment, memo } from "react";
  * Splits a line into words that rise and sharpen one after another.
  *
  * Each word carries `data-reveal`, so it rides the one IntersectionObserver in
- * lib/reveal.js — including its failsafe. If observation fails for any reason
+ * lib/reveal.js, including its failsafe. If observation fails for any reason
  * the words are simply shown, never left blank.
  *
  * Words are inline-block (transformable) but the spaces between them stay real

@@ -16,14 +16,12 @@ function Work({ env }) {
       <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
           id="work-title"
-          index={work.index}
-          label={work.label}
           title={work.title}
           script={work.script}
           size="xl"
         />
 
-        <div className="mt-16 space-y-28 sm:mt-24 sm:space-y-36 lg:space-y-44">
+        <div className="mt-12 space-y-28 sm:mt-16 sm:space-y-36 lg:space-y-44">
           {work.projects.map((project, i) => (
             <ProjectShowcase
               key={project.slug}

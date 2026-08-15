@@ -1,5 +1,5 @@
 /**
- * Portfolio content — concise, direct, human.
+ * Portfolio content: concise, direct, human.
  *
  * `script` fields are the words set in Ephesis. They are always a fragment of
  * a longer line, never the whole thing: the cursive is an accent on the page,
@@ -62,13 +62,11 @@ export const hero = {
 };
 
 export const about = {
-  index: "01",
-  label: "The short version",
   title: "About",
   script: "me",
 
   body: [
-    "I am a software engineer based in New Delhi, currently a software development intern at RARS Innoventa. My work spans backend services and React interfaces — product cataloguing, inventory, and order fulfillment systems.",
+    "I am a software engineer based in New Delhi, currently a software development intern at RARS Innoventa. My work spans backend services and React interfaces: product cataloguing, inventory, and order fulfillment systems.",
     "Alongside work I am finishing a B.Tech in Industrial Internet of Things at GGSIPU. Most of what I know came from building things and then fixing what broke.",
   ],
 
@@ -83,8 +81,6 @@ export const about = {
 };
 
 export const work = {
-  index: "02",
-  label: "Things I have shipped",
   title: "Selected",
   script: "work",
 
@@ -92,7 +88,7 @@ export const work = {
     {
       slug: "ats-workplace",
       name: "ATS Workplace",
-      category: "AI Recruitment Platform",
+      category: "AI recruitment platform",
       year: "2026",
       featured: true,
 
@@ -117,7 +113,7 @@ export const work = {
     {
       slug: "business40",
       name: "Business 4.0",
-      category: "Community Platform",
+      category: "Community platform",
       year: "2026",
 
       image: "/projects/business-40.png",
@@ -141,7 +137,7 @@ export const work = {
     {
       slug: "safarsaathi",
       name: "SafarSaathi",
-      category: "Ride Booking Application",
+      category: "Ride booking application",
       year: "2025",
 
       image: "/projects/safarsaathi.png",
@@ -165,8 +161,6 @@ export const work = {
 };
 
 export const skills = {
-  index: "03",
-  label: "What I reach for",
   title: "The",
   script: "toolkit",
   note: "Printed plainly, because a wall of glowing badges tells you nothing about what someone can actually do.",
@@ -187,19 +181,18 @@ export const skills = {
 };
 
 export const experience = {
-  index: "04",
-  label: "Where I have been",
   title: "The",
   script: "record",
 
+  workTitle: "Work",
   roles: [
     {
       year: "2026",
-      period: "June 2026 — Present",
+      period: "June 2026 to now",
       title: "Software Development Intern",
       org: "RARS Innoventa",
       detail:
-        "Developing backend services and React interfaces for a B2B marketplace and community platform — event RSVPs, member onboarding, and payment integrations.",
+        "Developing backend services and React interfaces for a B2B marketplace and community platform, covering event RSVPs, member onboarding, and payment integrations.",
     },
   ],
 
@@ -223,8 +216,6 @@ export const experience = {
 };
 
 export const achievements = {
-  index: "05",
-  label: "Along the way",
   title: "",
   script: "Recognition",
 
@@ -248,8 +239,6 @@ export const achievements = {
 };
 
 export const contact = {
-  index: "06",
-  label: "Say hello",
   title: "Let’s",
   script: "talk",
 
@@ -257,8 +246,6 @@ export const contact = {
   responseTime: "I usually reply within a day.",
 
   formTitle: "Write me a note",
-  formNote:
-    "This opens your own mail client with the message filled in — nothing is stored here.",
 
   channels: [
     { key: "email", label: "Email", value: "ronakdutta100@gmail.com" },

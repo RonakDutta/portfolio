@@ -2,7 +2,6 @@ import { memo, useCallback, useMemo, useState } from "react";
 import SectionTitle from "../components/typography/SectionTitle";
 import GoldGeometry from "../components/atmosphere/GoldGeometry";
 import Sparkles from "../components/fx/Sparkles";
-import Magnetic from "../components/fx/Magnetic";
 import Action from "../components/ui/Action";
 import { scrollToSection } from "../lib/useSmoothScroll";
 import { SECTIONS } from "../lib/store";
@@ -100,7 +99,7 @@ function Contact() {
       setCopied(key);
       setTimeout(() => setCopied(""), 2200);
     } catch {
-      /* Clipboard blocked — the address is on screen either way. */
+      /* Clipboard blocked. The address is on screen either way. */
     }
   }, []);
 
@@ -154,15 +153,13 @@ function Contact() {
       <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
           id="contact-title"
-          index={contact.index}
-          label={contact.label}
           title={contact.title}
           script={contact.script}
           size="xl"
         />
 
         <div className="mt-14 grid gap-16 sm:mt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-24">
-          {/* Left: the human part. `min-w-0` matters here — without it the
+          {/* Left: the human part. `min-w-0` matters here. Without it the
               email row sets the grid track's width and the whole column grows
               past the viewport on a phone. */}
           <div className="min-w-0">
@@ -190,7 +187,7 @@ function Contact() {
                     data-cursor={channel.key === "email" ? "Write" : "Open"}
                     className="flex min-w-0 flex-1 items-baseline gap-5"
                   >
-                    <span className="w-16 shrink-0 eyebrow-sm text-brass/75 sm:w-20">
+                    <span className="w-16 shrink-0 text-[0.85rem] text-brass/70 sm:w-20">
                       {channel.label}
                     </span>
                     <span
@@ -205,7 +202,7 @@ function Contact() {
                     <button
                       type="button"
                       onClick={() => copy(identity.email, "email")}
-                      className="shrink-0 eyebrow-sm text-mute transition-colors duration-500
+                      className="shrink-0 text-[0.85rem] text-mute transition-colors duration-500
                         hover:text-brass-lit"
                     >
                       {copied === "email" ? "Copied" : "Copy"}
@@ -328,15 +325,10 @@ function Contact() {
                   onBlur={blur}
                 />
 
-                <div className="mt-6 flex flex-wrap items-center gap-6">
-                  <Magnetic active={false}>
-                    <Action variant="solid" type="submit">
-                      Send it
-                    </Action>
-                  </Magnetic>
-                  <p className="max-w-[30ch] text-[0.8rem] leading-relaxed text-mute">
-                    {contact.formNote}
-                  </p>
+                <div className="mt-6">
+                  <Action variant="solid" type="submit">
+                    Send it
+                  </Action>
                 </div>
               </form>
             )}

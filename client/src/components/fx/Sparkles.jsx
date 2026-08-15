@@ -4,7 +4,7 @@ import { memo, useId, useMemo } from "react";
  * Ambient sparkle field.
  *
  * Four-point stars scattered over a section, each opening and closing on its
- * own cycle. Pure CSS animation on a handful of tiny SVGs — no canvas, no
+ * own cycle. Pure CSS animation on a handful of tiny SVGs: no canvas, no
  * per-frame JavaScript, so it costs nothing on the main thread and can sit
  * behind content for the whole page.
  *

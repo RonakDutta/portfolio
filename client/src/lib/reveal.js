@@ -3,8 +3,8 @@
  *
  * The previous approach hid every section's content with `gsap.from({opacity:0})`
  * and relied on a ScrollTrigger firing to bring it back. When a trigger did not
- * fire — stale positions after the curtain changed the document height, a
- * scroll the smooth-scroller did not emit for — the content stayed at opacity 0
+ * fire, whether from stale positions after the curtain changed the document height, or a
+ * scroll the smooth-scroller did not emit for, the content stayed at opacity 0
  * permanently. Several sections shipped invisible.
  *
  * This inverts the failure mode. Content is visible in CSS by default. The
