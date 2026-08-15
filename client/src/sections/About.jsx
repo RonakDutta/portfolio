@@ -7,12 +7,6 @@ import { about } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Editorial spread. The statement runs the full measure in display serif with
- * its closing clause struck in foil; the biography and the metadata sit below
- * across two unequal columns. No portrait here — the hero carries it, and a
- * second one would halve the first's impact.
- */
 function About({ env }) {
   const section = useRef(null);
 
@@ -23,8 +17,7 @@ function About({ env }) {
       gsap
         .timeline({ scrollTrigger: { trigger: section.current, start: "top 72%" } })
         .from(".ab-rise", { y: 26, opacity: 0, duration: 1.1, stagger: 0.08, ease: "expo.out" })
-        .from(".ab-mask > *", { yPercent: 106, duration: 1.5, stagger: 0.09, ease: "expo.out" }, 0.1)
-        .from(".ab-rule", { scaleX: 0, duration: 1.3, ease: "expo.out" }, 0.55);
+        .from(".ab-rule", { scaleX: 0, duration: 1.3, ease: "expo.out" }, 0.35);
 
       gsap.from(".ab-fact", {
         y: 18,
@@ -52,33 +45,35 @@ function About({ env }) {
       />
 
       <div className="relative mx-auto w-full max-w-[108rem] px-6 sm:px-10">
-        <SectionTitle index={about.index} label={about.label} itemClass="ab-rise" />
-
-        <h2
+        <SectionTitle
           id="about-title"
-          className="ab-mask mt-12 max-w-5xl font-display text-[clamp(2rem,5.2vw,4.4rem)] leading-[1.1] font-light sm:mt-16"
-        >
-          <span className="block overflow-hidden pb-[0.06em]">
-            <span className="text-ivory-lit block">{about.statement}</span>
-          </span>
-        </h2>
+          index={about.index}
+          label={about.label}
+          title={about.title}
+          itemClass="ab-rise"
+        />
 
-        <div aria-hidden="true" className="ab-rule mt-16 h-px w-full origin-left bg-line sm:mt-20" />
+        <div aria-hidden="true" className="ab-rule mt-10 h-px w-full origin-left rule-gold sm:mt-14" />
 
-        <div className="mt-14 grid gap-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-24">
-          <div className="space-y-6">
-            {about.body.map((para) => (
-              <p key={para.slice(0, 24)} className="ab-rise max-w-prose">
+        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-20">
+          <div className="space-y-6 text-[1.05rem] leading-relaxed text-sand/90 font-normal">
+            {about.body.map((para, i) => (
+              <p key={i} className="ab-rise max-w-prose">
                 {para}
               </p>
             ))}
           </div>
 
-          <dl className="ab-facts space-y-8">
+          <dl className="ab-facts grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-1">
             {about.facts.map((fact) => (
-              <div key={fact.term} className="ab-fact border-t border-line pt-5">
-                <dt className="eyebrow-sm text-champagne">{fact.term}</dt>
-                <dd className="mt-3 font-display text-[1.35rem] leading-snug font-light text-ivory sm:text-[1.5rem]">
+              <div
+                key={fact.term}
+                className="ab-fact group relative rounded-xl border border-gold-dark/25 bg-carbon/60 p-6 backdrop-blur-md transition-all duration-500 hover:border-gold-metal/50 hover:bg-carbon/90"
+              >
+                <dt className="eyebrow-sm text-gold-metal/90 font-medium tracking-[0.24em]">
+                  {fact.term}
+                </dt>
+                <dd className="mt-2 text-[1.15rem] leading-snug font-medium text-ivory">
                   {fact.value}
                 </dd>
               </div>

@@ -2,22 +2,10 @@ import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ProjectPlate from "./ProjectPlate";
-import GoldLink from "../ui/GoldLink";
+import LuxuryButton from "../ui/LuxuryButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * A project presented as a product launch.
- *
- * Three compositions, chosen by position rather than configured per project:
- *   featured — full-measure plate under a large masthead, copy in two columns
- *   even     — plate right, copy left
- *   odd      — plate left, copy right
- *
- * Below `lg` all three collapse to plate-then-copy, so the capture keeps the
- * full content width on a phone. Source order is always plate first; only the
- * desktop column order flips, so reading order stays correct.
- */
 function ProjectShowcase({ project, index, env }) {
   const root = useRef(null);
 
@@ -45,8 +33,6 @@ function ProjectShowcase({ project, index, env }) {
     const ctx = gsap.context(() => {
       gsap
         .timeline({ scrollTrigger: { trigger: root.current, start: "top 78%" } })
-        // The plate wipes up rather than sliding: heavier, and the reserved
-        // box never moves.
         .fromTo(
           ".plate-wipe",
           { clipPath: "inset(0% 0% 100% 0%)" },
@@ -75,25 +61,29 @@ function ProjectShowcase({ project, index, env }) {
 
   const masthead = (
     <div>
-      <p className="show-line flex items-center gap-4 eyebrow-sm text-champagne">
-        <span className="text-gold-dark">{number}</span>
+      <div className="show-line flex items-center gap-3.5">
+        <span className="font-mono text-xs font-semibold text-gold-metal">
+          #{number}
+        </span>
         <span
           aria-hidden="true"
-          className="h-px w-10"
+          className="h-px w-8"
           style={{
             background:
-              "linear-gradient(90deg, rgba(212,175,55,0.9), rgba(140,101,8,0))",
+              "linear-gradient(90deg, rgba(229,190,72,0.9), rgba(179,134,40,0))",
           }}
         />
-        <span className="text-sand">{category}</span>
-      </p>
+        <span className="inline-flex items-center rounded-full border border-gold-dark/35 bg-coal/70 px-3 py-0.5 text-[0.68rem] font-medium tracking-[0.2em] text-champagne uppercase">
+          {category}
+        </span>
+      </div>
 
       <h3
         id={headingId}
-        className={`show-line mt-5 font-display font-light ${
+        className={`show-line mt-4 font-display font-semibold tracking-[0.03em] uppercase ${
           featured
-            ? "text-[clamp(2.6rem,7vw,6rem)] leading-[0.94]"
-            : "text-[clamp(2.1rem,4.4vw,3.6rem)] leading-[1]"
+            ? "text-[clamp(2.2rem,5.5vw,4.5rem)] leading-[0.98]"
+            : "text-[clamp(1.9rem,4vw,3.2rem)] leading-[1.02]"
         }`}
       >
         <span className={featured ? "text-foil animate-foil" : "text-ivory-lit"}>
@@ -105,21 +95,21 @@ function ProjectShowcase({ project, index, env }) {
 
   const body = (
     <div>
-      <p className="show-line max-w-prose text-pearl/80">{description}</p>
+      <p className="show-line max-w-prose text-[1.02rem] leading-relaxed text-sand/90">
+        {description}
+      </p>
 
       {stack?.length ? (
-        <p className="show-line mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 eyebrow-sm text-sand">
-          {stack.map((tech, i) => (
-            <span key={tech} className="flex items-center gap-3">
-              {i > 0 ? (
-                <span aria-hidden="true" className="text-gold-dark">
-                  ·
-                </span>
-              ) : null}
+        <div className="show-line mt-6 flex flex-wrap items-center gap-2">
+          {stack.map((tech) => (
+            <span
+              key={tech}
+              className="inline-flex items-center rounded-md border border-gold-dark/25 bg-carbon/80 px-3 py-1 text-xs font-medium text-pearl/90 transition-colors hover:border-gold-metal/50 hover:text-gold-white"
+            >
               {tech}
             </span>
           ))}
-        </p>
+        </div>
       ) : null}
     </div>
   );
@@ -127,32 +117,47 @@ function ProjectShowcase({ project, index, env }) {
   const detail = (
     <div>
       {highlights?.length ? (
-        <>
-          <h4 className="show-line eyebrow-sm text-mute">Engineering</h4>
-          <ul className="show-line mt-6 space-y-5">
+        <div className="show-line rounded-xl border border-gold-dark/20 bg-carbon/50 p-6 backdrop-blur-sm">
+          <h4 className="eyebrow-sm flex items-center gap-2.5 text-gold-metal">
+            <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal" />
+            Key Highlights
+          </h4>
+          <ul className="mt-4 space-y-3.5">
             {highlights.map((line) => (
               <li
                 key={line}
-                className="border-t border-line pt-5 text-[0.95rem] leading-relaxed"
+                className="flex items-start gap-3 text-[0.92rem] leading-relaxed text-sand/85"
               >
-                {line}
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold-metal/70" />
+                <span>{line}</span>
               </li>
             ))}
           </ul>
-        </>
+        </div>
       ) : null}
 
       {liveUrl || githubUrl ? (
-        <div className="show-line mt-10 flex flex-wrap gap-x-10 gap-y-4">
+        <div className="show-line mt-8 flex flex-wrap items-center gap-4">
           {liveUrl ? (
-            <GoldLink href={liveUrl} context={name}>
-              View Project
-            </GoldLink>
+            <LuxuryButton
+              variant="gold"
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              magnetic={env.pointerFx}
+            >
+              Live Demo ↗
+            </LuxuryButton>
           ) : null}
           {githubUrl ? (
-            <GoldLink href={githubUrl} context={name}>
-              GitHub
-            </GoldLink>
+            <LuxuryButton
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              magnetic={env.pointerFx}
+            >
+              GitHub ↗
+            </LuxuryButton>
           ) : null}
         </div>
       ) : null}
@@ -161,10 +166,14 @@ function ProjectShowcase({ project, index, env }) {
 
   if (variant === "featured") {
     return (
-      <article ref={root} aria-labelledby={headingId} className="relative">
-        <div className="mb-12 sm:mb-16">{masthead}</div>
+      <article
+        ref={root}
+        aria-labelledby={headingId}
+        className="relative rounded-2xl border border-gold-dark/25 bg-carbon/30 p-6 sm:p-10 backdrop-blur-sm transition-all duration-700 hover:border-gold-metal/40"
+      >
+        <div className="mb-8 sm:mb-12">{masthead}</div>
         {plate}
-        <div className="mt-14 grid gap-12 sm:mt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-24">
+        <div className="mt-12 grid gap-10 sm:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
           {body}
           {detail}
         </div>
@@ -173,16 +182,20 @@ function ProjectShowcase({ project, index, env }) {
   }
 
   return (
-    <article ref={root} aria-labelledby={headingId} className="relative">
+    <article
+      ref={root}
+      aria-labelledby={headingId}
+      className="relative rounded-2xl border border-gold-dark/20 bg-carbon/25 p-6 sm:p-10 backdrop-blur-sm transition-all duration-700 hover:border-gold-metal/40"
+    >
       <div
-        className={`grid gap-12 lg:items-center lg:gap-20 ${
+        className={`grid gap-10 lg:items-center lg:gap-16 ${
           variant === "left"
-            ? "lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]"
-            : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)]"
+            ? "lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]"
+            : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]"
         }`}
       >
         <div className={variant === "right" ? "lg:order-2" : ""}>{plate}</div>
-        <div className={`space-y-10 ${variant === "right" ? "lg:order-1" : ""}`}>
+        <div className={`space-y-8 ${variant === "right" ? "lg:order-1" : ""}`}>
           {masthead}
           {body}
           {detail}

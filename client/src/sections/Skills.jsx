@@ -6,11 +6,6 @@ import { skills } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * A technical index, set like the specification page of a catalogue: numbered
- * groups, a gold filament that draws itself across each row, entries as plain
- * display type. Nothing is boxed, nothing is a pill, nothing claims a level.
- */
 function Skills({ env }) {
   const section = useRef(null);
 
@@ -27,20 +22,13 @@ function Skills({ env }) {
         scrollTrigger: { trigger: section.current, start: "top 76%" },
       });
 
-      gsap.utils.toArray(".sk-row").forEach((row) => {
-        gsap
-          .timeline({ scrollTrigger: { trigger: row, start: "top 90%" } })
-          .from(row.querySelector(".sk-rule"), {
-            scaleX: 0,
-            transformOrigin: "0% 50%",
-            duration: 1.2,
-            ease: "expo.out",
-          })
-          .from(
-            row.querySelectorAll(".sk-item"),
-            { y: 16, opacity: 0, duration: 0.75, stagger: 0.05, ease: "power3.out" },
-            0.15,
-          );
+      gsap.from(".sk-card", {
+        y: 24,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ".sk-grid", start: "top 85%" },
       });
     }, section);
 
@@ -64,43 +52,54 @@ function Skills({ env }) {
           itemClass="sk-rise"
         />
 
-        <dl className="mt-20 sm:mt-28">
+        <div className="sk-grid mt-16 grid gap-6 sm:mt-24 sm:grid-cols-2 lg:grid-cols-3">
           {skills.groups.map((group, i) => (
-            <div key={group.name} className="sk-row relative pt-8 pb-10 sm:pt-10 sm:pb-12">
-              <span
+            <div
+              key={group.name}
+              className="sk-card group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-gold-dark/25 bg-carbon/60 p-7 sm:p-8 backdrop-blur-md transition-all duration-500 hover:border-gold-metal/50 hover:bg-carbon/90 hover:shadow-[0_0_30px_rgba(212,175,55,0.12)]"
+            >
+              {/* Gold Top Light Filament */}
+              <div
                 aria-hidden="true"
-                className="sk-rule absolute inset-x-0 top-0 h-px"
+                className="absolute inset-x-0 top-0 h-px transition-opacity duration-500 opacity-60 group-hover:opacity-100"
                 style={{
                   background:
-                    "linear-gradient(90deg, rgba(212,175,55,0.55), rgba(43,38,32,1) 34%, rgba(43,38,32,1))",
+                    "linear-gradient(90deg, transparent, rgba(229,190,72,0.8) 50%, transparent)",
                 }}
               />
 
-              <div className="grid gap-6 sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] sm:gap-14">
-                <dt className="flex items-baseline gap-5">
-                  <span aria-hidden="true" className="eyebrow-sm text-gold-dark">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="eyebrow text-champagne">{group.name}</span>
-                </dt>
+              {/* Card Corner Trim */}
+              <div className="absolute top-0 right-0 h-5 w-5 overflow-hidden">
+                <div className="h-full w-full origin-bottom-left rotate-45 bg-gold-dark/20 transition-colors group-hover:bg-gold-metal/60" />
+              </div>
 
-                <dd>
-                  <ul className="flex flex-wrap gap-x-10 gap-y-3">
-                    {group.items.map((item) => (
-                      <li
-                        key={item}
-                        className="sk-item font-display text-[1.4rem] leading-tight font-light text-pearl sm:text-[1.7rem]"
-                      >
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-semibold text-gold-metal">
+                    0{i + 1}
+                  </span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold-dark/40 group-hover:bg-gold-metal" />
+                </div>
+
+                <h3 className="mt-4 font-display text-xl font-semibold uppercase tracking-[0.05em] text-ivory transition-colors group-hover:text-gold-white">
+                  {group.name}
+                </h3>
+
+                <div className="mt-6 flex flex-wrap gap-2.5">
+                  {group.items.map((item) => (
+                    <span
+                      key={item}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-gold-dark/20 bg-coal/70 px-3.5 py-1.5 text-xs font-medium text-sand/90 transition-all duration-300 group-hover:border-gold-dark/40 hover:!border-gold-metal hover:!text-gold-white hover:!bg-coal"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-gold-metal/60" />
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
-          <div aria-hidden="true" className="h-px w-full bg-line" />
-        </dl>
+        </div>
       </div>
     </section>
   );

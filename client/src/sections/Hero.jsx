@@ -7,15 +7,6 @@ import { scrollToSection } from "../lib/useSmoothScroll";
 import { onCrossed } from "../lib/threshold";
 import { identity, hero } from "../data/content";
 
-/**
- * The campaign cover.
- *
- * Role leads, statement follows, the name appears once as metadata. On `lg`
- * the type block and the portrait share grid cells so the display line crosses
- * in front of the plate; below `lg` the plate goes full-bleed and the type is
- * pulled up over its lower edge, which is the same layered composition read
- * top to bottom rather than a stack of centred boxes.
- */
 function Hero({ env }) {
   const section = useRef(null);
 
@@ -83,46 +74,47 @@ function Hero({ env }) {
 
         {/* Type */}
         <div className="relative z-10 order-2 -mt-16 sm:-mt-24 lg:order-1 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:self-center">
-          <p className="hero-eyebrow flex items-center gap-5 eyebrow text-champagne">
+          <p className="hero-eyebrow flex items-center gap-4 eyebrow text-champagne">
             <span
               aria-hidden="true"
-              className="h-px w-12"
+              className="h-px w-10 sm:w-14"
               style={{
                 background:
-                  "linear-gradient(90deg, rgba(255,217,102,0.9), rgba(140,101,8,0))",
+                  "linear-gradient(90deg, rgba(229,190,72,0.95), rgba(179,134,40,0))",
               }}
             />
-            {hero.role}
+            <span>{identity.name}</span>
+            <span aria-hidden="true" className="text-gold-dark/60">·</span>
+            <span className="text-sand/80">{hero.location}</span>
           </p>
 
-          <h1 id="hero-title" className="mt-7">
+          <h1 id="hero-title" className="mt-6">
             <span className="sr-only">
-              {identity.name} — {hero.role}. {hero.lead} {hero.accent}{" "}
-              {identity.region}.
+              {identity.name} — {hero.role}, {hero.location}.
             </span>
 
-            <span aria-hidden="true" className="hero-mask block overflow-hidden pb-[0.1em]">
-              <span className="text-ivory-lit block font-display text-[clamp(3.2rem,12.5vw,9.5rem)] leading-[0.92] font-light">
-                {hero.lead}
+            <span aria-hidden="true" className="hero-mask block overflow-hidden pb-[0.06em]">
+              <span className="text-ivory-lit block font-display text-[clamp(2.8rem,9.5vw,7.8rem)] leading-[0.92] font-semibold tracking-[0.03em] uppercase">
+                Software
               </span>
             </span>
-            <span aria-hidden="true" className="hero-mask block overflow-hidden pb-[0.08em]">
-              <span className="text-foil animate-foil block font-display text-[clamp(3.2rem,12.5vw,9.5rem)] leading-[0.92] font-light italic">
-                {hero.accent}
+            <span aria-hidden="true" className="hero-mask block overflow-hidden pb-[0.06em]">
+              <span className="text-foil animate-foil block font-display text-[clamp(2.8rem,9.5vw,7.8rem)] leading-[0.92] font-semibold tracking-[0.03em] uppercase">
+                Engineer
               </span>
             </span>
           </h1>
 
           <div
             aria-hidden="true"
-            className="hero-rule rule-gold mt-9 h-px w-full max-w-md origin-left lg:mt-11"
+            className="hero-rule rule-gold mt-7 h-px w-full max-w-sm origin-left lg:mt-9"
           />
 
-          <p className="hero-fade mt-8 max-w-lg text-pearl/85">
-            {hero.statement}
+          <p className="hero-fade mt-6 text-[1.1rem] leading-relaxed text-sand/80 font-light max-w-md">
+            {hero.tagline}
           </p>
 
-          <div className="hero-fade mt-10 flex flex-col items-stretch gap-3.5 sm:flex-row sm:items-center sm:gap-5">
+          <div className="hero-fade mt-9 flex flex-col items-stretch gap-3.5 sm:flex-row sm:items-center sm:gap-5">
             <LuxuryButton
               variant="gold"
               magnetic={env.pointerFx}
@@ -142,12 +134,12 @@ function Hero({ env }) {
         </div>
       </div>
 
-      {/* Footer rail: the name as metadata, location, and the scroll cue. */}
-      <div className="hero-fade mx-auto mt-10 flex w-full max-w-[108rem] flex-wrap items-end justify-between gap-5 px-6 sm:px-10 lg:mt-8">
+      {/* Footer rail */}
+      <div className="hero-fade mx-auto mt-12 flex w-full max-w-[108rem] flex-wrap items-end justify-between gap-5 px-6 sm:px-10 lg:mt-10">
         <p className="eyebrow-sm flex flex-wrap items-center gap-x-4 gap-y-1 text-mute">
-          <span className="text-sand">{identity.name}</span>
+          <span className="font-semibold text-ivory">{identity.name}</span>
           <span aria-hidden="true" className="h-3 w-px bg-line" />
-          <span>{identity.region}</span>
+          <span>{hero.location}</span>
         </p>
 
         <a

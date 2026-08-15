@@ -13,14 +13,14 @@ function NavLink({ section, active, onSelect, compact = false }) {
         type="button"
         onClick={() => onSelect(section.id)}
         aria-current={active ? "true" : undefined}
-        className={`group relative flex min-h-11 items-center eyebrow-sm transition-colors
-          duration-500 ${compact ? "w-full justify-start gap-5 py-1 text-[0.74rem]" : "px-4"}
-          ${active ? "text-ivory" : "text-sand hover:text-ivory"}`}
+        className={`group relative flex min-h-11 items-center eyebrow-sm transition-all
+          duration-300 ${compact ? "w-full justify-start gap-5 py-2 text-[0.78rem]" : "px-4"}
+          ${active ? "text-ivory font-semibold" : "text-sand/80 hover:text-ivory"}`}
       >
         {compact ? (
           <span
             aria-hidden="true"
-            className={`text-[0.6rem] ${active ? "text-gold-metal" : "text-mute"}`}
+            className={`text-[0.62rem] font-mono ${active ? "text-gold-metal" : "text-mute"}`}
           >
             {section.num}
           </span>
@@ -28,19 +28,21 @@ function NavLink({ section, active, onSelect, compact = false }) {
 
         <span>{section.label}</span>
 
-        {/* Active indicator: a lit filament, not an underline. */}
+        {/* Active indicator: a lit 24k gold filament */}
         <span
           aria-hidden="true"
-          className={`absolute transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]
+          className={`absolute transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
             ${
               compact
-                ? "top-1/2 -left-5 h-px w-3 origin-left"
-                : "inset-x-4 -bottom-2 h-px origin-center"
-            } ${active ? "scale-100" : "scale-0"}`}
+                ? "top-1/2 -left-4 h-1.5 w-1.5 -translate-y-1/2 rotate-45"
+                : "inset-x-3 -bottom-1 h-0.5 origin-center"
+            } ${active ? "scale-100 opacity-100" : "scale-0 opacity-0"}`}
           style={{
             background:
-              "linear-gradient(90deg, rgba(140,101,8,0), #ffd966 50%, rgba(140,101,8,0))",
-            boxShadow: active ? "0 0 8px rgba(212,175,55,0.7)" : undefined,
+              compact
+                ? "#e5be48"
+                : "linear-gradient(90deg, transparent, #ffd966 50%, transparent)",
+            boxShadow: active ? "0 0 10px rgba(229,190,72,0.8)" : undefined,
           }}
         />
       </button>
@@ -95,11 +97,11 @@ function LuxuryNav() {
             onClick={() => select(SECTIONS[0].id)}
             className="group -ml-1 flex min-h-11 items-center px-1"
           >
-            <Monogram className="h-9 w-9 transition-[filter] duration-700 group-hover:drop-shadow-[0_0_10px_rgba(212,175,55,0.55)] sm:h-10 sm:w-10" />
+            <Monogram className="h-9 w-9 transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(212,175,55,0.7)] group-hover:scale-105 sm:h-10 sm:w-10" />
             <span className="sr-only">{identity.name} — back to the top</span>
           </button>
 
-          <ul className="hidden items-center lg:flex">
+          <ul className="hidden items-center gap-1 lg:flex">
             {LINKS.map((section, i) => (
               <NavLink
                 key={section.id}
@@ -115,11 +117,11 @@ function LuxuryNav() {
               href={identity.resume}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden min-h-11 items-center border border-gold-dark/60 px-5 eyebrow-sm
-                text-champagne transition-colors duration-500
-                hover:border-gold-metal hover:text-gold-white sm:inline-flex"
+              className="hidden min-h-10 items-center rounded-lg border border-gold-dark/60 bg-coal/50 px-5 eyebrow-sm
+                text-champagne transition-all duration-300
+                hover:border-gold-metal hover:bg-gold-metal hover:text-void hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] sm:inline-flex"
             >
-              Résumé
+              Résumé ↗
             </a>
 
             <button
@@ -149,7 +151,7 @@ function LuxuryNav() {
           className={`absolute inset-x-0 bottom-0 h-px transition-opacity duration-700 ${solid ? "opacity-100" : "opacity-0"}`}
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(140,101,8,0.55) 22%, rgba(240,213,138,0.4) 50%, rgba(140,101,8,0.55) 78%, transparent)",
+              "linear-gradient(90deg, transparent, rgba(212,175,55,0.6) 25%, rgba(255,248,220,0.5) 50%, rgba(212,175,55,0.6) 75%, transparent)",
           }}
         />
 
@@ -170,7 +172,7 @@ function LuxuryNav() {
                 compact
               />
             ))}
-            <li className="mt-4 border-t border-line pt-4">
+            <li className="mt-4 border-t border-gold-dark/20 pt-4">
               <a
                 href={identity.resume}
                 target="_blank"
@@ -178,10 +180,10 @@ function LuxuryNav() {
                 className="flex min-h-11 items-center gap-5 eyebrow-sm text-champagne
                   transition-colors duration-500 hover:text-gold-white"
               >
-                <span aria-hidden="true" className="text-[0.6rem] text-mute">
+                <span aria-hidden="true" className="text-[0.6rem] font-mono text-mute">
                   06
                 </span>
-                Résumé
+                Résumé ↗
               </a>
             </li>
           </ul>

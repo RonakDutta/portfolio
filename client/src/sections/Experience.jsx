@@ -6,39 +6,45 @@ import { experience } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Annual-report chronology. The year is set oversized in the left margin and
- * carries the eye down the page; a single lit point marks each entry. No
- * connector spine, no dots-and-line timeline furniture.
- */
 function Entry({ year, period, title, org, detail, as: Heading = "h4" }) {
   return (
-    <li className="xp-entry relative grid gap-4 border-t border-line py-10 sm:grid-cols-[minmax(0,11rem)_minmax(0,1fr)] sm:gap-14 sm:py-14">
+    <li className="xp-entry group relative rounded-2xl border border-gold-dark/20 bg-carbon/50 p-6 sm:p-8 backdrop-blur-sm transition-all duration-500 hover:border-gold-metal/50 hover:bg-carbon/80">
+      {/* Lit top edge */}
       <span
         aria-hidden="true"
-        className="absolute top-0 left-0 h-px w-16"
+        className="absolute inset-x-8 top-0 h-px transition-opacity duration-500 opacity-50 group-hover:opacity-100"
         style={{
-          background: "linear-gradient(90deg, #ffd966, rgba(140,101,8,0))",
+          background:
+            "linear-gradient(90deg, transparent, rgba(229,190,72,0.7) 50%, transparent)",
         }}
       />
 
-      <p
-        aria-hidden="true"
-        className="font-display text-[clamp(2.6rem,6.5vw,4.5rem)] leading-[0.9] font-light text-slate"
-      >
-        {year}
-      </p>
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,10rem)_minmax(0,1fr)] sm:gap-10 sm:items-start">
+        <div className="flex flex-col">
+          <span className="font-display text-[clamp(2.5rem,5vw,3.8rem)] font-bold leading-none tracking-tight text-transparent [-webkit-text-stroke:1.2px_rgba(212,175,55,0.4)] group-hover:[-webkit-text-stroke:1.2px_rgba(255,217,102,0.9)] transition-all">
+            {year}
+          </span>
+          <span className="mt-2 font-mono text-[0.68rem] tracking-[0.2em] uppercase text-champagne/90">
+            {period}
+          </span>
+        </div>
 
-      <div>
-        <p className="eyebrow-sm text-champagne">{period}</p>
+        <div>
+          <Heading className="font-display text-[clamp(1.4rem,2.8vw,2rem)] leading-snug font-semibold text-ivory group-hover:text-gold-white transition-colors">
+            {title}
+          </Heading>
 
-        <Heading className="mt-4 font-display text-[clamp(1.6rem,3.2vw,2.4rem)] leading-tight font-light text-ivory">
-          {title}
-        </Heading>
+          <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-gold-metal/90">
+            <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal" />
+            {org}
+          </p>
 
-        <p className="mt-2 text-pearl/75">{org}</p>
-
-        {detail ? <p className="mt-5 max-w-prose text-[0.95rem]">{detail}</p> : null}
+          {detail ? (
+            <p className="mt-4 max-w-prose text-[0.98rem] leading-relaxed text-sand/85">
+              {detail}
+            </p>
+          ) : null}
+        </div>
       </div>
     </li>
   );
@@ -91,29 +97,26 @@ function Experience({ env }) {
           itemClass="xp-rise"
         />
 
-        <ol className="mt-20 sm:mt-28">
-          {experience.roles.map((role) => (
-            <Entry key={role.title} {...role} as="h3" />
-          ))}
-        </ol>
+        <div className="mt-16 sm:mt-24">
+          <ol className="space-y-6">
+            {experience.roles.map((role) => (
+              <Entry key={role.title} {...role} as="h3" />
+            ))}
+          </ol>
+        </div>
 
-        <h3 className="xp-rise mt-20 flex items-center gap-5 eyebrow text-gold-bright sm:mt-24">
-          <span
-            aria-hidden="true"
-            className="h-px w-16"
-            style={{
-              background: "linear-gradient(90deg, rgba(255,217,102,0.95), rgba(140,101,8,0))",
-            }}
-          />
-          {experience.educationTitle}
-        </h3>
+        <div className="mt-20 sm:mt-28">
+          <p className="xp-rise mb-6 flex items-center gap-3 eyebrow-sm text-gold-bright">
+            <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal" />
+            {experience.educationTitle}
+          </p>
 
-        <ol className="mt-10">
-          {experience.education.map((item) => (
-            <Entry key={item.title} {...item} />
-          ))}
-          <li aria-hidden="true" className="h-px w-full bg-line" />
-        </ol>
+          <ol className="space-y-6">
+            {experience.education.map((item) => (
+              <Entry key={item.title} {...item} />
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );

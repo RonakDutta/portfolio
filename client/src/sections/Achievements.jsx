@@ -6,11 +6,6 @@ import { achievements } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Three ruled columns. Deliberately the quietest section on the page: gold is
- * limited to the issuing organisation, so this supports Work and Experience
- * rather than competing with them.
- */
 function Achievements({ env }) {
   const section = useRef(null);
 
@@ -27,13 +22,13 @@ function Achievements({ env }) {
         scrollTrigger: { trigger: section.current, start: "top 80%" },
       });
 
-      gsap.from(".ac-item", {
-        y: 20,
+      gsap.from(".ac-card", {
+        y: 22,
         opacity: 0,
         duration: 0.9,
         stagger: 0.1,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".ac-list", start: "top 88%" },
+        scrollTrigger: { trigger: ".ac-grid", start: "top 88%" },
       });
     }, section);
 
@@ -57,24 +52,45 @@ function Achievements({ env }) {
           itemClass="ac-rise"
         />
 
-        <ul className="ac-list mt-16 grid gap-x-14 gap-y-12 sm:mt-20 lg:grid-cols-3">
-          {achievements.items.map((item) => (
-            <li key={item.name} className="ac-item relative border-t border-line pt-6">
-              <span
+        <div className="ac-grid mt-16 grid gap-6 sm:mt-24 lg:grid-cols-3">
+          {achievements.items.map((item, i) => (
+            <div
+              key={item.name}
+              className="ac-card group relative flex flex-col justify-between rounded-2xl border border-gold-dark/25 bg-carbon/60 p-7 sm:p-8 backdrop-blur-md transition-all duration-500 hover:border-gold-metal/50 hover:bg-carbon/90 hover:shadow-[0_0_28px_rgba(212,175,55,0.14)]"
+            >
+              {/* Gold Top Light Filament */}
+              <div
                 aria-hidden="true"
-                className="absolute top-0 left-0 h-px w-10"
+                className="absolute inset-x-0 top-0 h-px transition-opacity duration-500 opacity-60 group-hover:opacity-100"
                 style={{
-                  background: "linear-gradient(90deg, #d4af37, rgba(140,101,8,0))",
+                  background:
+                    "linear-gradient(90deg, transparent, rgba(229,190,72,0.85) 50%, transparent)",
                 }}
               />
-              <p className="eyebrow-sm text-gold-dark">{item.org}</p>
-              <h3 className="mt-4 font-display text-[1.6rem] leading-tight font-light text-ivory">
-                {item.name}
-              </h3>
-              <p className="mt-3 text-[0.95rem] leading-relaxed">{item.note}</p>
-            </li>
+
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-gold-dark/30 bg-coal/80 px-3 py-1 text-[0.68rem] font-medium tracking-[0.2em] uppercase text-champagne">
+                    <span className="h-1 w-1 rounded-full bg-gold-metal" />
+                    {item.org}
+                  </span>
+
+                  <span className="font-mono text-xs font-semibold text-gold-dark/70 group-hover:text-gold-metal">
+                    0{i + 1}
+                  </span>
+                </div>
+
+                <h3 className="mt-6 font-display text-[1.4rem] font-semibold leading-snug text-ivory group-hover:text-gold-white transition-colors">
+                  {item.name}
+                </h3>
+
+                <p className="mt-3.5 text-[0.94rem] leading-relaxed text-sand/85">
+                  {item.note}
+                </p>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );

@@ -33,7 +33,7 @@ function Atmosphere({ env }) {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(115% 78% at 24% 10%, #0f0f0f 0%, #070707 42%, #010101 76%)",
+            "radial-gradient(115% 78% at 24% 10%, #12131b 0%, #08080c 42%, #030304 76%)",
         }}
       />
 
@@ -43,7 +43,7 @@ function Atmosphere({ env }) {
         }`}
         style={{
           background:
-            "radial-gradient(closest-side, rgba(212,175,55,0.12) 0%, rgba(111,71,0,0.05) 44%, transparent 74%)",
+            "radial-gradient(closest-side, rgba(229,190,72,0.14) 0%, rgba(132,90,20,0.06) 44%, transparent 74%)",
         }}
       />
 
@@ -61,7 +61,7 @@ function Atmosphere({ env }) {
         className="absolute inset-x-0 bottom-0 h-[55vh] blur-[70px]"
         style={{
           background:
-            "radial-gradient(70% 100% at 50% 120%, rgba(198,161,91,0.1) 0%, rgba(111,71,0,0.04) 44%, transparent 76%)",
+            "radial-gradient(70% 100% at 50% 120%, rgba(212,175,55,0.12) 0%, rgba(132,90,20,0.04) 44%, transparent 76%)",
         }}
       />
 
@@ -69,7 +69,7 @@ function Atmosphere({ env }) {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(128% 92% at 50% 40%, transparent 28%, rgba(1,1,1,0.86) 100%)",
+            "radial-gradient(128% 92% at 50% 40%, transparent 28%, rgba(3,3,4,0.88) 100%)",
         }}
       />
 

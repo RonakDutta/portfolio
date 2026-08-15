@@ -45,22 +45,25 @@ function Work({ env }) {
           itemClass="wk-rise"
         />
 
-        <div className="mt-20 sm:mt-28">
-          <p className="wk-rise mb-12 flex items-center gap-5 eyebrow-sm text-gold-bright sm:mb-16">
+        <div className="mt-16 sm:mt-24">
+          <div className="wk-rise mb-10 flex items-center gap-3">
+            <span className="h-2 w-2 rotate-45 bg-gold-metal" />
+            <span className="eyebrow-sm text-gold-bright tracking-[0.24em]">
+              {work.featuredLabel}
+            </span>
             <span
               aria-hidden="true"
-              className="h-px w-16"
+              className="h-px flex-1 max-w-xs"
               style={{
                 background:
-                  "linear-gradient(90deg, rgba(255,217,102,0.95), rgba(140,101,8,0))",
+                  "linear-gradient(90deg, rgba(255,217,102,0.9), rgba(179,134,40,0))",
               }}
             />
-            {work.featuredLabel}
-          </p>
+          </div>
           <ProjectShowcase project={featured} index={0} env={env} />
         </div>
 
-        <div className="mt-32 space-y-32 sm:mt-44 sm:space-y-44">
+        <div className="mt-20 space-y-20 sm:mt-28 sm:space-y-28">
           {rest.map((project, i) => (
             <ProjectShowcase key={project.slug} project={project} index={i + 1} env={env} />
           ))}

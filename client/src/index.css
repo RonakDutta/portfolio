@@ -1,34 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  /* Black is the stage. Six steps because the depth comes from value, not hue. */
-  --color-void: #010101;
-  --color-black: #050505;
-  --color-carbon: #0a0a0a;
-  --color-coal: #101010;
-  --color-graphite: #171717;
-  --color-slate: #202020;
-  --color-line: #2b2620;
+  /* Deep Obsidian Velvet Stage. */
+  --color-void: #030304;
+  --color-black: #07070a;
+  --color-carbon: #0c0d12;
+  --color-coal: #12131b;
+  --color-graphite: #181a24;
+  --color-slate: #242738;
+  --color-line: rgba(212, 175, 55, 0.18);
 
-  --color-ivory: #fff9ec;
-  --color-pearl: #ede6d6;
-  --color-sand: #b5ac98;
-  --color-mute: #6e6659;
+  --color-ivory: #ffffff;
+  --color-pearl: #f3f4f8;
+  --color-sand: #c5c9d6;
+  --color-mute: #7c8296;
 
-  /* The full gold spectrum. Ramps run bronze -> gold -> champagne -> white-gold,
-     which is what makes it read as metal catching light rather than as a
-     flat colour. */
-  --color-bronze: #6f4700;
-  --color-gold-dark: #8c6508;
-  --color-gold: #c6a15b;
-  --color-gold-metal: #d4af37;
-  --color-champagne: #f0d58a;
+  /* The 24K Liquid Gold Spectrum */
+  --color-bronze: #845a14;
+  --color-gold-dark: #b38628;
+  --color-gold: #d4af37;
+  --color-gold-metal: #e5be48;
+  --color-champagne: #f3e5ab;
   --color-gold-bright: #ffd966;
-  --color-gold-white: #fff5c7;
+  --color-gold-white: #fff8dc;
 
-  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-display: "Cinzel", "Playfair Display", Georgia, serif;
+  --font-accent: "Playfair Display", Georgia, serif;
   --font-sans:
-    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-silk: cubic-bezier(0.65, 0, 0.35, 1);
@@ -48,12 +47,13 @@
     margin: 0;
     color: var(--color-sand);
     font-family: var(--font-sans);
-    font-weight: 300;
+    font-weight: 350;
     font-size: clamp(0.95rem, 0.91rem + 0.2vw, 1.05rem);
     line-height: 1.75;
     overflow-x: clip;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    background-color: var(--color-void);
   }
 
   h1,
@@ -62,8 +62,9 @@
   h4 {
     margin: 0;
     font-family: var(--font-display);
-    font-weight: 300;
-    line-height: 1;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
     color: var(--color-ivory);
     text-wrap: balance;
   }
@@ -90,20 +91,21 @@
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 7px;
   }
   ::-webkit-scrollbar-track {
     background: var(--color-void);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-slate);
+    background: rgba(212, 175, 55, 0.25);
+    border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-bronze);
+    background: var(--color-gold);
   }
   html {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-slate) var(--color-void);
+    scrollbar-color: rgba(212, 175, 55, 0.25) var(--color-void);
   }
 }
 
@@ -111,35 +113,38 @@
    Typography
 --------------------------------------------------------------------------- */
 
+@utility font-accent {
+  font-family: var(--font-accent);
+}
+
 @utility eyebrow {
   font-family: var(--font-sans);
-  font-size: 0.66rem;
-  font-weight: 500;
-  letter-spacing: 0.32em;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   line-height: 1.4;
 }
 
 @utility eyebrow-sm {
   font-family: var(--font-sans);
-  font-size: 0.6rem;
-  font-weight: 500;
+  font-size: 0.62rem;
+  font-weight: 600;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   line-height: 1.4;
 }
 
-/* Struck gold: the full ramp across the letterforms, angled so the highlight
-   falls across the middle the way light does on a polished bevel. */
+/* Radiant Liquid 24k Gold Text */
 @utility text-foil {
   background: linear-gradient(
-    100deg,
-    #8c6508 0%,
-    #d4af37 22%,
-    #fff5c7 42%,
-    #f0d58a 58%,
-    #c6a15b 78%,
-    #6f4700 100%
+    105deg,
+    #b38628 0%,
+    #e5be48 20%,
+    #fff8dc 42%,
+    #f3e5ab 58%,
+    #d4af37 78%,
+    #845a14 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
@@ -148,15 +153,14 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Warm white falling into shadow. The counterpart to text-foil — one line of
-   each is what gives the hero its two-tone composition. */
+/* Pure Titanium / Platinum Lit Text */
 @utility text-ivory-lit {
   background: linear-gradient(
-    170deg,
-    #fffdf7 0%,
-    #fff9ec 34%,
-    #cfc6b2 76%,
-    #7d7565 100%
+    175deg,
+    #ffffff 0%,
+    #f8f9fc 35%,
+    #d5d8e2 75%,
+    #8a90a2 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -165,7 +169,7 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Surfaces
+   Surfaces & Glassmorphism
 --------------------------------------------------------------------------- */
 
 @utility rule-gold {
@@ -173,7 +177,7 @@
     90deg,
     transparent,
     var(--color-gold-dark) 8%,
-    var(--color-champagne) 50%,
+    var(--color-gold-bright) 50%,
     var(--color-gold-dark) 92%,
     transparent
   );
@@ -181,20 +185,30 @@
 
 @utility edge-gold {
   box-shadow:
-    inset 0 0 0 1px rgba(198, 161, 91, 0.32),
-    inset 0 1px 0 rgba(255, 245, 199, 0.18);
+    inset 0 0 0 1px rgba(212, 175, 55, 0.28),
+    inset 0 1px 0 rgba(255, 248, 220, 0.25);
 }
 
-/* Black glass with a lit top edge — used for the nav bar and the project
-   plates, so both read as the same material. */
+@utility gold-glow-card {
+  box-shadow:
+    0 10px 30px -10px rgba(0, 0, 0, 0.7),
+    0 0 20px -2px rgba(212, 175, 55, 0.12);
+  &:hover {
+    box-shadow:
+      0 20px 40px -12px rgba(0, 0, 0, 0.85),
+      0 0 28px 2px rgba(212, 175, 55, 0.22);
+  }
+}
+
+/* Obsidian luxury glass with top-edge metallic bevel. */
 @utility glass-black {
   background: linear-gradient(
     180deg,
-    rgba(12, 12, 12, 0.93) 0%,
-    rgba(3, 3, 3, 0.97) 100%
+    rgba(15, 16, 22, 0.88) 0%,
+    rgba(7, 7, 10, 0.94) 100%
   );
-  backdrop-filter: blur(18px) saturate(1.1);
-  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
 @utility sr-focusable {
@@ -217,7 +231,7 @@
     position: absolute;
     left: 0;
     bottom: -0.3em;
-    height: 1px;
+    height: 1.5px;
     width: 100%;
     background: linear-gradient(
       90deg,
@@ -235,9 +249,7 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Atmosphere motion.
-   Everything here runs on transform/opacity only, so it stays on the
-   compositor and costs nothing on the main thread.
+   Atmosphere motion
 --------------------------------------------------------------------------- */
 
 @keyframes aurora-a {
@@ -276,8 +288,6 @@
   }
 }
 
-/* Ribbons sway rather than travel: a long, slow shear reads as silk moving,
-   where a translate reads as something sliding past. */
 @keyframes ribbon-sway {
   0%,
   100% {
@@ -290,7 +300,6 @@
   }
 }
 
-/* Light travelling along the foil. Paired with text-foil's 200% background. */
 @keyframes foil-sweep {
   0% {
     background-position: 160% 0;
@@ -303,10 +312,10 @@
 @keyframes glow-breathe {
   0%,
   100% {
-    opacity: 0.5;
+    opacity: 0.55;
   }
   50% {
-    opacity: 0.9;
+    opacity: 0.95;
   }
 }
 
@@ -326,6 +335,16 @@
   100% {
     transform: scaleY(0);
     transform-origin: 50% 100%;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 217, 102, 0.8);
   }
 }
 
@@ -349,6 +368,9 @@
 }
 .animate-cue-fall {
   animation: cue-fall 2.6s var(--ease-silk) infinite;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

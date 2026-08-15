@@ -1,9 +1,5 @@
 /**
- * Every word on the page. Sections are presentation only.
- *
- * Project screenshots: drop a file into `public/projects/` and point `image`
- * at it. The showcase reserves the space at the right ratio beforehand, so
- * adding the real asset shifts nothing.
+ * Portfolio content — concise, direct, human.
  */
 
 export const identity = {
@@ -16,24 +12,14 @@ export const identity = {
   region: "New Delhi, India",
   email: "ronakdutta100@gmail.com",
   github: "https://github.com/RonakDutta",
-
-  // No LinkedIn URL exists anywhere in this repository. Set it here and the
-  // row appears in the contact section automatically; guessing one would send
-  // people to the wrong person.
   linkedin: "",
-
   resume: "/resume.pdf",
 };
 
 export const hero = {
-  /* Role first, name second. The name lives in the RD monogram, the document
-     title, and one line of metadata under the composition. */
   role: "Software Engineer",
-  lead: "I build full-stack",
-  accent: "web products.",
-
-  statement:
-    "React interfaces over Node.js services and PostgreSQL, built end to end. Currently a software development intern at RARS Innoventa, finishing a B.Tech in Industrial IoT.",
+  location: "New Delhi, India",
+  tagline: "Building for the web.",
 
   primary: { label: "View Work", target: "work" },
   secondary: { label: "Résumé", href: "/resume.pdf" },
@@ -54,22 +40,18 @@ export const hero = {
 export const about = {
   index: "01",
   label: "About",
-
-  // The one large serif statement in this section. Kept factual on purpose:
-  // a slogan here would undo everything the rest of the page is doing.
-  statement:
-    "I like building the whole thing, front to back, and finding out what breaks.",
+  title: "About",
 
   body: [
-    "I build full-stack web applications. Right now I am a software development intern at RARS Innoventa, working on backend services and React interfaces for a B2B marketplace, covering product cataloguing, inventory control and order fulfillment.",
-    "Alongside that I am finishing a B.Tech in Industrial Internet of Things at University School of Automation and Robotics, GGSIPU. Most of what I know came from building projects end to end and then finding out what broke.",
+    "I am a software engineer based in New Delhi, currently working as a software development intern at RARS Innoventa. My work spans backend services and React interfaces, focusing on product cataloguing, inventory, and order fulfillment systems.",
+    "Alongside work, I am completing a B.Tech in Industrial Internet of Things at GGSIPU. I focus on building reliable full-stack web applications with clean architecture and solid fundamentals.",
   ],
 
   facts: [
     { term: "Location", value: "New Delhi, India" },
-    { term: "Currently", value: "Software Development Intern, RARS Innoventa" },
+    { term: "Current Role", value: "Software Development Intern, RARS Innoventa" },
     { term: "Education", value: "B.Tech Industrial IoT, GGSIPU" },
-    { term: "Focus", value: "Full-stack development, web applications" },
+    { term: "Focus", value: "Full-Stack Development" },
   ],
 };
 
@@ -78,7 +60,7 @@ export const work = {
   label: "Work",
   title: "Selected",
   accent: "Work",
-  featuredLabel: "Featured Work",
+  featuredLabel: "Featured Project",
 
   projects: [
     {
@@ -88,18 +70,17 @@ export const work = {
       featured: true,
 
       image: "/projects/ats-workplace.png",
-      imageAlt:
-        "Candidate screening view: resumes ranked by semantic match score, each with an AI insight summary and its matched and missing skills",
+      imageAlt: "ATS Workplace resume screening interface",
       secondaryImage: null,
       secondaryImageAlt: null,
 
       description:
-        "A microservice-based applicant tracking system automating high-volume recruitment workflows, candidate analysis, and semantic NLP resume scoring.",
+        "An applicant tracking system featuring candidate screening, resume parsing, and semantic match scoring.",
 
       highlights: [
-        "Architected a microservice-based ATS featuring a React frontend, a Node.js API gateway, and a Python-based ML engine.",
-        "Developed a high-performance NLP pipeline using FastAPI, SpaCy and Hugging Face Transformers for real-time candidate analysis and semantic resume scoring.",
-        "Engineered an automated screening system that generates AI-driven candidate summaries and ranking metrics, significantly reducing manual review time.",
+        "Built microservices architecture using React for the interface, Node.js for API routing, and FastAPI for NLP services.",
+        "Implemented NLP pipelines using FastAPI, SpaCy, and Transformers for candidate analysis and resume scoring.",
+        "Created screening dashboards that summarize candidate qualifications and match scores.",
       ],
 
       stack: ["React", "Node.js", "Python", "FastAPI", "PostgreSQL", "SpaCy"],
@@ -111,21 +92,20 @@ export const work = {
     {
       slug: "business40",
       name: "Business 4.0",
-      category: "Community Meetup Platform",
+      category: "Community Platform",
 
       image: "/projects/business-40.png",
-      imageAlt:
-        "Business 4.0 landing page with member navigation, log in and sign up, introducing the meetup",
+      imageAlt: "Business 4.0 community meetup platform",
       secondaryImage: null,
       secondaryImageAlt: null,
 
       description:
-        "A membership platform where members sign up, log in and RSVP to events, with a separate admin role for the organisers running them.",
+        "A membership and event management platform with role-based access, event scheduling, and attendee registrations.",
 
       highlights: [
-        "Built JWT authentication with a separate admin role for organisers.",
-        "Created an admin panel to add, edit and cancel events and upload images, with photos on Cloudinary and event data in PostgreSQL.",
-        "Automated the registration workflow with UPI payment proof verification, synchronising attendee seat allocations.",
+        "Implemented JWT authentication with separate permissions for members and organisers.",
+        "Built an admin panel for creating and managing events, storing media on Cloudinary and data in PostgreSQL.",
+        "Automated event registration flows and seat allocation sync.",
       ],
 
       stack: ["React", "Node.js", "Express", "PostgreSQL", "Cloudinary"],
@@ -137,21 +117,20 @@ export const work = {
     {
       slug: "safarsaathi",
       name: "SafarSaathi",
-      category: "Cab Booking Application",
+      category: "Ride Booking Application",
 
       image: "/projects/safarsaathi.png",
-      imageAlt:
-        "SafarSaathi ride booking form with pickup location, duration and payment options, signed in as an administrator",
+      imageAlt: "SafarSaathi ride booking interface",
       secondaryImage: null,
       secondaryImageAlt: null,
 
       description:
-        "A booking system with three distinct sides to it: customers hailing rides, drivers accepting them, and admins watching the fleet.",
+        "A ride booking system connecting passengers, drivers, and administrators through dedicated portals.",
 
       highlights: [
-        "Implemented a multi-tier RBAC system managing separate authentication flows for admins, drivers and customers via JWT.",
-        "Built an admin dashboard for revenue tracking, plus fleet management with real-time driver assignment and automated WhatsApp confirmations.",
-        "Integrated Razorpay for payment processing and built the driver onboarding workflow end to end.",
+        "Implemented role-based access control and authentication for riders, drivers, and admins via JWT.",
+        "Built fleet management dashboards with driver dispatching and automated notifications.",
+        "Integrated Razorpay for payments and built driver onboarding workflows.",
       ],
 
       stack: ["React", "Node.js", "Express", "PostgreSQL", "Twilio", "Razorpay"],
@@ -165,8 +144,8 @@ export const work = {
 export const skills = {
   index: "03",
   label: "Skills",
-  title: "Technical",
-  accent: "Index",
+  title: "Skills",
+  accent: "",
 
   groups: [
     {
@@ -176,7 +155,7 @@ export const skills = {
     { name: "Backend", items: ["Node.js", "Express.js", "FastAPI"] },
     {
       name: "Languages",
-      items: ["JavaScript (ES6+)", "Python", "C/C++", "Java", "SQL"],
+      items: ["JavaScript (ES6+)", "Python", "SQL", "C/C++", "Java"],
     },
     { name: "Databases", items: ["PostgreSQL", "MongoDB", "MySQL"] },
     { name: "Tools", items: ["Git", "GitHub", "Postman", "Vercel", "NeonDB"] },
@@ -186,8 +165,8 @@ export const skills = {
 export const experience = {
   index: "04",
   label: "Experience",
-  title: "The",
-  accent: "Record",
+  title: "Experience",
+  accent: "",
 
   roles: [
     {
@@ -196,7 +175,7 @@ export const experience = {
       title: "Software Development Intern",
       org: "RARS Innoventa",
       detail:
-        "Backend services and React interfaces for a B2B marketplace, plus a community platform with automated onboarding, event RSVPs and payment gateway integration. Built full-stack features alongside senior engineers.",
+        "Developing backend services and React interfaces for a B2B marketplace and community platform, working on event RSVPs, member onboarding, and payment integrations.",
     },
   ],
 
@@ -207,14 +186,14 @@ export const experience = {
       period: "Expected July 2027",
       title: "B.Tech, Industrial Internet of Things",
       org: "University School of Automation and Robotics, GGSIPU",
-      detail: "GPA 8.83 out of 10.",
+      detail: "GPA: 8.83 / 10.",
     },
     {
       year: "2022",
       period: "2022",
       title: "CBSE Class XII",
       org: "Bal Mandir Sr. Sec. School",
-      detail: "92.6 percent.",
+      detail: "92.6%.",
     },
   ],
 };
@@ -222,23 +201,23 @@ export const experience = {
 export const achievements = {
   index: "05",
   label: "Achievements",
-  title: "Awards &",
-  accent: "Certifications",
+  title: "Achievements",
+  accent: "",
 
   items: [
     {
       name: "Smart India Hackathon",
       org: "Government of India",
-      note: "Cleared Round 1 of the national innovation hackathon.",
+      note: "Qualified Round 1 of the national innovation hackathon.",
     },
     {
       name: "Samsung Innovation Campus",
       org: "Samsung",
-      note: "Professional training and certification in Artificial Intelligence.",
+      note: "Artificial Intelligence training and certification.",
     },
     {
-      name: "Generative AI — Prompt Engineering",
-      org: "Google Cloud Skills Boost",
+      name: "Generative AI: Prompt Engineering",
+      org: "Google Cloud",
       note: "Certified in prompt engineering for generative AI systems.",
     },
   ],
@@ -247,13 +226,12 @@ export const achievements = {
 export const contact = {
   index: "06",
   label: "Contact",
-  title: "Let’s Work",
-  accent: "Together",
-  lede: "Open to software engineering roles and interesting problems. The fastest way to reach me is email.",
+  title: "Contact",
+  accent: "",
+  lede: "Open to software engineering opportunities and technical collaborations. The best way to reach me is email.",
 
-  cta: { label: "Send an Email", href: "mailto:ronakdutta100@gmail.com" },
+  cta: { label: "Send Email", href: "mailto:ronakdutta100@gmail.com" },
 
-  /* Rendered in order; any row with an empty href is skipped. */
   channels: [
     {
       label: "Email",

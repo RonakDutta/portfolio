@@ -1,14 +1,7 @@
 import { memo, useCallback, useRef } from "react";
 
 /**
- * Luxury hardware control.
- *
- * A black core inside a gold bezel. On hover a band of light sweeps across the
- * face once — the reflection you get running a finger over a polished surface.
- * With a real cursor it also takes a small magnetic pull, capped at 7px so it
- * reads as weight rather than as a toy.
- *
- * `gold` fills solid and inverts the label; `outline` stays black and warms.
+ * 24K Hardware Luxury Button
  */
 function LuxuryButton({
   children,
@@ -48,29 +41,29 @@ function LuxuryButton({
       onPointerMove={magnetic ? pull : undefined}
       onPointerLeave={magnetic ? release : undefined}
       onBlur={magnetic ? release : undefined}
-      className={`group relative isolate inline-flex min-h-13 items-center justify-center gap-4
-        overflow-hidden px-9 py-4 eyebrow-sm transition-[transform,color,border-color]
-        duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform
+      className={`group relative isolate inline-flex min-h-12 items-center justify-center gap-3.5
+        overflow-hidden rounded-xl px-7 py-3.5 eyebrow-sm font-semibold transition-all
+        duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform cursor-pointer
         ${
           solid
-            ? "border border-champagne text-void"
-            : "border border-gold-dark/70 text-champagne hover:border-gold-metal hover:text-gold-white"
+            ? "border border-gold-white/40 text-void shadow-[0_0_24px_rgba(212,175,55,0.35)] hover:shadow-[0_0_35px_rgba(255,217,102,0.55)]"
+            : "border border-gold-dark/45 bg-carbon/70 text-champagne backdrop-blur-md hover:border-gold-metal hover:text-gold-white hover:shadow-[0_0_24px_rgba(212,175,55,0.2)]"
         }
         ${className}`}
       {...rest}
     >
-      {/* Core */}
+      {/* Core Gradient */}
       <span
         aria-hidden="true"
         className="absolute inset-0 -z-20"
         style={{
           background: solid
-            ? "linear-gradient(140deg, #fff5c7 0%, #f0d58a 26%, #d4af37 58%, #8c6508 100%)"
-            : "linear-gradient(180deg, rgba(16,16,16,0.9), rgba(5,5,5,0.95))",
+            ? "linear-gradient(135deg, #fff8dc 0%, #f3e5ab 20%, #e5be48 55%, #d4af37 80%, #b38628 100%)"
+            : "linear-gradient(180deg, rgba(24,26,36,0.85), rgba(12,13,18,0.95))",
         }}
       />
 
-      {/* Single light sweep across the face on hover. */}
+      {/* Light Sweep Reflection */}
       <span
         aria-hidden="true"
         className="absolute inset-y-0 -left-full -z-10 w-2/3 -skew-x-12
@@ -78,17 +71,17 @@ function LuxuryButton({
           group-hover:translate-x-[250%] group-focus-visible:translate-x-[250%]"
         style={{
           background: solid
-            ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)"
-            : "linear-gradient(90deg, transparent, rgba(240,213,138,0.22), transparent)",
+            ? "linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent)"
+            : "linear-gradient(90deg, transparent, rgba(243,229,171,0.3), transparent)",
         }}
       />
 
-      <span className="relative">{children}</span>
+      <span className="relative tracking-[0.2em]">{children}</span>
 
       <span
         aria-hidden="true"
-        className={`h-px w-5 transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
-          group-hover:w-8 ${solid ? "bg-void/50" : "bg-gold-metal"}`}
+        className={`h-px w-4 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+          group-hover:w-7 ${solid ? "bg-void/60" : "bg-gold-metal"}`}
       />
     </Tag>
   );

@@ -14,18 +14,10 @@ gsap.registerPlugin(ScrollTrigger);
 const stripScheme = (href) =>
   href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 
-/**
- * The closing frame. The largest type on the page after the hero, a second
- * aurora local to this section so the gold visibly gathers at the end, and the
- * channels as a ruled list. The geometry returns here and nowhere in between,
- * which is what makes it read as a bookend rather than as wallpaper.
- */
 function Contact({ env }) {
   const section = useRef(null);
   const [copied, setCopied] = useState("");
 
-  // Rows without an href are dropped, so an unset LinkedIn URL simply does not
-  // render rather than becoming a dead link.
   const channels = contact.channels.filter((c) => c.href);
 
   useLayoutEffect(() => {
@@ -36,7 +28,7 @@ function Contact({ env }) {
         .timeline({ scrollTrigger: { trigger: section.current, start: "top 70%" } })
         .from(".ct-rise", { y: 28, opacity: 0, duration: 1.15, stagger: 0.08, ease: "expo.out" })
         .from(".ct-geo", { opacity: 0, duration: 2.2, ease: "power2.out" }, 0)
-        .from(".ct-row", { y: 18, opacity: 0, duration: 0.85, stagger: 0.07, ease: "power3.out" }, 0.45);
+        .from(".ct-card", { y: 20, opacity: 0, duration: 0.85, ease: "power3.out" }, 0.4);
     }, section);
 
     return () => ctx.revert();
@@ -46,9 +38,9 @@ function Contact({ env }) {
     try {
       await navigator.clipboard.writeText(value);
       setCopied(value);
-      setTimeout(() => setCopied(""), 2000);
+      setTimeout(() => setCopied(""), 2200);
     } catch {
-      /* Clipboard denied. The address is on screen and selectable anyway. */
+      /* Clipboard fallback */
     }
   };
 
@@ -69,91 +61,86 @@ function Contact({ env }) {
       />
 
       <div className="relative mx-auto w-full max-w-[108rem] px-6 sm:px-10">
-        <SectionTitle index={contact.index} label={contact.label} itemClass="ct-rise" />
-
-        <h2
+        <SectionTitle
           id="contact-title"
-          className="ct-rise mt-10 font-display text-[clamp(3rem,12vw,10rem)] leading-[0.88] font-light sm:mt-12"
-        >
-          <span className="text-ivory-lit block">{contact.title}</span>{" "}
-          <span className="text-foil animate-foil block italic sm:pl-[0.12em]">
-            {contact.accent}
-          </span>
-        </h2>
+          index={contact.index}
+          label={contact.label}
+          title={contact.title}
+          itemClass="ct-rise"
+        />
 
-        <div className="mt-16 grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-24">
+        <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20">
           <div>
-            <p className="ct-rise max-w-md text-pearl/85">{contact.lede}</p>
-            <div className="ct-rise mt-10">
+            <p className="ct-rise max-w-md text-[1.08rem] leading-relaxed text-sand/90 font-light">
+              {contact.lede}
+            </p>
+            <div className="ct-rise mt-8">
               <LuxuryButton variant="gold" href={contact.cta.href} magnetic={env.pointerFx}>
-                {contact.cta.label}
+                {contact.cta.label} ↗
               </LuxuryButton>
             </div>
           </div>
 
-          <ul>
-            {channels.map((channel) => {
-              const external = channel.href.startsWith("http");
-              const value = channel.value || stripScheme(channel.href);
+          <div className="ct-card rounded-2xl border border-gold-dark/25 bg-carbon/70 p-6 sm:p-8 backdrop-blur-md">
+            <h3 className="eyebrow-sm text-gold-metal mb-6 flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal" />
+              Links & Contact Information
+            </h3>
 
-              return (
-                /* Label above the value below `sm`: at 320px a label column, an
-                   address and a copy button do not share a line without
-                   truncating the address. */
-                <li
-                  key={channel.label}
-                  className="ct-row border-t border-line py-4 sm:flex sm:items-center sm:gap-8 sm:py-3"
-                >
-                  <span className="block eyebrow-sm text-champagne sm:w-24 sm:shrink-0">
-                    {channel.label}
-                  </span>
+            <ul className="space-y-4">
+              {channels.map((channel) => {
+                const external = channel.href.startsWith("http");
+                const value = channel.value || stripScheme(channel.href);
 
-                  <div className="flex items-center gap-3 sm:min-w-0 sm:flex-1">
-                    <a
-                      href={channel.href}
-                      target={external ? "_blank" : undefined}
-                      rel={external ? "noreferrer noopener" : undefined}
-                      className="flex min-h-11 min-w-0 flex-1 items-center truncate font-display
-                        text-[1.05rem] font-light text-ivory transition-colors duration-500
-                        hover:text-gold-white min-[360px]:text-[1.2rem] sm:text-[1.4rem]"
-                    >
-                      {value}
-                      {external ? <span className="sr-only"> (opens in a new tab)</span> : null}
-                    </a>
+                return (
+                  <li
+                    key={channel.label}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-gold-dark/15 bg-coal/60 p-4 transition-all duration-300 hover:border-gold-metal/40 hover:bg-coal/90"
+                  >
+                    <span className="eyebrow-sm text-champagne/90 sm:w-28 sm:shrink-0">
+                      {channel.label}
+                    </span>
 
-                    {channel.copy ? (
-                      <button
-                        type="button"
-                        onClick={() => copy(channel.value)}
-                        className="flex min-h-11 min-w-11 shrink-0 items-center justify-center
-                          eyebrow-sm text-mute transition-colors duration-500 hover:text-gold-white"
+                    <div className="flex items-center justify-between gap-3 sm:min-w-0 sm:flex-1">
+                      <a
+                        href={channel.href}
+                        target={external ? "_blank" : undefined}
+                        rel={external ? "noreferrer noopener" : undefined}
+                        className="truncate text-sm font-medium text-ivory transition-colors hover:text-gold-white"
                       >
-                        <span aria-hidden="true">
-                          {copied === channel.value ? "Copied" : "Copy"}
-                        </span>
-                        <span className="sr-only">
-                          {copied === channel.value
-                            ? "Address copied to clipboard"
-                            : `Copy ${channel.label.toLowerCase()} address`}
-                        </span>
-                      </button>
-                    ) : null}
-                  </div>
-                </li>
-              );
-            })}
-            <li aria-hidden="true" className="h-px w-full bg-line" />
-          </ul>
+                        {value}
+                        {external ? <span className="sr-only"> (opens in a new tab)</span> : null}
+                      </a>
+
+                      {channel.copy ? (
+                        <button
+                          type="button"
+                          onClick={() => copy(channel.value)}
+                          className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-gold-dark/30 bg-carbon px-2.5 py-1 eyebrow-sm text-[0.62rem] text-sand/80 transition-all hover:border-gold-metal hover:text-gold-white cursor-pointer"
+                        >
+                          {copied === channel.value ? (
+                            <span className="text-gold-bright">✓ Copied</span>
+                          ) : (
+                            <span>Copy</span>
+                          )}
+                        </button>
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
 
         <p aria-live="polite" className="sr-only">
           {copied ? "Copied to clipboard" : ""}
         </p>
 
-        <footer className="ct-rise mt-24 flex flex-col items-start justify-between gap-6 border-t border-line pt-8 sm:flex-row sm:items-center">
+        <footer className="ct-rise mt-24 flex flex-col items-start justify-between gap-6 border-t border-gold-dark/20 pt-8 sm:flex-row sm:items-center">
           <p className="eyebrow-sm text-mute">
             {contact.closing}
-            <span aria-hidden="true" className="mx-3 text-line">/</span>
+            <span aria-hidden="true" className="mx-3 text-gold-dark/40">/</span>
             {new Date().getFullYear()}
           </p>
 
@@ -161,7 +148,7 @@ function Contact({ env }) {
             type="button"
             onClick={() => scrollToSection(SECTIONS[0].id)}
             className="gold-underline group inline-flex min-h-11 items-center gap-3 eyebrow-sm
-              text-sand transition-colors duration-500 hover:text-ivory"
+              text-sand transition-colors duration-500 hover:text-ivory cursor-pointer"
           >
             {contact.backToTop}
             <svg

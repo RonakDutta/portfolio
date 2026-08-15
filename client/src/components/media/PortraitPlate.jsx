@@ -150,14 +150,14 @@ function PortraitPlate({
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4"
           style={{
-            background: "linear-gradient(to top, #010101 0%, transparent 100%)",
+            background: "linear-gradient(to top, #030304 0%, transparent 100%)",
           }}
         />
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 left-0 w-1/3"
           style={{
-            background: "linear-gradient(to right, #010101 0%, transparent 100%)",
+            background: "linear-gradient(to right, #030304 0%, transparent 100%)",
           }}
         />
       </div>
