@@ -49,7 +49,7 @@ function Hero({ env }) {
       ref={section}
       aria-labelledby="hero-title"
       className="relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden
-        pt-28 pb-10 sm:pt-32 lg:pt-20 lg:pb-8"
+        pt-20 pb-10 sm:pt-28 lg:pt-20 lg:pb-8"
     >
       <GoldGeometry
         variant="orbit"
@@ -102,9 +102,9 @@ function Hero({ env }) {
             </span>
             <span
               aria-hidden="true"
-              className="hero-mask -mt-1 block overflow-hidden pb-[0.04em] sm:-mt-2"
+              className="hero-mask -mt-1 block overflow-hidden pb-[0.06em] sm:-mt-2"
             >
-              <span className="text-foil animate-foil block font-display text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.03] font-semibold tracking-[0.01em]">
+              <span className="text-foil animate-foil block font-accent italic text-[clamp(2.5rem,5.8vw,5.2rem)] leading-[1.08] font-normal tracking-tight">
                 {hero.headline.line2}
               </span>
             </span>

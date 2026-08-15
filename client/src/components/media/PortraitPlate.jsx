@@ -144,8 +144,15 @@ function PortraitPlate({
           }}
         />
 
-        {/* Dissolve into the page on the two edges that meet the type, so the
-            plate never reads as a rectangle pasted onto the background. */}
+        {/* Dissolve into the page on top, bottom and left edges so the plate
+            never reads as a cut rectangle pasted onto the background. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-1/4"
+          style={{
+            background: "linear-gradient(to bottom, #030304 0%, transparent 100%)",
+          }}
+        />
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4"
