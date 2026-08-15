@@ -60,7 +60,7 @@ function Hero({ env }) {
       <div className="mx-auto grid w-full max-w-[108rem] items-center gap-0 px-6 sm:px-10 lg:grid-cols-12">
         {/* Plate */}
         <div
-          className="hero-plate relative order-1 -mx-6 sm:-mx-10 mb-8 sm:mb-12 lg:order-2 lg:col-span-5
+          className="hero-plate relative order-1 -mx-6 sm:-mx-10 mb-6 sm:mb-8 lg:order-2 lg:col-span-5
             lg:col-start-8 lg:row-start-1 lg:mx-0 lg:w-full lg:max-w-[28rem] lg:mb-0
             lg:justify-self-end xl:max-w-[31rem]"
         >
@@ -87,32 +87,32 @@ function Hero({ env }) {
           </p>
 
           {/* Big Statement Headline */}
-          <h1 id="hero-title" className="mt-5 space-y-1">
+          <h1 id="hero-title" className="mt-5">
             <span className="sr-only">
               {hero.headline.line1} {hero.headline.line2} {hero.headline.line3} {identity.name}, {hero.role} in {hero.location}.
             </span>
 
             <span
               aria-hidden="true"
-              className="hero-mask block overflow-hidden pb-1"
+              className="hero-mask block overflow-hidden pb-[0.04em]"
             >
-              <span className="text-ivory-lit block font-display text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.05] font-semibold tracking-[0.01em]">
+              <span className="text-ivory-lit block font-display text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.03] font-semibold tracking-[0.01em]">
                 {hero.headline.line1}
               </span>
             </span>
             <span
               aria-hidden="true"
-              className="hero-mask block overflow-hidden pt-1 pb-3 sm:pb-4 -my-1 sm:-my-1.5"
+              className="hero-mask -mt-1 sm:-mt-2 block overflow-hidden pb-[0.14em]"
             >
-              <span className="text-foil animate-foil block font-accent italic text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.28] font-normal tracking-tight">
+              <span className="text-foil animate-foil block font-accent italic text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.12] font-normal tracking-tight">
                 {hero.headline.line2}
               </span>
             </span>
             <span
               aria-hidden="true"
-              className="hero-mask block overflow-hidden pb-1"
+              className="hero-mask -mt-1 sm:-mt-2 block overflow-hidden pb-[0.04em]"
             >
-              <span className="text-ivory-lit block font-display text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.05] font-semibold tracking-[0.01em]">
+              <span className="text-ivory-lit block font-display text-[clamp(2.4rem,5.6vw,5rem)] leading-[1.03] font-semibold tracking-[0.01em]">
                 {hero.headline.line3}
               </span>
             </span>
