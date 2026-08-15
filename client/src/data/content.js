@@ -26,10 +26,16 @@ export const identity = {
 };
 
 export const hero = {
-  statement:
-    "I build full-stack web applications — React interfaces over Node.js services and PostgreSQL. Currently a software development intern at RARS Innoventa, finishing a B.Tech in Industrial IoT.",
+  /* Role first, name second. The name lives in the RD monogram, the document
+     title, and one line of metadata under the composition. */
+  role: "Software Engineer",
+  lead: "I build full-stack",
+  accent: "web products.",
 
-  primary: { label: "View My Work", target: "work" },
+  statement:
+    "React interfaces over Node.js services and PostgreSQL, built end to end. Currently a software development intern at RARS Innoventa, finishing a B.Tech in Industrial IoT.",
+
+  primary: { label: "View Work", target: "work" },
   secondary: { label: "Résumé", href: "/resume.pdf" },
 
   scrollCue: "Scroll",
@@ -70,7 +76,8 @@ export const about = {
 export const work = {
   index: "02",
   label: "Work",
-  title: "Selected Work",
+  title: "Selected",
+  accent: "Work",
   featuredLabel: "Featured Work",
 
   projects: [
@@ -158,7 +165,8 @@ export const work = {
 export const skills = {
   index: "03",
   label: "Skills",
-  title: "Technical Directory",
+  title: "Technical",
+  accent: "Index",
 
   groups: [
     {
@@ -178,7 +186,8 @@ export const skills = {
 export const experience = {
   index: "04",
   label: "Experience",
-  title: "Experience",
+  title: "The",
+  accent: "Record",
 
   roles: [
     {
@@ -210,10 +219,11 @@ export const experience = {
   ],
 };
 
-export const recognition = {
+export const achievements = {
   index: "05",
-  label: "Recognition",
-  title: "Awards & Certifications",
+  label: "Achievements",
+  title: "Awards &",
+  accent: "Certifications",
 
   items: [
     {
@@ -237,7 +247,8 @@ export const recognition = {
 export const contact = {
   index: "06",
   label: "Contact",
-  title: ["Let’s Work", "Together"],
+  title: "Let’s Work",
+  accent: "Together",
   lede: "Open to software engineering roles and interesting problems. The fastest way to reach me is email.",
 
   cta: { label: "Send an Email", href: "mailto:ronakdutta100@gmail.com" },

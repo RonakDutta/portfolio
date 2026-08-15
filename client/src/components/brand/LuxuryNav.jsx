@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, subscribe, frame } from "../../lib/store";
 import { scrollToSection } from "../../lib/useSmoothScroll";
+import Monogram from "./Monogram";
 import { identity } from "../../data/content";
 
 const LINKS = SECTIONS.slice(1);
@@ -13,13 +14,13 @@ function NavLink({ section, active, onSelect, compact = false }) {
         onClick={() => onSelect(section.id)}
         aria-current={active ? "true" : undefined}
         className={`group relative flex min-h-11 items-center eyebrow-sm transition-colors
-          duration-500 ${compact ? "w-full justify-start gap-4 py-1 text-[0.72rem]" : "px-4"}
-          ${active ? "text-ivory" : "text-stone hover:text-ivory"}`}
+          duration-500 ${compact ? "w-full justify-start gap-5 py-1 text-[0.74rem]" : "px-4"}
+          ${active ? "text-ivory" : "text-sand hover:text-ivory"}`}
       >
         {compact ? (
           <span
             aria-hidden="true"
-            className={`text-[0.6rem] ${active ? "text-gold" : "text-mute"}`}
+            className={`text-[0.6rem] ${active ? "text-gold-metal" : "text-mute"}`}
           >
             {section.num}
           </span>
@@ -27,22 +28,27 @@ function NavLink({ section, active, onSelect, compact = false }) {
 
         <span>{section.label}</span>
 
-        {/* The gold indicator: a hairline that draws out from the centre. */}
+        {/* Active indicator: a lit filament, not an underline. */}
         <span
           aria-hidden="true"
-          className={`absolute bg-gold transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]
+          className={`absolute transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)]
             ${
               compact
-                ? "top-1/2 -left-4 h-px w-2.5 origin-left"
-                : "inset-x-4 -bottom-1.5 h-px origin-center"
+                ? "top-1/2 -left-5 h-px w-3 origin-left"
+                : "inset-x-4 -bottom-2 h-px origin-center"
             } ${active ? "scale-100" : "scale-0"}`}
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(140,101,8,0), #ffd966 50%, rgba(140,101,8,0))",
+            boxShadow: active ? "0 0 8px rgba(212,175,55,0.7)" : undefined,
+          }}
         />
       </button>
     </li>
   );
 }
 
-function Nav() {
+function LuxuryNav() {
   const [active, setActive] = useState(frame.section);
   const [lifted, setLifted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -73,25 +79,24 @@ function Nav() {
     scrollToSection(id);
   }, []);
 
+  const solid = lifted || open;
+
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <div
-        className={`relative transition-[background-color,backdrop-filter] duration-700 ${
-          lifted || open ? "bg-ink/85 backdrop-blur-xl" : "bg-transparent"
-        }`}
+        className={`relative transition-all duration-700 ${solid ? "glass-black" : "bg-transparent"}`}
       >
         <nav
           aria-label="Primary"
-          className="mx-auto flex w-full max-w-[104rem] items-center justify-between gap-6 px-6 py-5 sm:px-10"
+          className="mx-auto flex w-full max-w-[108rem] items-center justify-between gap-6 px-5 py-4 sm:px-10"
         >
           <button
             type="button"
             onClick={() => select(SECTIONS[0].id)}
-            className="group -ml-1 flex min-h-11 items-center px-1 font-display text-[0.95rem]
-              font-light tracking-[0.34em] text-ivory uppercase sm:text-[1.05rem]"
+            className="group -ml-1 flex min-h-11 items-center px-1"
           >
-            <span aria-hidden="true">{identity.name}</span>
-            <span className="sr-only">Back to the top</span>
+            <Monogram className="h-9 w-9 transition-[filter] duration-700 group-hover:drop-shadow-[0_0_10px_rgba(212,175,55,0.55)] sm:h-10 sm:w-10" />
+            <span className="sr-only">{identity.name} — back to the top</span>
           </button>
 
           <ul className="hidden items-center lg:flex">
@@ -110,8 +115,9 @@ function Nav() {
               href={identity.resume}
               target="_blank"
               rel="noopener noreferrer"
-              className="link-rule hidden min-h-11 items-center eyebrow-sm text-pearl
-                transition-colors duration-500 hover:text-ivory sm:inline-flex"
+              className="hidden min-h-11 items-center border border-gold-dark/60 px-5 eyebrow-sm
+                text-champagne transition-colors duration-500
+                hover:border-gold-metal hover:text-gold-white sm:inline-flex"
             >
               Résumé
             </a>
@@ -123,15 +129,15 @@ function Nav() {
               aria-expanded={open}
               aria-controls="nav-panel"
               className="flex min-h-11 min-w-11 items-center justify-end gap-3 eyebrow-sm
-                text-pearl transition-colors duration-500 hover:text-ivory lg:hidden"
+                text-sand transition-colors duration-500 hover:text-ivory lg:hidden"
             >
               <span>{open ? "Close" : "Menu"}</span>
               <span aria-hidden="true" className="flex w-5 flex-col gap-[5px]">
                 <span
-                  className={`block h-px w-full bg-current transition-transform duration-500 ${open ? "translate-y-[3px] rotate-45" : ""}`}
+                  className={`block h-px w-full bg-gold-metal transition-transform duration-500 ${open ? "translate-y-[3px] rotate-45" : ""}`}
                 />
                 <span
-                  className={`block h-px w-full bg-current transition-transform duration-500 ${open ? "-translate-y-[3px] -rotate-45" : ""}`}
+                  className={`block h-px w-full bg-gold-metal transition-transform duration-500 ${open ? "-translate-y-[3px] -rotate-45" : ""}`}
                 />
               </span>
             </button>
@@ -140,19 +146,21 @@ function Nav() {
 
         <span
           aria-hidden="true"
-          className={`absolute inset-x-0 bottom-0 h-px bg-line transition-opacity duration-700 ${
-            lifted || open ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-x-0 bottom-0 h-px transition-opacity duration-700 ${solid ? "opacity-100" : "opacity-0"}`}
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgba(140,101,8,0.55) 22%, rgba(240,213,138,0.4) 50%, rgba(140,101,8,0.55) 78%, transparent)",
+          }}
         />
 
         <div
           id="nav-panel"
           inert={!open}
           className={`overflow-hidden transition-[max-height,opacity] duration-500 lg:hidden ${
-            open ? "max-h-[30rem] opacity-100" : "max-h-0 opacity-0"
+            open ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          <ul className="mx-auto flex w-full max-w-[104rem] flex-col gap-1 px-10 pt-2 pb-8 sm:px-14">
+          <ul className="mx-auto flex w-full max-w-[108rem] flex-col gap-1 px-10 pt-2 pb-8 sm:px-14">
             {LINKS.map((section, i) => (
               <NavLink
                 key={section.id}
@@ -167,11 +175,11 @@ function Nav() {
                 href={identity.resume}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex min-h-11 items-center gap-4 eyebrow-sm text-stone
-                  transition-colors duration-500 hover:text-ivory"
+                className="flex min-h-11 items-center gap-5 eyebrow-sm text-champagne
+                  transition-colors duration-500 hover:text-gold-white"
               >
                 <span aria-hidden="true" className="text-[0.6rem] text-mute">
-                  —
+                  06
                 </span>
                 Résumé
               </a>
@@ -183,4 +191,4 @@ function Nav() {
   );
 }
 
-export default memo(Nav);
+export default memo(LuxuryNav);

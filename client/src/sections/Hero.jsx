@@ -1,23 +1,23 @@
 import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
-import Portrait from "../components/media/Portrait";
-import GoldArc from "../components/ui/GoldArc";
-import Button from "../components/ui/Button";
+import PortraitPlate from "../components/media/PortraitPlate";
+import GoldGeometry from "../components/atmosphere/GoldGeometry";
+import LuxuryButton from "../components/ui/LuxuryButton";
 import { scrollToSection } from "../lib/useSmoothScroll";
 import { onCrossed } from "../lib/threshold";
 import { identity, hero } from "../data/content";
 
 /**
- * The campaign plate.
+ * The campaign cover.
  *
- * On `lg` the name and the portrait share grid cells so the type crosses in
- * front of the image — the layering is what makes it read as art direction
- * rather than two columns side by side. Below `lg` it becomes portrait, then
- * name, then copy, which is the same composition read top to bottom.
+ * Role leads, statement follows, the name appears once as metadata. On `lg`
+ * the type block and the portrait share grid cells so the display line crosses
+ * in front of the plate; below `lg` the plate goes full-bleed and the type is
+ * pulled up over its lower edge, which is the same layered composition read
+ * top to bottom rather than a stack of centred boxes.
  */
 function Hero({ env }) {
   const section = useRef(null);
-  const portrait = useRef(null);
 
   useLayoutEffect(() => {
     let release = () => {};
@@ -25,28 +25,23 @@ function Hero({ env }) {
     const ctx = gsap.context(() => {
       if (env.reducedMotion) return;
 
-      // Slow, heavy, and in one direction. Nothing bounces.
       const intro = gsap
         .timeline({ defaults: { ease: "expo.out" }, paused: true })
-        .from(".hero-mask > *", {
-          yPercent: 108,
-          duration: 1.7,
-          stagger: 0.11,
-        })
-        .from(portrait.current, { opacity: 0, duration: 2 }, 0.15)
+        .from(".hero-eyebrow", { opacity: 0, y: 14, duration: 1.2 })
+        .from(".hero-mask > *", { yPercent: 110, duration: 1.8, stagger: 0.12 }, 0.1)
         .fromTo(
           ".hero-plate",
           { clipPath: "inset(0% 0% 100% 0%)" },
-          { clipPath: "inset(0% 0% 0% 0%)", duration: 1.9 },
-          0.15,
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 2 },
+          0.2,
         )
-        .from(".hero-rule", { scaleX: 0, duration: 1.4 }, 0.6)
+        .from(".hero-geo", { opacity: 0, duration: 2.6 }, 0.4)
+        .from(".hero-rule", { scaleX: 0, duration: 1.5 }, 0.7)
         .from(
           ".hero-fade",
-          { opacity: 0, y: 18, duration: 1.1, stagger: 0.09 },
-          0.75,
-        )
-        .from(".hero-arc", { opacity: 0, duration: 2.4 }, 0.4);
+          { opacity: 0, y: 20, duration: 1.2, stagger: 0.1 },
+          0.85,
+        );
 
       release = onCrossed(() => intro.play());
     }, section);
@@ -63,26 +58,22 @@ function Hero({ env }) {
       ref={section}
       aria-labelledby="hero-title"
       className="relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden
-        pt-28 pb-14 sm:pt-32 lg:pt-24 lg:pb-20"
+        pt-28 pb-10 sm:pt-32 lg:pt-20 lg:pb-8"
     >
-      <GoldArc
-        className="hero-arc top-1/2 right-[-18%] aspect-square w-[86vmin] -translate-y-1/2
-          opacity-70 lg:right-[-8%] lg:w-[62vmin]"
-        rings={3}
+      <GoldGeometry
+        variant="orbit"
+        className="hero-geo top-1/2 right-[-26%] aspect-square w-[104vmin] -translate-y-1/2
+          opacity-80 lg:right-[-6%] lg:w-[70vmin]"
       />
 
-      <div className="mx-auto grid w-full max-w-[104rem] items-center gap-0 px-6 sm:px-10 lg:grid-cols-12">
-        {/* The plate. Right of centre on desktop so the type has something to
-            cross in front of; full-bleed above `lg`, with the name pulled up
-            over its lower edge so the phone gets the same layered composition
-            rather than a stack of centred boxes. */}
+      <div className="mx-auto grid w-full max-w-[108rem] items-center gap-0 px-6 sm:px-10 lg:grid-cols-12">
+        {/* Plate */}
         <div
-          ref={portrait}
-          className="hero-plate relative order-1 -mx-6 sm:-mx-10
-            lg:order-2 lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:mx-0
-            lg:w-full lg:max-w-[28rem] lg:justify-self-end xl:max-w-[32rem]"
+          className="hero-plate relative order-1 -mx-6 sm:-mx-10 lg:order-2 lg:col-span-5
+            lg:col-start-8 lg:row-start-1 lg:mx-0 lg:w-full lg:max-w-[28rem]
+            lg:justify-self-end xl:max-w-[31rem]"
         >
-          <Portrait
+          <PortraitPlate
             portrait={hero.portrait}
             initials={identity.initials}
             reducedMotion={env.reducedMotion}
@@ -90,76 +81,79 @@ function Hero({ env }) {
           />
         </div>
 
-        {/* Type. Sits above the plate in the stacking order on every size. */}
-        <div className="relative z-10 order-2 -mt-16 sm:-mt-24 lg:order-1 lg:col-span-8
-            lg:col-start-1 lg:row-start-1 lg:mt-0 lg:self-center">
-          <h1 id="hero-title">
+        {/* Type */}
+        <div className="relative z-10 order-2 -mt-16 sm:-mt-24 lg:order-1 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:self-center">
+          <p className="hero-eyebrow flex items-center gap-5 eyebrow text-champagne">
+            <span
+              aria-hidden="true"
+              className="h-px w-12"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(255,217,102,0.9), rgba(140,101,8,0))",
+              }}
+            />
+            {hero.role}
+          </p>
+
+          <h1 id="hero-title" className="mt-7">
             <span className="sr-only">
-              {identity.name} — {identity.role}, {identity.region}
+              {identity.name} — {hero.role}. {hero.lead} {hero.accent}{" "}
+              {identity.region}.
             </span>
 
-            {[identity.given, identity.family].map((word, i) => (
-              <span
-                key={word}
-                aria-hidden="true"
-                className="hero-mask block overflow-hidden pb-[0.04em]"
-              >
-                <span
-                  className={`text-lit block font-display font-light uppercase
-                    text-[clamp(3.4rem,14.5vw,13rem)] leading-[0.82] tracking-[0.005em]
-                    ${i === 1 ? "lg:pl-[0.14em]" : ""}`}
-                >
-                  {word}
-                </span>
+            <span aria-hidden="true" className="hero-mask block overflow-hidden pb-[0.1em]">
+              <span className="text-ivory-lit block font-display text-[clamp(3.2rem,12.5vw,9.5rem)] leading-[0.92] font-light">
+                {hero.lead}
               </span>
-            ))}
+            </span>
+            <span aria-hidden="true" className="hero-mask block overflow-hidden pb-[0.08em]">
+              <span className="text-foil animate-foil block font-display text-[clamp(3.2rem,12.5vw,9.5rem)] leading-[0.92] font-light italic">
+                {hero.accent}
+              </span>
+            </span>
           </h1>
 
           <div
             aria-hidden="true"
-            className="hero-rule mt-9 h-px w-full max-w-lg origin-left bg-gradient-to-r
-              from-gold/60 via-gold/25 to-transparent lg:mt-11"
+            className="hero-rule rule-gold mt-9 h-px w-full max-w-md origin-left lg:mt-11"
           />
 
-          <p
-            aria-hidden="true"
-            className="hero-fade mt-7 flex flex-wrap items-center gap-x-5 gap-y-1 eyebrow text-gold-light"
-          >
-            <span>{identity.role}</span>
-            <span className="h-3 w-px bg-line" />
-            <span className="text-stone">{identity.region}</span>
-          </p>
-
-          <p className="hero-fade mt-7 max-w-lg text-pearl/85">
+          <p className="hero-fade mt-8 max-w-lg text-pearl/85">
             {hero.statement}
           </p>
 
           <div className="hero-fade mt-10 flex flex-col items-stretch gap-3.5 sm:flex-row sm:items-center sm:gap-5">
-            <Button
-              variant="solid"
+            <LuxuryButton
+              variant="gold"
               magnetic={env.pointerFx}
               onClick={() => scrollToSection(hero.primary.target)}
             >
               {hero.primary.label}
-            </Button>
-            <Button
+            </LuxuryButton>
+            <LuxuryButton
               href={hero.secondary.href}
               target="_blank"
               rel="noopener noreferrer"
               magnetic={env.pointerFx}
             >
               {hero.secondary.label}
-            </Button>
+            </LuxuryButton>
           </div>
         </div>
       </div>
 
-      {/* Footer rail: the email in plain sight, and the scroll cue. */}
-      <div className="hero-fade mx-auto mt-14 flex w-full max-w-[104rem] items-end justify-between gap-6 px-6 sm:px-10 lg:mt-16">
+      {/* Footer rail: the name as metadata, location, and the scroll cue. */}
+      <div className="hero-fade mx-auto mt-10 flex w-full max-w-[108rem] flex-wrap items-end justify-between gap-5 px-6 sm:px-10 lg:mt-8">
+        <p className="eyebrow-sm flex flex-wrap items-center gap-x-4 gap-y-1 text-mute">
+          <span className="text-sand">{identity.name}</span>
+          <span aria-hidden="true" className="h-3 w-px bg-line" />
+          <span>{identity.region}</span>
+        </p>
+
         <a
           href={`mailto:${identity.email}`}
-          className="link-rule min-h-11 eyebrow-sm inline-flex items-center text-stone
-            transition-colors duration-500 hover:text-ivory"
+          className="gold-underline inline-flex min-h-11 items-center eyebrow-sm text-sand
+            transition-colors duration-500 hover:text-gold-white"
         >
           {identity.email}
         </a>
@@ -170,7 +164,7 @@ function Hero({ env }) {
         >
           {hero.scrollCue}
           <span className="relative block h-10 w-px overflow-hidden bg-line">
-            <span className="animate-cue-fall absolute inset-0 bg-gold" />
+            <span className="animate-cue-fall absolute inset-0 bg-gold-metal" />
           </span>
         </span>
       </div>

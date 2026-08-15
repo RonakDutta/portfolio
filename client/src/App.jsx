@@ -1,14 +1,14 @@
 import { useEnvironment } from "./lib/useEnvironment";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
-import Atmosphere from "./components/Atmosphere";
+import Atmosphere from "./components/atmosphere/Atmosphere";
 import Curtain from "./components/Curtain";
-import Nav from "./components/nav/Nav";
+import LuxuryNav from "./components/brand/LuxuryNav";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
 import Work from "./sections/Work";
 import Skills from "./sections/Skills";
 import Experience from "./sections/Experience";
-import Recognition from "./sections/Recognition";
+import Achievements from "./sections/Achievements";
 import Contact from "./sections/Contact";
 
 export default function App() {
@@ -21,13 +21,13 @@ export default function App() {
 
       <a
         href="#hero"
-        className="sr-focusable inline-flex min-h-11 items-center border border-gold/50
-          bg-ink px-5 text-sm text-ivory"
+        className="sr-focusable inline-flex min-h-11 items-center border border-gold-metal
+          bg-void px-5 text-sm text-ivory"
       >
         Skip to content
       </a>
 
-      <Nav />
+      <LuxuryNav />
       <Atmosphere env={env} />
 
       <main className="relative z-10">
@@ -36,9 +36,9 @@ export default function App() {
         <Work env={env} />
         <Skills env={env} />
         <Experience env={env} />
-        {/* Recognition has no nav entry; the spy holds on Experience through
-            it, which is the correct reading of where it belongs. */}
-        <Recognition env={env} />
+        {/* Achievements has no nav entry; the spy holds on Experience through
+            it, which is where it sits in the reading order. */}
+        <Achievements env={env} />
         <Contact env={env} />
       </main>
     </>

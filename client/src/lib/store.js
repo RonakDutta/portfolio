@@ -7,13 +7,16 @@
  * change of identity.
  */
 export const SECTIONS = [
-  { id: "hero", label: "Ronak Dutta", num: "" },
+  { id: "hero", label: "Home", num: "00" },
   { id: "about", label: "About", num: "01" },
   { id: "work", label: "Work", num: "02" },
   { id: "skills", label: "Skills", num: "03" },
   { id: "experience", label: "Experience", num: "04" },
   { id: "contact", label: "Contact", num: "06" },
 ];
+
+/* Achievements (05) is rendered between Experience and Contact but is not a
+   nav destination; the spy holds on Experience while it is on screen. */
 
 /** Active section index, kept out of React so scrolling costs no renders. */
 export const frame = { section: 0 };

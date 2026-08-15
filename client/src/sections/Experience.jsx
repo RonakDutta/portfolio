@@ -1,38 +1,44 @@
 import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SectionHeading from "../components/ui/SectionHeading";
+import SectionTitle from "../components/typography/SectionTitle";
 import { experience } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Annual-report chronology. The year is set oversized in display serif and
- * carries the eye down the left edge; the entry sits beside it across a
- * hairline. No dots, no connector spine, no timeline furniture.
+ * Annual-report chronology. The year is set oversized in the left margin and
+ * carries the eye down the page; a single lit point marks each entry. No
+ * connector spine, no dots-and-line timeline furniture.
  */
 function Entry({ year, period, title, org, detail, as: Heading = "h4" }) {
   return (
-    <li className="exp-entry relative grid gap-4 border-t border-line py-10 sm:grid-cols-[minmax(0,10rem)_minmax(0,1fr)] sm:gap-14 sm:py-12">
+    <li className="xp-entry relative grid gap-4 border-t border-line py-10 sm:grid-cols-[minmax(0,11rem)_minmax(0,1fr)] sm:gap-14 sm:py-14">
+      <span
+        aria-hidden="true"
+        className="absolute top-0 left-0 h-px w-16"
+        style={{
+          background: "linear-gradient(90deg, #ffd966, rgba(140,101,8,0))",
+        }}
+      />
+
       <p
         aria-hidden="true"
-        className="font-display text-[clamp(2.5rem,6vw,4rem)] leading-[0.9] font-light text-ash"
+        className="font-display text-[clamp(2.6rem,6.5vw,4.5rem)] leading-[0.9] font-light text-slate"
       >
         {year}
       </p>
 
       <div>
-        <p className="eyebrow-sm text-gold">{period}</p>
+        <p className="eyebrow-sm text-champagne">{period}</p>
 
-        <Heading className="mt-4 font-display text-[clamp(1.5rem,3vw,2.25rem)] leading-tight font-light text-ivory">
+        <Heading className="mt-4 font-display text-[clamp(1.6rem,3.2vw,2.4rem)] leading-tight font-light text-ivory">
           {title}
         </Heading>
 
         <p className="mt-2 text-pearl/75">{org}</p>
 
-        {detail ? (
-          <p className="mt-5 max-w-prose text-[0.95rem]">{detail}</p>
-        ) : null}
+        {detail ? <p className="mt-5 max-w-prose text-[0.95rem]">{detail}</p> : null}
       </div>
     </li>
   );
@@ -45,8 +51,8 @@ function Experience({ env }) {
     if (env.reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      gsap.from(".exp-rise", {
-        y: 24,
+      gsap.from(".xp-rise", {
+        y: 26,
         opacity: 0,
         duration: 1,
         stagger: 0.08,
@@ -54,11 +60,11 @@ function Experience({ env }) {
         scrollTrigger: { trigger: section.current, start: "top 76%" },
       });
 
-      gsap.utils.toArray(".exp-entry").forEach((entry) => {
+      gsap.utils.toArray(".xp-entry").forEach((entry) => {
         gsap.from(entry, {
-          y: 22,
+          y: 24,
           opacity: 0,
-          duration: 0.9,
+          duration: 0.95,
           ease: "expo.out",
           scrollTrigger: { trigger: entry, start: "top 88%" },
         });
@@ -75,13 +81,14 @@ function Experience({ env }) {
       aria-labelledby="experience-title"
       className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
     >
-      <div className="mx-auto w-full max-w-[104rem] px-6 sm:px-10">
-        <SectionHeading
+      <div className="mx-auto w-full max-w-[108rem] px-6 sm:px-10">
+        <SectionTitle
           id="experience-title"
           index={experience.index}
           label={experience.label}
           title={experience.title}
-          itemClass="exp-rise"
+          accent={experience.accent}
+          itemClass="xp-rise"
         />
 
         <ol className="mt-20 sm:mt-28">
@@ -90,8 +97,14 @@ function Experience({ env }) {
           ))}
         </ol>
 
-        <h3 className="exp-rise mt-20 flex items-center gap-5 eyebrow text-gold-light sm:mt-24">
-          <span aria-hidden="true" className="h-px w-14 bg-gold/40" />
+        <h3 className="xp-rise mt-20 flex items-center gap-5 eyebrow text-gold-bright sm:mt-24">
+          <span
+            aria-hidden="true"
+            className="h-px w-16"
+            style={{
+              background: "linear-gradient(90deg, rgba(255,217,102,0.95), rgba(140,101,8,0))",
+            }}
+          />
           {experience.educationTitle}
         </h3>
 
