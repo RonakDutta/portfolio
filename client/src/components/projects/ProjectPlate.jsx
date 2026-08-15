@@ -57,17 +57,26 @@ function ProjectPlate({
           sm:aspect-[2.104/1]"
       >
         {hasImage ? (
-          <img
-            src={src}
-            alt={alt}
-            loading={priority ? "eager" : "lazy"}
-            fetchPriority={priority ? "high" : "low"}
-            decoding="async"
-            onError={() => setBroken(true)}
-            className={`absolute inset-0 h-full w-full object-cover object-top
-              transition-transform duration-[1300ms] ease-[cubic-bezier(0.16,1,0.3,1)]
-              ${interactive ? "group-hover/plate:scale-[1.015]" : ""}`}
-          />
+          <picture>
+            <source
+              type="image/webp"
+              sizes="(min-width: 1024px) 88vw, 100vw"
+              srcSet={`${src}-800.webp 800w, ${src}-1600.webp 1600w`}
+            />
+            <img
+              src={`${src}-fallback.png`}
+              alt={alt}
+              width="1600"
+              height="760"
+              loading={priority ? "eager" : "lazy"}
+              fetchPriority={priority ? "high" : "low"}
+              decoding="async"
+              onError={() => setBroken(true)}
+              className={`absolute inset-0 h-full w-full object-cover object-top
+                transition-transform duration-[1300ms] ease-[cubic-bezier(0.16,1,0.3,1)]
+                ${interactive ? "group-hover/plate:scale-[1.015]" : ""}`}
+            />
+          </picture>
         ) : (
           <Placeholder label={label} />
         )}

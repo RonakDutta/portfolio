@@ -2,7 +2,6 @@ import { memo } from "react";
 import GoldAurora from "./GoldAurora";
 import GoldRibbons from "./GoldRibbons";
 import GoldDust from "./GoldDust";
-import Sparkles from "../fx/Sparkles";
 
 /**
  * The world the site sits in. One fixed stack behind every section, so the
@@ -52,14 +51,20 @@ function Atmosphere({ env }) {
 
       {/* Ribbons at a quarter strength. At full opacity they drew two bright
           gold curves straight across the headline and the portrait, which is
-          the first thing that made the page look decorated rather than lit. */}
-      <GoldRibbons still={still} className="opacity-25" />
+          the first thing that made the page look decorated rather than lit.
+
+          Always held still, on every device. The sway animated a transform on
+          each of four paths inside one full-viewport SVG, so the whole surface
+          re-rasterised every frame; motionless they cost nothing after the
+          first paint and read as exactly the same light trails. */}
+      <GoldRibbons still className="opacity-25" />
 
       {still ? null : (
-        <>
-          <GoldDust count={env.isMobile ? 18 : 40} className="opacity-70" />
-          <Sparkles count={env.isMobile ? 10 : 22} seed={101} className="opacity-70" />
-        </>
+        <GoldDust
+          motes={env.isMobile ? 14 : 30}
+          glints={env.isMobile ? 10 : 20}
+          className="opacity-80"
+        />
       )}
 
       {/* Volumetric bloom pooling low in the frame. It gives the black a floor
@@ -81,9 +86,12 @@ function Atmosphere({ env }) {
       />
 
       {/* Grain. Kills banding across the large black fields, which is what
-          separates a lit black from a flat #000. */}
+          separates a lit black from a flat #000. It used to be composited with
+          `overlay`, which costs a full-viewport backdrop read on every frame
+          the aurora moves. Over a near-black page plain alpha looks the same
+          and measured about one frame per scroll tick cheaper. */}
       <div
-        className="absolute inset-0 opacity-[0.4] mix-blend-overlay"
+        className="absolute inset-0 opacity-[0.16]"
         style={{
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.34'/%3E%3C/svg%3E\")",

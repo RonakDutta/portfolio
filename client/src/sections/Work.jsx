@@ -1,7 +1,6 @@
 import { memo } from "react";
 import ProjectShowcase from "../components/projects/ProjectShowcase";
 import SectionTitle from "../components/typography/SectionTitle";
-import Sparkles from "../components/fx/Sparkles";
 import { work } from "../data/content";
 
 function Work({ env }) {
@@ -11,7 +10,6 @@ function Work({ env }) {
       aria-labelledby="work-title"
       className="relative isolate overflow-x-clip py-24 sm:py-32 lg:py-44"
     >
-      <Sparkles count={12} seed={19} className="-z-10 opacity-60" />
 
       <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle

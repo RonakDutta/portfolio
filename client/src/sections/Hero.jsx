@@ -2,7 +2,6 @@ import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import PortraitPlate from "../components/media/PortraitPlate";
 import GoldGeometry from "../components/atmosphere/GoldGeometry";
-import Sparkles from "../components/fx/Sparkles";
 import Magnetic from "../components/fx/Magnetic";
 import Marquee from "../components/ui/Marquee";
 import Action from "../components/ui/Action";
@@ -64,7 +63,6 @@ function Hero({ env }) {
         className="hero-geo top-[46%] right-[-30%] aspect-square w-[110vmin] -translate-y-1/2
           opacity-70 lg:right-[-8%] lg:w-[68vmin]"
       />
-      <Sparkles count={16} seed={3} className="-z-10 opacity-80" />
 
       <div
         className="mx-auto grid w-full max-w-[102rem] flex-1 items-center gap-8 px-6

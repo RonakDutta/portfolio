@@ -1,7 +1,6 @@
 import { memo, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Sparkles from "../fx/Sparkles";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -117,8 +116,6 @@ function PortraitPlate({
           }}
         />
       </div>
-
-      <Sparkles count={9} seed={31} scale={0.85} className="-z-10" />
     </figure>
   );
 }

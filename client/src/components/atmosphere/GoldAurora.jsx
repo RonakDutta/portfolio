@@ -11,6 +11,12 @@ import { memo } from "react";
  *
  * Pure CSS: no canvas, no shader. It composites on the GPU and costs nothing
  * on the main thread, which is the only reason it can run for the whole page.
+ *
+ * These blend normally rather than with `screen`. Over a near-black stage the
+ * two are almost indistinguishable, and `screen` on a full-viewport layer
+ * makes the compositor re-read the backdrop on every frame the fields move,
+ * which measured at roughly one dropped frame per scroll tick on a throttled
+ * phone.
  */
 const FIELDS = [
   {
@@ -52,7 +58,7 @@ function GoldAurora({ still = false, intensity = 1 }) {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 overflow-hidden mix-blend-screen"
+      className="absolute inset-0 overflow-hidden"
       style={{ opacity: intensity }}
     >
       {/* No blur filter here on purpose. These are radial gradients that

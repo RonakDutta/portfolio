@@ -13,7 +13,8 @@ import gsap from "gsap";
  * hidden (`has-cursor` on <html>) once this is actually on screen, so a
  * failure here can never leave a visitor with no pointer at all.
  */
-const TRAIL_MS = 55;
+const TRAIL_MS = 90;
+const TRAIL_MIN_PX = 6;
 const SPARK_ARMS = 9;
 
 export default function Cursor({ enabled }) {
@@ -44,6 +45,8 @@ export default function Cursor({ enabled }) {
 
     let visible = false;
     let lastTrail = 0;
+    let lastX = 0;
+    let lastY = 0;
 
     const show = () => {
       if (visible) return;
@@ -83,9 +86,16 @@ export default function Cursor({ enabled }) {
       labelX(e.clientX);
       labelY(e.clientY);
 
+      // Only leave a trail when the pointer is actually travelling. A hand
+      // resting on the trackpad used to emit a sparkle, and a tween to drive
+      // it, eighteen times a second.
       const now = performance.now();
-      if (now - lastTrail > TRAIL_MS) {
+      const far =
+        Math.abs(e.clientX - lastX) + Math.abs(e.clientY - lastY) > TRAIL_MIN_PX;
+      if (far && now - lastTrail > TRAIL_MS) {
         lastTrail = now;
+        lastX = e.clientX;
+        lastY = e.clientY;
         sparkle(e.clientX, e.clientY);
       }
     };

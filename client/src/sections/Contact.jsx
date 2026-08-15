@@ -1,7 +1,6 @@
 import { memo, useCallback, useMemo, useState } from "react";
 import SectionTitle from "../components/typography/SectionTitle";
 import GoldGeometry from "../components/atmosphere/GoldGeometry";
-import Sparkles from "../components/fx/Sparkles";
 import Action from "../components/ui/Action";
 import { scrollToSection } from "../lib/useSmoothScroll";
 import { SECTIONS } from "../lib/store";
@@ -148,7 +147,6 @@ function Contact() {
         className="pointer-events-none top-[38%] left-1/2 aspect-square w-[150vmin]
           -translate-x-1/2 -translate-y-1/2 opacity-40 lg:w-[92vmin]"
       />
-      <Sparkles count={20} seed={91} className="-z-10" />
 
       <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
@@ -205,7 +203,7 @@ function Contact() {
                       className="shrink-0 text-[0.85rem] text-mute transition-colors duration-500
                         hover:text-brass-lit"
                     >
-                      {copied === "email" ? "Copied" : "Copy"}
+                      {copied === "email" ? contact.copiedLabel : "Copy"}
                     </button>
                   ) : (
                     <span
@@ -266,10 +264,10 @@ function Contact() {
                     onClick={() => copy(draft, "draft")}
                     arrow={null}
                   >
-                    {copied === "draft" ? "Copied" : "Copy the note"}
+                    {copied === "draft" ? contact.copiedLabel : contact.copyLabel}
                   </Action>
                   <Action onClick={reset} arrow={null}>
-                    Write another
+                    {contact.againLabel}
                   </Action>
                 </div>
               </div>
@@ -327,7 +325,7 @@ function Contact() {
 
                 <div className="mt-6">
                   <Action variant="solid" type="submit">
-                    Send it
+                    {contact.sendLabel}
                   </Action>
                 </div>
               </form>

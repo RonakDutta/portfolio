@@ -33,7 +33,7 @@ export const hero = {
 
   status: "Open to work",
 
-  primary: { label: "See the work", target: "work" },
+  primary: { label: "Have a look", target: "work" },
   secondary: { label: "Resume", href: "/resume.pdf" },
 
   scrollCue: "Scroll",
@@ -84,6 +84,9 @@ export const work = {
   title: "Selected",
   script: "work",
 
+  openLabel: "Open it",
+  sourceLabel: "Code",
+
   projects: [
     {
       slug: "ats-workplace",
@@ -92,7 +95,7 @@ export const work = {
       year: "2026",
       featured: true,
 
-      image: "/projects/ats-workplace.png",
+      image: "/projects/ats-workplace",
       imageAlt: "ATS Workplace resume screening interface",
 
       description:
@@ -116,7 +119,7 @@ export const work = {
       category: "Community platform",
       year: "2026",
 
-      image: "/projects/business-40.png",
+      image: "/projects/business-40",
       imageAlt: "Business 4.0 community meetup platform",
 
       description:
@@ -140,7 +143,7 @@ export const work = {
       category: "Ride booking application",
       year: "2025",
 
-      image: "/projects/safarsaathi.png",
+      image: "/projects/safarsaathi",
       imageAlt: "SafarSaathi ride booking interface",
 
       description:
@@ -246,6 +249,10 @@ export const contact = {
   responseTime: "I usually reply within a day.",
 
   formTitle: "Write me a note",
+  sendLabel: "Send",
+  copyLabel: "Copy it",
+  copiedLabel: "Copied",
+  againLabel: "Write another",
 
   channels: [
     { key: "email", label: "Email", value: "ronakdutta100@gmail.com" },

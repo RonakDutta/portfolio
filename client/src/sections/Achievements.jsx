@@ -1,6 +1,5 @@
 import { memo } from "react";
 import SectionTitle from "../components/typography/SectionTitle";
-import Sparkles from "../components/fx/Sparkles";
 import { achievements } from "../data/content";
 
 /**
@@ -15,7 +14,6 @@ function Achievements() {
       aria-labelledby="achievements-title"
       className="relative isolate overflow-x-clip pb-20 sm:pb-24 lg:pb-32"
     >
-      <Sparkles count={10} seed={57} className="-z-10 opacity-50" />
 
       <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle

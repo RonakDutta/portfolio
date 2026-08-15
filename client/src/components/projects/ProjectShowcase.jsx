@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ProjectPlate from "./ProjectPlate";
 import Action from "../ui/Action";
 import Magnetic from "../fx/Magnetic";
+import { work } from "../../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -144,14 +145,14 @@ function ProjectShowcase({ project, index, env }) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Live site
+                    {work.openLabel}
                   </Action>
                 </Magnetic>
               ) : null}
               {githubUrl ? (
                 <Magnetic active={env.pointerFx}>
                   <Action href={githubUrl} target="_blank" rel="noopener noreferrer">
-                    Source
+                    {work.sourceLabel}
                   </Action>
                 </Magnetic>
               ) : null}

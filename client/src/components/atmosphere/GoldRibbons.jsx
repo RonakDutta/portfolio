@@ -58,7 +58,7 @@ function GoldRibbons({ still = false, className = "" }) {
       aria-hidden="true"
       viewBox="0 0 1440 900"
       preserveAspectRatio="xMidYMid slice"
-      className={`absolute inset-0 h-full w-full mix-blend-screen ${className}`}
+      className={`absolute inset-0 h-full w-full ${className}`}
     >
       <defs>
         <linearGradient id={`rb-${uid}`} x1="0" y1="0" x2="1" y2="0">
