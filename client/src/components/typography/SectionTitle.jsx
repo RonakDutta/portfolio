@@ -1,60 +1,71 @@
 import { memo } from "react";
+import Words from "./Words";
 
 /**
- * Section masthead with 24k gold filament, Cinzel display title, and Playfair italic foil accent.
+ * Section masthead: a mono index line, then the title with its cursive accent.
+ *
+ * There is no rule under it. Every section used to open with the same hairline
+ * and the page ended up looking ruled rather than designed — the space below
+ * the title does that job now.
  */
 function SectionTitle({
   index,
   label,
   title,
-  accent,
+  script,
   id,
-  align = "left",
+  tone = "ink",
   size = "lg",
-  itemClass = "",
   className = "",
 }) {
-  const centred = align === "center";
+  const paper = tone === "paper";
 
   return (
     <header className={className}>
       <p
         data-reveal
-        className={`${itemClass} flex items-center gap-4 eyebrow text-champagne ${
-          centred ? "justify-center" : ""
+        className={`flex items-center gap-3.5 eyebrow ${
+          paper ? "text-espresso-soft" : "text-brass"
         }`}
       >
-        {index ? (
-          <span className="flex items-center gap-2 font-mono text-[0.7rem] font-medium text-gold-metal">
-            <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal/80" />
-            {index}
-          </span>
-        ) : null}
+        {index ? <span className="font-medium">{index}</span> : null}
         <span
           aria-hidden="true"
-          className="h-px w-10 sm:w-14"
+          className="h-px w-8 sm:w-12"
           style={{
-            background:
-              "linear-gradient(90deg, rgba(229,190,72,0.95), rgba(179,134,40,0))",
+            background: paper
+              ? "linear-gradient(90deg, rgba(74,66,55,0.7), rgba(74,66,55,0))"
+              : "linear-gradient(90deg, rgba(200,164,92,0.9), rgba(200,164,92,0))",
           }}
         />
-        <span className="text-sand/90 font-medium tracking-[0.24em]">{label}</span>
+        <span className={paper ? "text-espresso/70" : "text-sand/80"}>{label}</span>
       </p>
 
-      {title ? (
+      {title || script ? (
         <h2
           id={id}
-          data-reveal
-          className={`${itemClass} mt-6 font-display ${centred ? "text-center" : ""} ${
+          className={`mt-5 font-display font-normal ${
             size === "xl"
-              ? "text-[clamp(2.8rem,8.5vw,6.5rem)] leading-[0.95] font-semibold tracking-[0.03em] uppercase"
-              : "text-[clamp(2.2rem,5.5vw,4.2rem)] leading-[0.98] font-semibold tracking-[0.03em] uppercase"
-          }`}
+              ? "text-[clamp(2.9rem,9vw,6.5rem)]"
+              : "text-[clamp(2.4rem,6.5vw,4.6rem)]"
+          } leading-[1.02] tracking-[-0.02em] sm:mt-6`}
         >
-          <span className="text-ivory-lit inline-block">{title}</span>{" "}
-          {accent ? (
-            <span className="text-foil animate-foil font-accent font-normal italic lowercase sm:pl-2">
-              {accent}
+          {title ? (
+            <Words
+              text={title}
+              className={paper ? "text-espresso" : "text-ivory-lit"}
+            />
+          ) : null}
+          {title && script ? " " : null}
+          {script ? (
+            <span
+              data-reveal
+              style={{ transitionDelay: "140ms" }}
+              className={`script inline-block pr-[0.12em] text-[1.34em] leading-[0.9] align-baseline ${
+                paper ? "text-brass-deep" : "text-leaf"
+              }`}
+            >
+              {script}
             </span>
           ) : null}
         </h2>

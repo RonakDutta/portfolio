@@ -1,32 +1,36 @@
 import { memo } from "react";
 import ProjectShowcase from "../components/projects/ProjectShowcase";
 import SectionTitle from "../components/typography/SectionTitle";
+import Sparkles from "../components/fx/Sparkles";
 import { work } from "../data/content";
 
 function Work({ env }) {
-  const [featured, ...rest] = work.projects;
-
-
   return (
     <section
       id="work"
       aria-labelledby="work-title"
-      className="relative isolate overflow-x-clip py-20 sm:py-28 lg:py-36"
+      className="relative isolate overflow-x-clip py-24 sm:py-32 lg:py-44"
     >
-      <div className="mx-auto w-full max-w-[108rem] px-6 sm:px-10">
+      <Sparkles count={12} seed={19} className="-z-10 opacity-60" />
+
+      <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
           id="work-title"
           index={work.index}
           label={work.label}
           title={work.title}
-          accent={work.accent}
-          itemClass="reveal"
+          script={work.script}
+          size="xl"
         />
 
-        <div className="mt-14 sm:mt-20 space-y-24 sm:space-y-32">
-          <ProjectShowcase project={featured} index={0} env={env} />
-          {rest.map((project, i) => (
-            <ProjectShowcase key={project.slug} project={project} index={i + 1} env={env} />
+        <div className="mt-16 space-y-28 sm:mt-24 sm:space-y-36 lg:space-y-44">
+          {work.projects.map((project, i) => (
+            <ProjectShowcase
+              key={project.slug}
+              project={project}
+              index={i}
+              env={env}
+            />
           ))}
         </div>
       </div>

@@ -5,15 +5,18 @@ import { alreadyCrossed, markCrossed } from "../lib/threshold";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FLOOR_MS = 1100;
+const FLOOR_MS = 1200;
 const CEILING_MS = 4000;
 
 /**
- * Drives the curtain that `index.html` painted, then removes it.
+ * Drives the overture that `index.html` painted, then removes it.
  *
- * It holds until fonts are ready, so the display serif never swaps in front of
- * the visitor, and it opens once per session — a returning visitor gets a plain
- * fade rather than the performance again.
+ * It holds until the display faces are ready, so Fraunces and Ephesis never
+ * swap in front of the visitor, and it performs once per session — a returning
+ * visitor gets a plain fade instead of the whole show again.
+ *
+ * The exit is a single upward wipe rather than two halves parting: the sheet
+ * leaves the way a page turns, and the hero is already sitting behind it.
  */
 export default function Curtain({ env }) {
   useLayoutEffect(() => {
@@ -22,8 +25,7 @@ export default function Curtain({ env }) {
 
     const fill = gate.querySelector("#cu-fill");
     const core = gate.querySelector(".cu-core");
-    const seam = gate.querySelector("#cu-seam");
-    const halves = gate.querySelectorAll(".cu-half");
+    const count = gate.querySelector("#cu-count");
 
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
@@ -57,6 +59,8 @@ export default function Curtain({ env }) {
     let shown = 0;
     let fontsReady = false;
 
+    // Pick up wherever the CSS creep animation had reached, so the bar never
+    // jumps backwards at the moment JS takes over.
     try {
       const creep = new DOMMatrixReadOnly(getComputedStyle(fill).transform).a;
       if (Number.isFinite(creep)) shown = creep;
@@ -66,36 +70,37 @@ export default function Curtain({ env }) {
     fill.style.animation = "none";
     gsap.set(fill, { scaleX: shown });
 
+    const paint = (value) => {
+      gsap.set(fill, { scaleX: value });
+      count.textContent = String(Math.round(value * 100)).padStart(2, "0");
+    };
+
     const open = () => {
       cancelAnimationFrame(raf);
+      paint(1);
 
       gsap
-        .timeline({ onComplete: teardown })
-        .to(fill, { scaleX: 1, duration: 0.35, ease: "power2.out" })
-        .to(core, { opacity: 0, y: -10, duration: 0.5, ease: "power2.in" }, 0.2)
+        .timeline({ onComplete: teardown, defaults: { ease: "expo.inOut" } })
+        .to(core, { yPercent: 60, opacity: 0, duration: 0.9, ease: "power2.in" })
         .fromTo(
-          seam,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.35, ease: "power2.out" },
-          0.4,
+          gate,
+          { clipPath: "inset(0% 0% 0% 0%)" },
+          { clipPath: "inset(0% 0% 100% 0%)", duration: 1.25 },
+          0.15,
         )
-        .to(seam, { opacity: 0, duration: 0.6, ease: "power2.in" }, 0.85)
-        // Heavy, slow parting. The whole tone of the site is set here.
-        .to(halves[0], { xPercent: -100, duration: 1.5, ease: "expo.inOut" }, 0.6)
-        .to(halves[1], { xPercent: 100, duration: 1.5, ease: "expo.inOut" }, 0.6)
-        .add(markCrossed, 1.1);
+        .add(markCrossed, 0.8);
     };
 
     const started = performance.now();
 
     const tick = () => {
       const elapsed = performance.now() - started;
-      const target = fontsReady || elapsed >= CEILING_MS ? 1 : 0.55;
+      const target = fontsReady || elapsed >= CEILING_MS ? 1 : 0.62;
 
-      shown += (target - shown) * 0.07;
-      gsap.set(fill, { scaleX: shown });
+      shown += (target - shown) * 0.06;
+      paint(shown);
 
-      if (target === 1 && elapsed >= FLOOR_MS) {
+      if (target === 1 && elapsed >= FLOOR_MS && shown > 0.985) {
         open();
         return;
       }
@@ -103,12 +108,19 @@ export default function Curtain({ env }) {
     };
 
     raf = requestAnimationFrame(tick);
-    (document.fonts?.ready ?? Promise.resolve()).then(() => {
+
+    const ready = document.fonts?.ready ?? Promise.resolve();
+    ready.then(() => {
       fontsReady = true;
+      core.classList.add("is-ready");
     });
+    // If the font API never settles, still show the name rather than an empty
+    // sheet with a counter on it.
+    const nameFallback = setTimeout(() => core.classList.add("is-ready"), 900);
 
     return () => {
       cancelAnimationFrame(raf);
+      clearTimeout(nameFallback);
       if (!done) {
         document.documentElement.style.removeProperty("overflow");
         window.__lenis?.start();

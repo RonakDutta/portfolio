@@ -3,66 +3,72 @@ import SectionTitle from "../components/typography/SectionTitle";
 import { skills } from "../data/content";
 
 /**
- * A technical index, set like the specification page of a catalogue.
+ * The toolkit, printed on paper.
  *
- * Numbered rows, a hairline between each, entries as plain display type. No
- * cards, no pills, no dots — a wall of bordered chips is the single most
- * recognisable "generated portfolio" pattern, and it buries the information
- * under decoration.
+ * This is the one light section on the site. A dark portfolio that stays dark
+ * for six screens reads as one long gradient; cutting a warm sheet into the
+ * middle of it gives the scroll a middle, and gives this section a reason to
+ * be plain — it is a specification page, not a wall of glowing badges.
  */
 function Skills() {
   return (
     <section
       id="skills"
       aria-labelledby="skills-title"
-      className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
+      className="paper relative isolate z-10 overflow-x-clip py-24 shadow-[0_-40px_80px_-40px_rgba(0,0,0,0.9),0_40px_80px_-40px_rgba(0,0,0,0.9)] sm:py-32 lg:py-40"
     >
-      <div className="mx-auto w-full max-w-[108rem] px-6 sm:px-10">
-        <SectionTitle
-          id="skills-title"
-          index={skills.index}
-          label={skills.label}
-          title={skills.title}
-          accent={skills.accent}
-        />
+      {/* Paper tooth. Without it the sheet is a flat swatch. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.5] mix-blend-multiply"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.16'/%3E%3C/svg%3E\")",
+          backgroundSize: "200px 200px",
+        }}
+      />
 
-        <dl className="mt-16 sm:mt-24">
+      <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+          <SectionTitle
+            id="skills-title"
+            index={skills.index}
+            label={skills.label}
+            title={skills.title}
+            script={skills.script}
+            tone="paper"
+          />
+
+          <p
+            data-reveal
+            className="max-w-[42ch] font-display text-[1.05rem] leading-relaxed text-espresso-soft lg:justify-self-end lg:text-right"
+          >
+            {skills.note}
+          </p>
+        </div>
+
+        <dl className="mt-16 grid gap-x-16 gap-y-12 sm:mt-20 sm:grid-cols-2 lg:mt-24 lg:gap-y-16">
           {skills.groups.map((group, i) => (
             <div
               key={group.name}
               data-reveal
-              className="group relative grid gap-5 border-t border-gold-dark/20 py-8
-                sm:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] sm:gap-14 sm:py-10"
+              style={{ transitionDelay: `${i * 60}ms` }}
+              className={i === skills.groups.length - 1 ? "sm:col-span-2" : ""}
             >
-              {/* The rule lights up as the row is hovered — the only state
-                  change in the section. */}
-              <span
-                aria-hidden="true"
-                className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 transition-transform
-                  duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
-                style={{
-                  background:
-                    "linear-gradient(90deg, rgba(255,217,102,0.85), rgba(140,101,8,0))",
-                }}
-              />
-
-              <dt className="flex items-baseline gap-5">
-                <span
-                  aria-hidden="true"
-                  className="font-mono text-xs text-gold-dark"
-                >
+              <dt className="flex items-baseline gap-3 eyebrow-sm text-espresso-soft">
+                <span className="text-brass-deep">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="eyebrow text-champagne">{group.name}</span>
+                {group.name}
               </dt>
 
-              <dd>
-                <ul className="flex flex-wrap gap-x-10 gap-y-2.5">
+              <dd className="mt-3.5">
+                <ul className="flex flex-wrap gap-x-8 gap-y-1.5">
                   {group.items.map((item) => (
                     <li
                       key={item}
-                      className="font-display text-[1.45rem] leading-tight font-normal text-pearl
-                        transition-colors duration-500 group-hover:text-ivory sm:text-[1.75rem]"
+                      className="font-display text-[1.55rem] leading-tight font-normal
+                        tracking-[-0.02em] text-espresso sm:text-[1.85rem]"
                     >
                       {item}
                     </li>
@@ -71,7 +77,6 @@ function Skills() {
               </dd>
             </div>
           ))}
-          <div aria-hidden="true" className="h-px w-full bg-gold-dark/20" />
         </dl>
       </div>
     </section>

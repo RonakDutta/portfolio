@@ -1,11 +1,11 @@
 {
   "name": "Ronak Dutta, Software Engineer",
   "short_name": "Ronak Dutta",
-  "description": "A descent through six chambers of work, study and the things I have built.",
+  "description": "Software engineer in New Delhi. Selected work, experience and contact.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#05030a",
-  "theme_color": "#05030a",
+  "background_color": "#07060a",
+  "theme_color": "#07060a",
   "icons": [
     {
       "src": "/icon-192.png",

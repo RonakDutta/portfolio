@@ -2,10 +2,21 @@ import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ProjectPlate from "./ProjectPlate";
-import LuxuryButton from "../ui/LuxuryButton";
+import Action from "../ui/Action";
+import Magnetic from "../fx/Magnetic";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * One project, set as a case sheet.
+ *
+ * The previous layout mirrored image and text left/right on alternating rows,
+ * which is the single most recognisable portfolio template there is. This runs
+ * every project through the same masthead → capture → detail band, and gets
+ * its variety from where the sheet sits on the page instead: odd projects are
+ * inset from the left, even ones from the right, so the column edge moves as
+ * you scroll without the content ever reshuffling.
+ */
 function ProjectShowcase({ project, index, env }) {
   const root = useRef(null);
 
@@ -13,6 +24,7 @@ function ProjectShowcase({ project, index, env }) {
     slug,
     name,
     category,
+    year,
     featured,
     image,
     imageAlt,
@@ -23,25 +35,28 @@ function ProjectShowcase({ project, index, env }) {
     githubUrl,
   } = project;
 
-  const variant = featured ? "featured" : index % 2 === 0 ? "right" : "left";
   const headingId = `project-${slug}`;
   const number = String(index + 1).padStart(2, "0");
+  const inset = index % 2 === 0 ? "lg:pr-[6%]" : "lg:pl-[6%]";
 
   useLayoutEffect(() => {
     if (env.reducedMotion) return;
 
     const ctx = gsap.context(() => {
       gsap
-        .timeline({ scrollTrigger: { trigger: root.current, start: "top 78%" } })
+        .timeline({ scrollTrigger: { trigger: root.current, start: "top 76%" } })
+        .from(".show-line", {
+          y: 24,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.07,
+          ease: "expo.out",
+        })
         .fromTo(
           ".plate-wipe",
           { clipPath: "inset(0% 0% 100% 0%)" },
-          { clipPath: "inset(0% 0% 0% 0%)", duration: 1.6, ease: "expo.out" },
-        )
-        .from(
-          ".show-line",
-          { y: 22, opacity: 0, duration: 1, stagger: 0.06, ease: "expo.out" },
-          0.28,
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, ease: "expo.out" },
+          0.15,
         );
     }, root);
 
@@ -59,219 +74,122 @@ function ProjectShowcase({ project, index, env }) {
     />
   );
 
-  const masthead = (
-    <div>
-      <div className="show-line flex flex-wrap items-center gap-3">
-        <span className="font-mono text-xs font-semibold text-gold-metal">
-          #{number}
-        </span>
+  return (
+    <article ref={root} aria-labelledby={headingId} className={`relative ${inset}`}>
+      <div className="show-line flex flex-wrap items-center gap-x-4 gap-y-2 eyebrow-sm">
+        <span className="text-brass">{number}</span>
         <span
           aria-hidden="true"
-          className="h-px w-6"
+          className="h-px w-8"
           style={{
             background:
-              "linear-gradient(90deg, rgba(229,190,72,0.9), rgba(179,134,40,0))",
+              "linear-gradient(90deg, rgba(200,164,92,0.9), rgba(200,164,92,0))",
           }}
         />
+        <span className="text-sand/85">{category}</span>
         {featured ? (
-          <>
-            <span className="rounded-md border border-gold-dark/40 bg-coal/90 px-2.5 py-0.5 eyebrow-sm text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-gold-bright">
-              Featured Project
-            </span>
-            <span aria-hidden="true" className="text-gold-dark/40 font-mono">
-              /
-            </span>
-          </>
+          <span className="text-brass-lit">Featured</span>
         ) : null}
-        <span className="eyebrow-sm text-sand/90">{category}</span>
+        <span className="ml-auto text-mute">{year}</span>
       </div>
 
       <h3
         id={headingId}
-        className={`show-line mt-4 font-display font-semibold tracking-[0.03em] uppercase ${
-          featured
-            ? "text-[clamp(2.2rem,5.5vw,4.5rem)] leading-[0.98]"
-            : "text-[clamp(1.9rem,4vw,3.2rem)] leading-[1.02]"
-        }`}
+        className="show-line mt-4 font-display text-[clamp(2.1rem,6vw,4rem)] leading-[1.02]
+          font-normal tracking-[-0.03em] text-ivory sm:mt-5"
       >
-        <span className={featured ? "text-foil animate-foil" : "text-ivory-lit"}>
-          {name}
-        </span>
+        {name}
       </h3>
-    </div>
-  );
 
-  if (variant === "featured") {
-    return (
-      <article
-        ref={root}
-        aria-labelledby={headingId}
-        className="relative"
-      >
-        <div className="mb-8 sm:mb-12">{masthead}</div>
-        {plate}
+      <p className="show-line mt-5 max-w-[52ch] text-[1.02rem] leading-relaxed text-sand/85">
+        {description}
+      </p>
 
-        <div className="mt-12 grid gap-10 sm:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-16 lg:items-start">
-          {/* Left Column: Description, Tech Stack, & CTA Buttons */}
-          <div className="space-y-7">
-            <p className="show-line text-[1.05rem] leading-relaxed text-sand/90 font-normal">
-              {description}
-            </p>
+      <div className="mt-9 sm:mt-12">
+        {liveUrl ? (
+          <a
+            href={liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cursor="Open live"
+            aria-label={`${name} — open the live site`}
+            className="block"
+          >
+            {plate}
+          </a>
+        ) : (
+          plate
+        )}
+      </div>
 
-            {stack?.length ? (
-              <div className="show-line border-t border-gold-dark/20 pt-6">
-                <span className="eyebrow-sm text-gold-metal font-semibold tracking-[0.22em] block mb-3">
-                  Technologies
-                </span>
-                <p className="flex flex-wrap items-center gap-x-3 gap-y-2 eyebrow-sm text-sand/85">
-                  {stack.map((tech, i) => (
-                    <span key={tech} className="flex items-center gap-3">
-                      {i > 0 ? (
-                        <span aria-hidden="true" className="text-gold-dark/60 font-mono">
-                          ·
-                        </span>
-                      ) : null}
-                      {tech}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            ) : null}
+      {/* Detail band. Two columns that do not mirror: the build notes carry the
+          weight, the stack and the links sit under them in the margin. */}
+      <div className="mt-10 grid gap-9 sm:mt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.55fr)] lg:gap-16">
+        <div className="show-line">
+          {stack?.length ? (
+            <>
+              <p className="eyebrow-sm text-brass/80">Built with</p>
+              <ul className="mt-4 flex flex-wrap gap-x-2.5 gap-y-2.5">
+                {stack.map((tech) => (
+                  <li
+                    key={tech}
+                    className="border border-brass/20 px-3 py-1.5 font-mono text-[0.68rem]
+                      tracking-[0.08em] text-sand/90 transition-colors duration-500
+                      hover:border-brass/50 hover:text-brass-lit"
+                  >
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
 
-            {liveUrl || githubUrl ? (
-              <div className="show-line pt-2 flex flex-wrap items-center gap-4">
-                {liveUrl ? (
-                  <LuxuryButton
-                    variant="gold"
+          {liveUrl || githubUrl ? (
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              {liveUrl ? (
+                <Magnetic active={env.pointerFx}>
+                  <Action
+                    variant="solid"
                     href={liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Live Demo ↗
-                  </LuxuryButton>
-                ) : null}
-                {githubUrl ? (
-                  <LuxuryButton
-                    href={githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub ↗
-                  </LuxuryButton>
-                ) : null}
-              </div>
-            ) : null}
-          </div>
-
-          {/* Right Column: Key Architecture & Features */}
-          <div>
-            {highlights?.length ? (
-              <div className="show-line">
-                <span className="eyebrow-sm text-gold-metal font-semibold tracking-[0.22em] block mb-4">
-                  Architecture & Features
-                </span>
-                <ul className="space-y-0">
-                  {highlights.map((line) => (
-                    <li
-                      key={line}
-                      className="border-t border-gold-dark/20 py-4 text-[0.95rem] leading-relaxed text-sand/85 flex items-start gap-3.5"
-                    >
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-gold-metal/70" />
-                      <span>{line}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </article>
-    );
-  }
-
-  return (
-    <article
-      ref={root}
-      aria-labelledby={headingId}
-      className="relative"
-    >
-      <div
-        className={`grid gap-10 lg:items-center lg:gap-16 ${
-          variant === "left"
-            ? "lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]"
-            : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]"
-        }`}
-      >
-        <div className={variant === "right" ? "lg:order-2" : ""}>{plate}</div>
-        <div className={`space-y-6 ${variant === "right" ? "lg:order-1" : ""}`}>
-          {masthead}
-          <p className="show-line text-[1.02rem] leading-relaxed text-sand/90 font-normal">
-            {description}
-          </p>
-
-          {highlights?.length ? (
-            <div className="show-line pt-2">
-              <span className="eyebrow-sm text-gold-metal font-semibold tracking-[0.22em] block mb-3">
-                Architecture & Features
-              </span>
-              <ul className="space-y-0 border-t border-gold-dark/20">
-                {highlights.map((line) => (
-                  <li
-                    key={line}
-                    className="border-b border-gold-dark/15 py-3.5 text-[0.92rem] leading-relaxed text-sand/85 flex items-start gap-3.5"
-                  >
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-gold-metal/70" />
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-
-          {stack?.length ? (
-            <div className="show-line pt-1">
-              <span className="eyebrow-sm text-gold-metal font-semibold tracking-[0.22em] block mb-2.5">
-                Technologies
-              </span>
-              <p className="flex flex-wrap items-center gap-x-3 gap-y-2 eyebrow-sm text-sand/85">
-                {stack.map((tech, i) => (
-                  <span key={tech} className="flex items-center gap-3">
-                    {i > 0 ? (
-                      <span aria-hidden="true" className="text-gold-dark/60 font-mono">
-                        ·
-                      </span>
-                    ) : null}
-                    {tech}
-                  </span>
-                ))}
-              </p>
-            </div>
-          ) : null}
-
-          {liveUrl || githubUrl ? (
-            <div className="show-line pt-2 flex flex-wrap items-center gap-4">
-              {liveUrl ? (
-                <LuxuryButton
-                  variant="gold"
-                  href={liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Live Demo ↗
-                </LuxuryButton>
+                    Live site
+                  </Action>
+                </Magnetic>
               ) : null}
               {githubUrl ? (
-                <LuxuryButton
-                  href={githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub ↗
-                </LuxuryButton>
+                <Magnetic active={env.pointerFx}>
+                  <Action href={githubUrl} target="_blank" rel="noopener noreferrer">
+                    Source
+                  </Action>
+                </Magnetic>
               ) : null}
             </div>
           ) : null}
         </div>
+
+        {highlights?.length ? (
+          <div className="show-line">
+            <p className="eyebrow-sm text-brass/80">How it was built</p>
+            <ul className="mt-4 space-y-4">
+              {highlights.map((line, i) => (
+                <li
+                  key={line}
+                  className="flex gap-4 text-[0.96rem] leading-relaxed text-sand/85"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="shrink-0 pt-[0.35em] font-mono text-[0.66rem] text-brass/60"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
     </article>
   );

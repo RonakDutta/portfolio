@@ -1,374 +1,345 @@
-import { memo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import SectionTitle from "../components/typography/SectionTitle";
 import GoldGeometry from "../components/atmosphere/GoldGeometry";
-import LuxuryButton from "../components/ui/LuxuryButton";
+import Sparkles from "../components/fx/Sparkles";
+import Magnetic from "../components/fx/Magnetic";
+import Action from "../components/ui/Action";
 import { scrollToSection } from "../lib/useSmoothScroll";
 import { SECTIONS } from "../lib/store";
 import { contact, identity } from "../data/content";
 
-function Contact() {
-  const [copied, setCopied] = useState("");
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [formStatus, setFormStatus] = useState("idle"); // 'idle' | 'sending' | 'success'
+const EMPTY = { name: "", email: "", subject: "", message: "" };
+const MESSAGE_MAX = 1200;
+/* Deliberately loose: the job here is to catch a typo, not to adjudicate what
+   is a legal address. */
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-  const copy = async (value) => {
+function validate(values) {
+  const errors = {};
+  if (!values.name.trim()) errors.name = "Tell me who you are.";
+  if (!values.email.trim()) errors.email = "I need somewhere to reply.";
+  else if (!EMAIL.test(values.email.trim()))
+    errors.email = "That address does not look complete.";
+  if (!values.message.trim()) errors.message = "Say something and I will read it.";
+  else if (values.message.length > MESSAGE_MAX)
+    errors.message = `Keep it under ${MESSAGE_MAX} characters.`;
+  return errors;
+}
+
+function Field({
+  id,
+  name,
+  label,
+  value,
+  error,
+  touched,
+  onChange,
+  onBlur,
+  type = "text",
+  rows,
+  required = false,
+}) {
+  const invalid = Boolean(touched && error);
+  const Tag = rows ? "textarea" : "input";
+
+  return (
+    <div className="relative">
+      <Tag
+        id={id}
+        name={name}
+        type={rows ? undefined : type}
+        rows={rows}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        placeholder=" "
+        required={required}
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? `${id}-error` : undefined}
+        className={`field peer ${rows ? "resize-y" : ""}`}
+        style={invalid ? { borderBottomColor: "#d9663f" } : undefined}
+      />
+      <label htmlFor={id} className="field-label">
+        {label}
+        {required ? <span className="text-brass"> *</span> : null}
+      </label>
+
+      <p
+        id={`${id}-error`}
+        role={invalid ? "alert" : undefined}
+        className={`mt-2 font-mono text-[0.66rem] tracking-[0.08em] text-ember transition-opacity
+          duration-300 ${invalid ? "opacity-100" : "opacity-0"}`}
+      >
+        {error || " "}
+      </p>
+    </div>
+  );
+}
+
+function Contact() {
+  const [values, setValues] = useState(EMPTY);
+  const [touched, setTouched] = useState({});
+  const [sent, setSent] = useState(false);
+  const [copied, setCopied] = useState("");
+
+  const errors = useMemo(() => validate(values), [values]);
+
+  const change = useCallback((e) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const blur = useCallback((e) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+  }, []);
+
+  const copy = useCallback(async (value, key) => {
     try {
       await navigator.clipboard.writeText(value);
-      setCopied(value);
+      setCopied(key);
       setTimeout(() => setCopied(""), 2200);
     } catch {
-      /* Clipboard fallback */
+      /* Clipboard blocked — the address is on screen either way. */
     }
-  };
+  }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const draft = useMemo(
+    () =>
+      `Name: ${values.name}\nEmail: ${values.email}\n\n${values.message}`.trim(),
+    [values],
+  );
 
-  const handleSubmit = (e) => {
+  const submit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
+    setTouched({ name: true, email: true, message: true });
+    if (Object.keys(errors).length) {
+      document.getElementById(`contact-${Object.keys(errors)[0]}`)?.focus();
+      return;
+    }
 
-    setFormStatus("sending");
-
-    // Compose mailto link as direct fallback so visitor can also send via their mail client
-    const mailtoSubject = encodeURIComponent(
-      formData.subject || `Inquiry from ${formData.name}`,
+    const subject = encodeURIComponent(
+      values.subject.trim() || `Hello from ${values.name.trim()}`,
     );
-    const mailtoBody = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`,
-    );
-    const mailtoUrl = `mailto:${identity.email}?subject=${mailtoSubject}&body=${mailtoBody}`;
-
-    setTimeout(() => {
-      setFormStatus("success");
-      // Trigger mailto client
-      window.location.href = mailtoUrl;
-    }, 600);
+    window.location.href = `mailto:${identity.email}?subject=${subject}&body=${encodeURIComponent(draft)}`;
+    setSent(true);
   };
 
-  const resetForm = () => {
-    setFormData({ name: "", email: "", subject: "", message: "" });
-    setFormStatus("idle");
+  const reset = () => {
+    setValues(EMPTY);
+    setTouched({});
+    setSent(false);
+  };
+
+  const links = {
+    email: `mailto:${identity.email}`,
+    github: identity.github,
+    linkedin: identity.linkedin,
+    resume: identity.resume,
   };
 
   return (
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="relative isolate overflow-x-clip pt-20 pb-8 sm:pt-28 sm:pb-10 lg:pt-36 lg:pb-12"
+      className="relative isolate overflow-x-clip pt-10 pb-10 sm:pt-14 lg:pt-20"
     >
       <GoldGeometry
         variant="orbit"
-        data-reveal
-        className="pointer-events-none top-1/2 left-1/2 aspect-square w-[140vmin] -translate-x-1/2 -translate-y-1/2 opacity-45 lg:w-[96vmin]"
+        className="pointer-events-none top-[38%] left-1/2 aspect-square w-[150vmin]
+          -translate-x-1/2 -translate-y-1/2 opacity-40 lg:w-[92vmin]"
       />
+      <Sparkles count={20} seed={91} className="-z-10" />
 
-      <div className="relative mx-auto w-full max-w-[108rem] px-5 sm:px-10">
+      <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
           id="contact-title"
           index={contact.index}
           label={contact.label}
           title={contact.title}
-          itemClass="reveal"
+          script={contact.script}
+          size="xl"
         />
 
-        <div className="mt-10 grid gap-10 sm:mt-12 sm:gap-12 lg:grid-cols-12 lg:gap-16 lg:items-start">
-          {/* Left Column: Context, Social Links with SVG Icons */}
-          <div className="space-y-7 lg:col-span-5 min-w-0 w-full">
-            <div data-reveal className="space-y-3.5">
-              <p className="text-[1.12rem] sm:text-[1.22rem] leading-snug font-normal text-ivory">
-                Let’s build something exceptional together.
-              </p>
-              <p className="text-[0.96rem] leading-relaxed text-sand/85 font-light">
-                Open to software engineering roles, distributed systems discussions, and full-stack collaborations. Feel free to send a note or connect through my social links.
-              </p>
-            </div>
+        <div className="mt-14 grid gap-16 sm:mt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-24">
+          {/* Left: the human part. `min-w-0` matters here — without it the
+              email row sets the grid track's width and the whole column grows
+              past the viewport on a phone. */}
+          <div className="min-w-0">
+            <p
+              data-reveal
+              className="max-w-[38ch] font-display text-[1.4rem] leading-snug font-normal text-ivory sm:text-[1.7rem]"
+            >
+              {contact.lede}
+            </p>
 
-            {/* Social & Direct Contact Channels */}
-            <div data-reveal className="space-y-3 pt-1">
-              {/* Email */}
-              <div className="group flex items-center justify-between gap-3 rounded-xl border border-gold-dark/20 bg-carbon/70 p-4 transition-all duration-300 hover:border-gold-metal/40 hover:bg-coal/90 w-full min-w-0">
-                <a
-                  href={`mailto:${identity.email}`}
-                  className="flex items-center gap-3.5 min-w-0 flex-1"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold-dark/30 bg-coal text-gold-metal transition-colors group-hover:border-gold-metal group-hover:text-gold-white">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="block font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold-metal">
-                      Email
-                    </span>
-                    <span className="block truncate text-sm font-medium text-ivory group-hover:text-gold-white transition-colors">
-                      {identity.email}
-                    </span>
-                  </div>
-                </a>
+            <p data-reveal className="mt-4 text-[0.98rem] text-sand/75">
+              {contact.responseTime}
+            </p>
 
-                <button
-                  type="button"
-                  onClick={() => copy(identity.email)}
-                  className="shrink-0 inline-flex min-h-9 items-center justify-center rounded-md border border-gold-dark/30 bg-coal/80 px-3 eyebrow-sm text-[0.62rem] text-sand/80 transition-all hover:border-gold-metal hover:text-gold-white cursor-pointer"
-                  title="Copy email address"
+            <ul data-reveal className="mt-12 space-y-px">
+              {contact.channels.map((channel) => (
+                <li
+                  key={channel.key}
+                  className="group flex items-center justify-between gap-4 py-4"
                 >
-                  {copied === identity.email ? (
-                    <span className="text-gold-bright">Copied</span>
+                  <a
+                    href={links[channel.key]}
+                    target={channel.key === "email" ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    data-cursor={channel.key === "email" ? "Write" : "Open"}
+                    className="flex min-w-0 flex-1 items-baseline gap-5"
+                  >
+                    <span className="w-16 shrink-0 eyebrow-sm text-brass/75 sm:w-20">
+                      {channel.label}
+                    </span>
+                    <span
+                      className="link-underline min-w-0 truncate font-display text-[1.05rem] text-pearl
+                        transition-colors duration-500 group-hover:text-brass-lit sm:text-[1.3rem]"
+                    >
+                      {channel.value}
+                    </span>
+                  </a>
+
+                  {channel.key === "email" ? (
+                    <button
+                      type="button"
+                      onClick={() => copy(identity.email, "email")}
+                      className="shrink-0 eyebrow-sm text-mute transition-colors duration-500
+                        hover:text-brass-lit"
+                    >
+                      {copied === "email" ? "Copied" : "Copy"}
+                    </button>
                   ) : (
-                    <span>Copy</span>
+                    <span
+                      aria-hidden="true"
+                      className="shrink-0 text-mute transition-colors duration-500 group-hover:text-brass"
+                    >
+                      ↗
+                    </span>
                   )}
-                </button>
-              </div>
+                </li>
+              ))}
+            </ul>
 
-              {/* GitHub */}
-              <a
-                href={identity.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between gap-3 rounded-xl border border-gold-dark/20 bg-carbon/70 p-4 transition-all duration-300 hover:border-gold-metal/40 hover:bg-coal/90 w-full min-w-0"
-              >
-                <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold-dark/30 bg-coal text-gold-metal transition-colors group-hover:border-gold-metal group-hover:text-gold-white">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
-                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                    </svg>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="block font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold-metal">
-                      GitHub
-                    </span>
-                    <span className="block truncate text-sm font-medium text-ivory group-hover:text-gold-white transition-colors">
-                      github.com/RonakDutta
-                    </span>
-                  </div>
-                </div>
-                <span className="shrink-0 text-sand/50 group-hover:text-gold-metal transition-colors">
-                  ↗
-                </span>
-              </a>
-
-              {/* LinkedIn */}
-              <a
-                href={identity.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between gap-3 rounded-xl border border-gold-dark/20 bg-carbon/70 p-4 transition-all duration-300 hover:border-gold-metal/40 hover:bg-coal/90 w-full min-w-0"
-              >
-                <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold-dark/30 bg-coal text-gold-metal transition-colors group-hover:border-gold-metal group-hover:text-gold-white">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
-                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                      <rect x="2" y="9" width="4" height="12" />
-                      <circle cx="4" cy="4" r="2" />
-                    </svg>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="block font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold-metal">
-                      LinkedIn
-                    </span>
-                    <span className="block truncate text-sm font-medium text-ivory group-hover:text-gold-white transition-colors">
-                      linkedin.com/in/ronak-dutta
-                    </span>
-                  </div>
-                </div>
-                <span className="shrink-0 text-sand/50 group-hover:text-gold-metal transition-colors">
-                  ↗
-                </span>
-              </a>
-
-              {/* Resume */}
-              <a
-                href={identity.resume}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between gap-3 rounded-xl border border-gold-dark/20 bg-carbon/70 p-4 transition-all duration-300 hover:border-gold-metal/40 hover:bg-coal/90 w-full min-w-0"
-              >
-                <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gold-dark/30 bg-coal text-gold-metal transition-colors group-hover:border-gold-metal group-hover:text-gold-white">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                      <line x1="16" y1="13" x2="8" y2="13" />
-                      <line x1="16" y1="17" x2="8" y2="17" />
-                    </svg>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="block font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold-metal">
-                      Curriculum Vitae
-                    </span>
-                    <span className="block truncate text-sm font-medium text-ivory group-hover:text-gold-white transition-colors">
-                      View Official Resume
-                    </span>
-                  </div>
-                </div>
-                <span className="shrink-0 text-sand/50 group-hover:text-gold-metal transition-colors">
-                  ↗
-                </span>
-              </a>
-            </div>
-
-            {/* Location & Availability */}
-            <div data-reveal className="rounded-xl border border-gold-dark/20 bg-carbon/70 p-4 sm:p-5 w-full min-w-0">
-              <span className="block font-mono text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold-metal mb-1.5">
-                Location & Availability
-              </span>
-              <p className="text-[0.92rem] leading-relaxed text-sand/90 font-light">
-                Based in <strong className="text-ivory font-medium">New Delhi, India</strong>. Available for full-time software engineering roles, internships, and remote work.
-              </p>
-            </div>
+            <p
+              data-reveal
+              className="mt-10 max-w-[40ch] text-[0.92rem] leading-relaxed text-sand/60"
+            >
+              {contact.availability}
+            </p>
           </div>
 
-          {/* Right Column: Luxury Interactive Contact Form */}
-          <div data-reveal className="lg:col-span-7 min-w-0 w-full">
-            <div className="relative rounded-2xl border border-gold-dark/30 bg-carbon/85 p-5 sm:p-8 lg:p-10 shadow-[0_0_35px_rgba(0,0,0,0.45)] w-full min-w-0">
-              {/* Precision curved gold metallic border highlight */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 rounded-2xl border border-transparent"
-                style={{
-                  borderTopColor: "#ffd966",
-                  borderLeftColor: "#e5be48",
-                  WebkitMaskImage:
-                    "linear-gradient(135deg, black 0%, black 20%, transparent 60%)",
-                  maskImage:
-                    "linear-gradient(135deg, black 0%, black 20%, transparent 60%)",
-                }}
-              />
-
-              <div className="mb-6 border-b border-gold-dark/15 pb-4">
-                <h3 className="eyebrow-sm flex items-center gap-2.5 font-semibold tracking-[0.24em] text-champagne">
-                  <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal" />
-                  Send a Message
-                </h3>
-              </div>
-
-              {formStatus === "success" ? (
-                <div className="py-10 text-center space-y-5">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl border border-gold-metal/50 bg-coal/90 text-gold-bright">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-7 w-7">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-display text-xl font-semibold text-ivory">
-                      Message Prepared & Sent
-                    </h4>
-                    <p className="text-sand/85 text-sm max-w-sm mx-auto">
-                      Your email client has been opened with your message. I typically respond within 24 hours.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="mt-4 inline-flex min-h-10 items-center rounded-lg border border-gold-dark/40 bg-coal px-5 eyebrow-sm text-[0.7rem] text-champagne hover:border-gold-metal hover:text-gold-white transition-all cursor-pointer"
-                  >
-                    Send Another Message
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5 w-full min-w-0">
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    {/* Name */}
-                    <div className="space-y-2 min-w-0">
-                      <label
-                        htmlFor="contact-name"
-                        className="block font-mono text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-champagne/90"
-                      >
-                        Your Name <span className="text-gold-metal">*</span>
-                      </label>
-                      <input
-                        id="contact-name"
-                        name="name"
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="e.g. Aarav Sharma"
-                        className="w-full min-w-0 rounded-xl border border-gold-dark/25 bg-coal/70 px-4 py-3.5 text-sm text-ivory placeholder-sand/35 transition-all duration-300 focus:border-gold-metal focus:bg-coal focus:ring-1 focus:ring-gold-metal/40 focus:outline-none"
-                      />
-                    </div>
-
-                    {/* Email */}
-                    <div className="space-y-2 min-w-0">
-                      <label
-                        htmlFor="contact-email"
-                        className="block font-mono text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-champagne/90"
-                      >
-                        Email Address <span className="text-gold-metal">*</span>
-                      </label>
-                      <input
-                        id="contact-email"
-                        name="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="e.g. aarav@example.com"
-                        className="w-full min-w-0 rounded-xl border border-gold-dark/25 bg-coal/70 px-4 py-3.5 text-sm text-ivory placeholder-sand/35 transition-all duration-300 focus:border-gold-metal focus:bg-coal focus:ring-1 focus:ring-gold-metal/40 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Subject */}
-                  <div className="space-y-2 min-w-0">
-                    <label
-                      htmlFor="contact-subject"
-                      className="block font-mono text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-champagne/90"
-                    >
-                      Subject / Role
-                    </label>
-                    <input
-                      id="contact-subject"
-                      name="subject"
-                      type="text"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      placeholder="e.g. Engineering Role / Project Collaboration"
-                      className="w-full min-w-0 rounded-xl border border-gold-dark/25 bg-coal/70 px-4 py-3.5 text-sm text-ivory placeholder-sand/35 transition-all duration-300 focus:border-gold-metal focus:bg-coal focus:ring-1 focus:ring-gold-metal/40 focus:outline-none"
-                    />
-                  </div>
-
-                  {/* Message */}
-                  <div className="space-y-2 min-w-0">
-                    <label
-                      htmlFor="contact-message"
-                      className="block font-mono text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-champagne/90"
-                    >
-                      Your Message <span className="text-gold-metal">*</span>
-                    </label>
-                    <textarea
-                      id="contact-message"
-                      name="message"
-                      rows="4"
-                      required
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      placeholder="Write your message here..."
-                      className="w-full min-w-0 resize-y rounded-xl border border-gold-dark/25 bg-coal/70 px-4 py-3.5 text-sm text-ivory placeholder-sand/35 transition-all duration-300 focus:border-gold-metal focus:bg-coal focus:ring-1 focus:ring-gold-metal/40 focus:outline-none"
-                    />
-                  </div>
-
-                  <div className="pt-2">
-                    <LuxuryButton
-                      variant="gold"
-                      type="submit"
-                      disabled={formStatus === "sending"}
-                    >
-                      {formStatus === "sending" ? "Sending..." : "Send Message →"}
-                    </LuxuryButton>
-                  </div>
-                </form>
-              )}
+          {/* Right: the form */}
+          <div data-reveal className="min-w-0">
+            <div className="flex items-baseline justify-between gap-4">
+              <h3 className="script text-[2.4rem] leading-none text-brass-lit sm:text-[2.8rem]">
+                {contact.formTitle}
+              </h3>
+              {!sent ? (
+                <span className="shrink-0 font-mono text-[0.66rem] text-mute">
+                  {values.message.length}/{MESSAGE_MAX}
+                </span>
+              ) : null}
             </div>
+
+            {sent ? (
+              <div className="mt-10">
+                <p className="font-display text-[1.5rem] leading-snug text-ivory">
+                  Your mail client should be open now.
+                </p>
+                <p className="mt-4 max-w-[44ch] text-[0.96rem] leading-relaxed text-sand/80">
+                  If nothing happened, copy the note below and send it to{" "}
+                  <a
+                    href={`mailto:${identity.email}`}
+                    className="link-underline text-brass-lit"
+                  >
+                    {identity.email}
+                  </a>
+                  .
+                </p>
+
+                <pre className="mt-7 max-h-52 overflow-auto border border-brass/15 bg-carbon/60 p-5 font-mono text-[0.76rem] leading-relaxed whitespace-pre-wrap text-sand/85">
+                  {draft}
+                </pre>
+
+                <div className="mt-7 flex flex-wrap gap-4">
+                  <Action
+                    variant="solid"
+                    onClick={() => copy(draft, "draft")}
+                    arrow={null}
+                  >
+                    {copied === "draft" ? "Copied" : "Copy the note"}
+                  </Action>
+                  <Action onClick={reset} arrow={null}>
+                    Write another
+                  </Action>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={submit} noValidate className="mt-8 min-w-0">
+                <div className="grid gap-x-8 sm:grid-cols-2">
+                  <Field
+                    id="contact-name"
+                    name="name"
+                    label="Your name"
+                    required
+                    value={values.name}
+                    error={errors.name}
+                    touched={touched.name}
+                    onChange={change}
+                    onBlur={blur}
+                  />
+                  <Field
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    label="Email"
+                    required
+                    value={values.email}
+                    error={errors.email}
+                    touched={touched.email}
+                    onChange={change}
+                    onBlur={blur}
+                  />
+                </div>
+
+                <Field
+                  id="contact-subject"
+                  name="subject"
+                  label="Subject"
+                  value={values.subject}
+                  error={errors.subject}
+                  touched={touched.subject}
+                  onChange={change}
+                  onBlur={blur}
+                />
+
+                <Field
+                  id="contact-message"
+                  name="message"
+                  label="Message"
+                  required
+                  rows={5}
+                  value={values.message}
+                  error={errors.message}
+                  touched={touched.message}
+                  onChange={change}
+                  onBlur={blur}
+                />
+
+                <div className="mt-6 flex flex-wrap items-center gap-6">
+                  <Magnetic active={false}>
+                    <Action variant="solid" type="submit">
+                      Send it
+                    </Action>
+                  </Magnetic>
+                  <p className="max-w-[30ch] text-[0.8rem] leading-relaxed text-mute">
+                    {contact.formNote}
+                  </p>
+                </div>
+              </form>
+            )}
           </div>
         </div>
 
@@ -376,13 +347,11 @@ function Contact() {
           {copied ? "Copied to clipboard" : ""}
         </p>
 
-        <footer data-reveal className="mt-20 flex flex-col items-center justify-between gap-6 border-t border-gold-dark/20 pt-8 text-center sm:flex-row sm:items-center sm:text-left">
+        <footer className="mt-24 flex flex-col items-start justify-between gap-6 pt-8 sm:flex-row sm:items-center">
           <p className="eyebrow-sm text-mute">
-            Designed & Engineered by{" "}
-            <span className="whitespace-nowrap text-sand/90 font-medium">
-              {identity.name}
-            </span>
-            <span aria-hidden="true" className="mx-3 text-gold-dark/40">
+            {contact.closing}{" "}
+            <span className="whitespace-nowrap text-sand/85">{identity.name}</span>
+            <span aria-hidden="true" className="mx-3 text-brass-deep">
               /
             </span>
             {new Date().getFullYear()}
@@ -391,22 +360,27 @@ function Contact() {
           <button
             type="button"
             onClick={() => scrollToSection(SECTIONS[0].id)}
-            className="gold-underline group inline-flex min-h-11 items-center gap-3 eyebrow-sm
-              text-sand transition-colors duration-500 hover:text-ivory cursor-pointer"
+            className="link-underline group inline-flex min-h-11 items-center gap-3 eyebrow-sm
+              text-sand transition-colors duration-500 hover:text-ivory"
           >
             {contact.backToTop}
             <svg
               aria-hidden="true"
               viewBox="0 0 12 12"
-              className="h-2.5 w-2.5 text-gold-metal transition-transform duration-500 group-hover:-translate-y-1"
+              className="h-2.5 w-2.5 text-brass transition-transform duration-500 group-hover:-translate-y-1"
             >
-              <path d="M6 11V1M2 5l4-4 4 4" fill="none" stroke="currentColor" strokeWidth="1.3" />
+              <path
+                d="M6 11V1M2 5l4-4 4 4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.3"
+              />
             </svg>
           </button>
 
           <p className="sr-only">
-            {identity.name}, {identity.role} in {identity.region}. Contact by email at{" "}
-            {identity.email}.
+            {identity.name}, {identity.role} in {identity.region}. Contact by email
+            at {identity.email}.
           </p>
         </footer>
       </div>

@@ -1,5 +1,9 @@
 /**
  * Portfolio content — concise, direct, human.
+ *
+ * `script` fields are the words set in Ephesis. They are always a fragment of
+ * a longer line, never the whole thing: the cursive is an accent on the page,
+ * and a paragraph of it would be unreadable.
  */
 
 export const identity = {
@@ -18,19 +22,33 @@ export const identity = {
 
 export const hero = {
   headline: {
-    line1: "Building scalable",
-    line2: "systems & modern",
-    line3: "web experiences.",
+    line1: "I build",
+    script: "scalable systems",
+    line2: "and modern web experiences.",
   },
   introGreeting: "Hi, I’m",
   introRole: "a software engineer from New Delhi.",
   role: "Software Engineer",
   location: "New Delhi, India",
 
-  primary: { label: "View Work", target: "work" },
+  status: "Open to work",
+
+  primary: { label: "See the work", target: "work" },
   secondary: { label: "Resume", href: "/resume.pdf" },
 
   scrollCue: "Scroll",
+
+  ticker: [
+    "React",
+    "Node.js",
+    "PostgreSQL",
+    "TypeScript",
+    "FastAPI",
+    "Express",
+    "Next.js",
+    "Tailwind",
+    "Python",
+  ],
 
   portrait: {
     fallback: "/portrait.jpg",
@@ -45,47 +63,49 @@ export const hero = {
 
 export const about = {
   index: "01",
-  label: "Profile & Background",
+  label: "The short version",
   title: "About",
+  script: "me",
 
   body: [
-    "I am a software engineer based in New Delhi, currently working as a software development intern at RARS Innoventa. My work spans backend services and React interfaces, focusing on product cataloguing, inventory, and order fulfillment systems.",
-    "Alongside work, I am completing a B.Tech in Industrial Internet of Things at GGSIPU. Most of what I know came from building things and then fixing what broke.",
+    "I am a software engineer based in New Delhi, currently a software development intern at RARS Innoventa. My work spans backend services and React interfaces — product cataloguing, inventory, and order fulfillment systems.",
+    "Alongside work I am finishing a B.Tech in Industrial Internet of Things at GGSIPU. Most of what I know came from building things and then fixing what broke.",
   ],
 
+  signature: "Ronak",
+
   facts: [
-    { term: "Location", value: "New Delhi, India" },
-    { term: "Current Role", value: "Software Development Intern, RARS Innoventa" },
-    { term: "Education", value: "B.Tech Industrial IoT, GGSIPU" },
-    { term: "Focus", value: "Full-Stack Development" },
+    { term: "Based in", value: "New Delhi, India" },
+    { term: "Currently", value: "SDE Intern, RARS Innoventa" },
+    { term: "Studying", value: "B.Tech Industrial IoT, GGSIPU" },
+    { term: "Working in", value: "Full-stack development" },
   ],
 };
 
 export const work = {
   index: "02",
-  label: "Portfolio",
+  label: "Things I have shipped",
   title: "Selected",
-  accent: "Work",
+  script: "work",
 
   projects: [
     {
       slug: "ats-workplace",
       name: "ATS Workplace",
       category: "AI Recruitment Platform",
+      year: "2026",
       featured: true,
 
       image: "/projects/ats-workplace.png",
       imageAlt: "ATS Workplace resume screening interface",
-      secondaryImage: null,
-      secondaryImageAlt: null,
 
       description:
         "An applicant tracking system featuring candidate screening, resume parsing, and semantic match scoring.",
 
       highlights: [
-        "Built microservices architecture using React for the interface, Node.js for API routing, and FastAPI for NLP services.",
-        "Implemented NLP pipelines using FastAPI, SpaCy, and Transformers for candidate analysis and resume scoring.",
-        "Created screening dashboards that summarize candidate qualifications and match scores.",
+        "Built a microservices architecture using React for the interface, Node.js for API routing, and FastAPI for NLP services.",
+        "Implemented NLP pipelines with SpaCy and Transformers for candidate analysis and resume scoring.",
+        "Created screening dashboards that summarise candidate qualifications and match scores.",
       ],
 
       stack: ["React", "Node.js", "Python", "FastAPI", "PostgreSQL", "SpaCy"],
@@ -98,18 +118,17 @@ export const work = {
       slug: "business40",
       name: "Business 4.0",
       category: "Community Platform",
+      year: "2026",
 
       image: "/projects/business-40.png",
       imageAlt: "Business 4.0 community meetup platform",
-      secondaryImage: null,
-      secondaryImageAlt: null,
 
       description:
         "A membership and event management platform with role-based access, event scheduling, and attendee registrations.",
 
       highlights: [
         "Implemented JWT authentication with separate permissions for members and organisers.",
-        "Built an admin panel for creating and managing events, storing media on Cloudinary and data in PostgreSQL.",
+        "Built an admin panel for creating and managing events, with media on Cloudinary and data in PostgreSQL.",
         "Automated event registration flows and seat allocation sync.",
       ],
 
@@ -123,17 +142,16 @@ export const work = {
       slug: "safarsaathi",
       name: "SafarSaathi",
       category: "Ride Booking Application",
+      year: "2025",
 
       image: "/projects/safarsaathi.png",
       imageAlt: "SafarSaathi ride booking interface",
-      secondaryImage: null,
-      secondaryImageAlt: null,
 
       description:
         "A ride booking system connecting passengers, drivers, and administrators through dedicated portals.",
 
       highlights: [
-        "Implemented role-based access control and authentication for riders, drivers, and admins via JWT.",
+        "Implemented role-based access control for riders, drivers, and admins via JWT.",
         "Built fleet management dashboards with driver dispatching and automated notifications.",
         "Integrated Razorpay for payments and built driver onboarding workflows.",
       ],
@@ -148,9 +166,10 @@ export const work = {
 
 export const skills = {
   index: "03",
-  label: "Tech Stack & Toolkit",
-  title: "Skills",
-  accent: "",
+  label: "What I reach for",
+  title: "The",
+  script: "toolkit",
+  note: "Printed plainly, because a wall of glowing badges tells you nothing about what someone can actually do.",
 
   groups: [
     {
@@ -169,9 +188,9 @@ export const skills = {
 
 export const experience = {
   index: "04",
-  label: "Career & Timeline",
-  title: "Experience",
-  accent: "",
+  label: "Where I have been",
+  title: "The",
+  script: "record",
 
   roles: [
     {
@@ -180,7 +199,7 @@ export const experience = {
       title: "Software Development Intern",
       org: "RARS Innoventa",
       detail:
-        "Developing backend services and React interfaces for a B2B marketplace and community platform, working on event RSVPs, member onboarding, and payment integrations.",
+        "Developing backend services and React interfaces for a B2B marketplace and community platform — event RSVPs, member onboarding, and payment integrations.",
     },
   ],
 
@@ -191,7 +210,7 @@ export const experience = {
       period: "Expected July 2027",
       title: "B.Tech, Industrial Internet of Things",
       org: "University School of Automation and Robotics, GGSIPU",
-      detail: "GPA: 8.83 / 10.",
+      detail: "GPA 8.83 / 10.",
     },
     {
       year: "2022",
@@ -205,9 +224,9 @@ export const experience = {
 
 export const achievements = {
   index: "05",
-  label: "Honours & Credentials",
-  title: "Achievements",
-  accent: "",
+  label: "Along the way",
+  title: "",
+  script: "Recognition",
 
   items: [
     {
@@ -230,29 +249,27 @@ export const achievements = {
 
 export const contact = {
   index: "06",
-  label: "Get In Touch",
-  title: "Contact",
-  accent: "",
-  lede: "Open to software engineering roles. Email is the fastest way to reach me.",
+  label: "Say hello",
+  title: "Let’s",
+  script: "talk",
 
-  cta: { label: "Send Email", href: "mailto:ronakdutta100@gmail.com" },
+  lede: "Open to software engineering roles, and happy to talk about anything you are building.",
+  responseTime: "I usually reply within a day.",
+
+  formTitle: "Write me a note",
+  formNote:
+    "This opens your own mail client with the message filled in — nothing is stored here.",
 
   channels: [
-    {
-      label: "Email",
-      value: "ronakdutta100@gmail.com",
-      href: "mailto:ronakdutta100@gmail.com",
-      copy: true,
-    },
-    { label: "LinkedIn", value: "", href: identity.linkedin },
-    {
-      label: "GitHub",
-      value: "github.com/RonakDutta",
-      href: "https://github.com/RonakDutta",
-    },
-    { label: "Resume", value: "resume.pdf", href: "/resume.pdf" },
+    { key: "email", label: "Email", value: "ronakdutta100@gmail.com" },
+    { key: "github", label: "GitHub", value: "github.com/RonakDutta" },
+    { key: "linkedin", label: "LinkedIn", value: "in/ronak-dutta" },
+    { key: "resume", label: "Resume", value: "resume.pdf" },
   ],
 
-  closing: "Designed & Engineered by Ronak Dutta",
+  availability:
+    "Based in New Delhi. Available for full-time roles, internships and remote work.",
+
+  closing: "Designed and built by",
   backToTop: "Back to top",
 };

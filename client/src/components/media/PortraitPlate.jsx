@@ -1,27 +1,26 @@
 import { memo, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Sparkles from "../fx/Sparkles";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * The campaign portrait.
+ * The portrait.
  *
- * The source is a composite: the subject stands in front of a painted fantasy
- * landscape. Rather than invent a different photograph, the plate crops hard
- * to head and shoulders and desaturates almost fully, then relights it —
- * champagne rim from the upper right, cold bounce from the lower left, and a
- * studio falloff that takes everything but the face to black. What survives
- * of the background reads as a dark set.
+ * Two earlier attempts at this both failed for the same reason. Framing the
+ * photograph in a bordered, vignetted, gold-washed plate put a second dark edge
+ * inside a dark edge and laid a warm cast across one side of the face; trying
+ * to dissolve all four edges into the page instead just moved the problem,
+ * because the set it was shot on is a different black from the one this page is
+ * lit in, so a rectangle stayed visible whichever way the values fell.
  *
- * Geometry, derived from the source (1000x1250, head spanning ~30-68% of the
- * frame height): scaling by CROP about ORIGIN lands a window on roughly
- * y 262-1225 / x 115-885. The vignette below is centred on where the face
- * lands in that window — change CROP and the vignette has to move with it.
+ * So the edge is deliberate now. An arch — the shape a portrait has hung in
+ * since long before websites — with a single brass hairline along it, and the
+ * foot of it dissolving into the page so the subject is standing in the room
+ * rather than sitting in a box. The only grade left is a touch of contrast; no
+ * tint over skin.
  */
-const CROP = 1.0;
-const ORIGIN = "50% 50%";
-
 function PortraitPlate({
   portrait,
   initials = "",
@@ -37,12 +36,12 @@ function PortraitPlate({
     if (reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Drift inside a fixed frame. Never negative enough to clip the crown.
+      // Drift inside a fixed frame. Never far enough to clear the crown.
       gsap.fromTo(
         image.current,
-        { yPercent: -1 },
+        { yPercent: -2 },
         {
-          yPercent: 5,
+          yPercent: 4,
           ease: "none",
           scrollTrigger: {
             trigger: root.current,
@@ -57,25 +56,28 @@ function PortraitPlate({
     return () => ctx.revert();
   }, [reducedMotion]);
 
+  const dissolve =
+    "linear-gradient(to bottom, #000 0%, #000 58%, rgba(0,0,0,0.55) 82%, transparent 99%)";
+
   return (
     <figure ref={root} className={`relative isolate ${className}`}>
-      {/* Backlight: the aurora reads as if it is coming from behind the
-          subject rather than from behind the page. */}
+      {/* The light the subject is standing in. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -inset-x-[18%] -inset-y-[10%] -z-10 blur-[48px]"
+        className="pointer-events-none absolute -inset-[14%] -z-10 blur-[64px]"
         style={{
           background:
-            "radial-gradient(closest-side, rgba(212,175,55,0.34) 0%, rgba(140,101,8,0.16) 46%, transparent 76%)",
+            "radial-gradient(closest-side, rgba(200,164,92,0.26) 0%, rgba(138,109,51,0.1) 54%, transparent 80%)",
         }}
       />
 
       <div
-        className="relative aspect-4/5 w-full overflow-hidden rounded-2xl border border-gold-dark/30 bg-carbon shadow-[0_0_40px_rgba(0,0,0,0.6)]"
+        className="relative aspect-4/5 w-full overflow-hidden rounded-t-full"
+        style={{ maskImage: dissolve, WebkitMaskImage: dissolve }}
       >
         {failed ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-coal">
-            <span className="font-display text-[6rem] font-light tracking-[0.2em] text-slate">
+          <div className="absolute inset-0 flex items-center justify-center bg-carbon">
+            <span className="font-display text-[5rem] font-light tracking-[0.14em] text-slate">
               {initials}
             </span>
           </div>
@@ -96,46 +98,27 @@ function PortraitPlate({
               fetchPriority={priority ? "high" : "auto"}
               decoding="async"
               onError={() => setFailed(true)}
-              className="absolute inset-0 h-full w-full scale-[var(--crop)] object-cover"
-              style={{
-                "--crop": CROP,
-                transformOrigin: ORIGIN,
-                filter: "contrast(1.08) brightness(0.96) saturate(1.04)",
-              }}
+              className="absolute inset-0 h-full w-full object-cover object-top"
+              style={{ filter: "contrast(1.06) brightness(1.03)" }}
             />
           </picture>
         )}
 
-        {/* Subtle warm champagne key-light overlay */}
+        {/* The hairline, drawn inside the arch so it follows the curve. It is
+            brightest at the top left, where the key light is. */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 mix-blend-soft-light"
+          className="pointer-events-none absolute inset-0 rounded-t-full border border-brass/35"
           style={{
-            background:
-              "linear-gradient(225deg, rgba(255,245,199,0.35) 0%, rgba(212,175,55,0.08) 25%, transparent 55%)",
-          }}
-        />
-
-        {/* Delicate cinematic corner vignette: softly darkens perimeter while keeping subject bright */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 38%, transparent 45%, rgba(3,3,4,0.35) 75%, rgba(3,3,4,0.7) 100%)",
+            maskImage:
+              "linear-gradient(160deg, #000 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.15) 100%)",
+            WebkitMaskImage:
+              "linear-gradient(160deg, #000 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.15) 100%)",
           }}
         />
       </div>
 
-      {/* A single gold filament down the lit edge of the plate. */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-[8%] right-0 w-px"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent, rgba(255,245,199,0.75) 34%, rgba(212,175,55,0.4) 62%, transparent)",
-        }}
-      />
+      <Sparkles count={9} seed={31} scale={0.85} className="-z-10" />
     </figure>
   );
 }

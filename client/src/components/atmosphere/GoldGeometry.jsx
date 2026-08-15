@@ -24,15 +24,15 @@ function GoldGeometry({ variant = "orbit", className = "" }) {
     >
       <defs>
         <linearGradient id={stroke} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#fff5c7" stopOpacity="0.85" />
-          <stop offset="34%" stopColor="#d4af37" stopOpacity="0.5" />
-          <stop offset="70%" stopColor="#8c6508" stopOpacity="0.22" />
-          <stop offset="100%" stopColor="#6f4700" stopOpacity="0" />
+          <stop offset="0%" stopColor="#fff6de" stopOpacity="0.85" />
+          <stop offset="34%" stopColor="#c8a45c" stopOpacity="0.5" />
+          <stop offset="70%" stopColor="#8a6d33" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="#5e4a20" stopOpacity="0" />
         </linearGradient>
         <linearGradient id={faint} x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0%" stopColor="#c6a15b" stopOpacity="0" />
-          <stop offset="50%" stopColor="#c6a15b" stopOpacity="0.22" />
-          <stop offset="100%" stopColor="#c6a15b" stopOpacity="0" />
+          <stop offset="0%" stopColor="#c8a45c" stopOpacity="0" />
+          <stop offset="50%" stopColor="#c8a45c" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="#c8a45c" stopOpacity="0" />
         </linearGradient>
       </defs>
 

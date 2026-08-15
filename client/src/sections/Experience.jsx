@@ -3,92 +3,96 @@ import SectionTitle from "../components/typography/SectionTitle";
 import { experience } from "../data/content";
 
 /**
- * One entry in the chronology. The year sits oversized in the left margin and
- * carries the eye down the page; a hairline separates entries. No card, no
- * outlined-number trick — the year is set solid so it reads as typography
- * rather than as an effect.
+ * The chronology, hung off one vertical line.
+ *
+ * Every entry used to be separated by its own horizontal rule, so the section
+ * read as a stack of dividers with text between them. One line down the left
+ * with a node per entry does the same job once instead of six times.
  */
 function Entry({ year, period, title, org, detail, as: Heading = "h4" }) {
   return (
-    <li
-      data-reveal
-      className="group relative grid gap-4 border-t border-gold-dark/20 py-10
-        sm:grid-cols-[minmax(0,11rem)_minmax(0,1fr)] sm:gap-14 sm:py-14"
-    >
+    <li data-reveal className="group relative pl-8 pb-12 last:pb-0 sm:pl-12">
       <span
         aria-hidden="true"
-        className="absolute top-0 left-0 h-px w-16 origin-left transition-transform
-          duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-150"
-        style={{
-          background: "linear-gradient(90deg, #e5be48, rgba(140,101,8,0))",
-        }}
+        className="absolute top-[0.6rem] left-0 h-2 w-2 -translate-x-1/2 rotate-45
+          border border-brass bg-ink transition-colors duration-500 group-hover:bg-brass"
       />
 
-      <div>
-        <p
-          aria-hidden="true"
-          className="font-display text-[clamp(2.6rem,6vw,4.2rem)] leading-[0.9] font-normal text-gold-metal/90 sm:text-slate
-            transition-colors duration-500 sm:group-hover:text-gold-metal"
-        >
-          {year}
+      <p className="eyebrow-sm text-brass/85">{period}</p>
+
+      <Heading className="mt-3 font-display text-[clamp(1.4rem,3.4vw,2.05rem)] leading-tight font-normal text-ivory">
+        {title}
+      </Heading>
+
+      <p className="mt-1.5 text-[0.98rem] text-sand/80">{org}</p>
+
+      {detail ? (
+        <p className="mt-4 max-w-[54ch] text-[0.96rem] leading-relaxed text-sand/70">
+          {detail}
         </p>
-        <p className="mt-2 eyebrow-sm text-champagne">{period}</p>
-      </div>
+      ) : null}
 
-      <div>
-        <Heading className="font-display text-[clamp(1.5rem,3vw,2.2rem)] leading-tight font-normal text-ivory">
-          {title}
-        </Heading>
-
-        <p className="mt-2 text-sand/80">{org}</p>
-
-        {detail ? (
-          <p className="mt-5 max-w-prose text-[0.95rem] leading-relaxed text-sand/85">
-            {detail}
-          </p>
-        ) : null}
-      </div>
+      <span aria-hidden="true" className="sr-only">
+        {year}
+      </span>
     </li>
   );
 }
 
+function Timeline({ children }) {
+  return (
+    <ol className="relative">
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-0 left-0 w-px"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(200,164,92,0.55), rgba(200,164,92,0.18) 65%, transparent)",
+        }}
+      />
+      {children}
+    </ol>
+  );
+}
+
 function Experience() {
-
-
   return (
     <section
       id="experience"
       aria-labelledby="experience-title"
-      className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
+      className="relative isolate overflow-x-clip py-24 sm:py-32 lg:py-44"
     >
-      <div className="mx-auto w-full max-w-[108rem] px-6 sm:px-10">
+      <div className="mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
           id="experience-title"
           index={experience.index}
           label={experience.label}
           title={experience.title}
-          accent={experience.accent}
-          itemClass="reveal"
+          script={experience.script}
         />
 
-        <ol className="mt-16 sm:mt-24">
-            {experience.roles.map((role) => (
-            <Entry key={role.title} {...role} as="h3" />
-          ))}
-        </ol>
+        <div className="mt-14 grid gap-14 sm:mt-20 lg:grid-cols-2 lg:gap-24">
+          <div>
+            <p data-reveal className="mb-8 eyebrow-sm text-sand/70">
+              Work
+            </p>
+            <Timeline>
+              {experience.roles.map((role) => (
+                <Entry key={role.title} {...role} as="h3" />
+              ))}
+            </Timeline>
+          </div>
 
-        <div className="mt-20 sm:mt-28">
-          <p data-reveal className="mb-6 flex items-center gap-3 eyebrow-sm text-gold-bright">
-            <span className="h-1.5 w-1.5 rotate-45 bg-gold-metal" />
-            {experience.educationTitle}
-          </p>
-
-          <ol>
-            {experience.education.map((item) => (
-              <Entry key={item.title} {...item} />
-            ))}
-            <li aria-hidden="true" className="h-px w-full bg-gold-dark/20" />
-          </ol>
+          <div>
+            <p data-reveal className="mb-8 eyebrow-sm text-sand/70">
+              {experience.educationTitle}
+            </p>
+            <Timeline>
+              {experience.education.map((item) => (
+                <Entry key={item.title} {...item} as="h3" />
+              ))}
+            </Timeline>
+          </div>
         </div>
       </div>
     </section>

@@ -75,9 +75,9 @@ function GoldDust({ count = 46, className = "" }) {
         // A tiny halo under each speck: without it they read as flat dots
         // rather than as motes catching a light source.
         const halo = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r * 4);
-        halo.addColorStop(0, `rgba(255,245,199,${alpha})`);
-        halo.addColorStop(0.4, `rgba(212,175,55,${alpha * 0.4})`);
-        halo.addColorStop(1, "rgba(212,175,55,0)");
+        halo.addColorStop(0, `rgba(255,246,222,${alpha})`);
+        halo.addColorStop(0.4, `rgba(200,164,92,${alpha * 0.4})`);
+        halo.addColorStop(1, "rgba(200,164,92,0)");
 
         ctx.fillStyle = halo;
         ctx.beginPath();

@@ -62,12 +62,12 @@ function GoldRibbons({ still = false, className = "" }) {
     >
       <defs>
         <linearGradient id={`rb-${uid}`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#6f4700" stopOpacity="0" />
-          <stop offset="18%" stopColor="#8c6508" stopOpacity="0.7" />
-          <stop offset="42%" stopColor="#d4af37" stopOpacity="1" />
-          <stop offset="56%" stopColor="#fff5c7" stopOpacity="1" />
-          <stop offset="74%" stopColor="#c6a15b" stopOpacity="0.75" />
-          <stop offset="100%" stopColor="#6f4700" stopOpacity="0" />
+          <stop offset="0%" stopColor="#5e4a20" stopOpacity="0" />
+          <stop offset="18%" stopColor="#8a6d33" stopOpacity="0.7" />
+          <stop offset="42%" stopColor="#c8a45c" stopOpacity="1" />
+          <stop offset="56%" stopColor="#fff6de" stopOpacity="1" />
+          <stop offset="74%" stopColor="#c8a45c" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="#5e4a20" stopOpacity="0" />
         </linearGradient>
       </defs>
 

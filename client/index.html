@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#010101" />
+    <meta name="theme-color" content="#07060a" />
     <meta
       name="description"
       content="Ronak Dutta, software engineer in New Delhi. Full-stack work in React, Node.js and PostgreSQL. Selected projects, experience and contact."
@@ -15,10 +15,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="%VITE_SITE_URL%/" />
     <meta property="og:site_name" content="Ronak Dutta" />
-    <meta
-      property="og:title"
-      content="Ronak Dutta — Software Engineer, New Delhi"
-    />
+    <meta property="og:title" content="Ronak Dutta — Software Engineer, New Delhi" />
     <meta
       property="og:description"
       content="Full-stack work in React, Node.js and PostgreSQL. Selected projects, experience and contact."
@@ -31,10 +28,7 @@
       content="Ronak Dutta, Software Engineer, New Delhi"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Ronak Dutta — Software Engineer, New Delhi"
-    />
+    <meta name="twitter:title" content="Ronak Dutta — Software Engineer, New Delhi" />
     <meta
       name="twitter:description"
       content="Full-stack work in React, Node.js and PostgreSQL. Selected projects, experience and contact."
@@ -46,22 +40,34 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Faces are served from this origin (see @font-face in src/index.css),
+         so there is no third party on the critical path. The three that the
+         first screen actually sets type in are fetched up front. -->
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      as="font"
+      type="font/woff2"
+      href="/fonts/fraunces.woff2"
+      crossorigin
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
-      />
-    </noscript>
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/instrument-sans.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/ephesis.woff2"
+      crossorigin
+    />
 
-    <title>Ronak Dutta - Software Engineer</title>
+    <link rel="preload" as="image" href="/portrait-560.webp" type="image/webp" />
+
+    <title>Ronak Dutta — Software Engineer</title>
 
     <script type="application/ld+json">
       {
@@ -88,81 +94,61 @@
           "PostgreSQL",
           "Full-stack web development"
         ],
-        "sameAs": ["https://github.com/RonakDutta"]
+        "sameAs": [
+          "https://github.com/RonakDutta",
+          "https://www.linkedin.com/in/ronak-dutta"
+        ]
       }
     </script>
 
-    <!-- The curtain. Painted by the parser, not by React, so there is never a
-         white flash in front of the thing that exists to remove it. -->
+    <!-- The overture. Painted by the parser rather than by React, so there is
+         never a white flash in front of the thing that exists to prevent one.
+         Everything below is inert markup: Curtain.jsx animates and removes it. -->
     <style>
       html {
-        background: #030304;
+        background: #07060a;
       }
       #curtain {
         position: fixed;
         inset: 0;
         z-index: 100;
         overflow: hidden;
-        background: #030304;
+        background: #07060a;
+        will-change: clip-path;
       }
-      .cu-half {
+      #cu-wash {
         position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 50.5%;
-        background: #030304;
-        will-change: transform;
-      }
-      .cu-left {
-        left: 0;
-      }
-      .cu-right {
-        right: 0;
-      }
-      #cu-seam {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 50%;
-        width: 1px;
-        margin-left: -0.5px;
-        background: linear-gradient(
-          to bottom,
-          transparent,
-          rgba(212, 175, 55, 0.7) 40%,
-          rgba(255, 248, 220, 0.98) 50%,
-          rgba(212, 175, 55, 0.7) 60%,
-          transparent
-        );
-        opacity: 0;
+        inset: 0;
+        background:
+          radial-gradient(
+            80% 60% at 50% 108%,
+            rgba(200, 164, 92, 0.16) 0%,
+            transparent 70%
+          ),
+          radial-gradient(
+            60% 50% at 18% -10%,
+            rgba(200, 164, 92, 0.07) 0%,
+            transparent 70%
+          );
       }
       .cu-core {
         position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
+        inset: auto 0 0 0;
+        padding: 0 1.5rem 1.75rem;
+        will-change: transform;
       }
-      .cu-name {
-        margin: 0;
-        font-family: "Cinzel", "Playfair Display", Georgia, serif;
-        font-weight: 600;
-        font-size: clamp(1.4rem, 4.5vw, 2.2rem);
-        letter-spacing: 0.38em;
-        text-indent: 0.38em;
-        text-transform: uppercase;
-        color: #fff8dc;
-        text-shadow: 0 0 24px rgba(212, 175, 55, 0.35);
+      @media (min-width: 640px) {
+        .cu-core {
+          padding: 0 2.5rem 2.25rem;
+        }
       }
-      .cu-bar {
+      .cu-rule {
         position: relative;
-        width: min(180px, 42vw);
-        height: 1.5px;
-        background: rgba(255, 248, 220, 0.12);
+        height: 1px;
+        width: 100%;
+        margin-bottom: 1.5rem;
+        background: rgba(200, 164, 92, 0.16);
         overflow: hidden;
-        box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
       }
       #cu-fill {
         display: block;
@@ -170,29 +156,68 @@
         width: 100%;
         transform: scaleX(0);
         transform-origin: 0 50%;
-        background: linear-gradient(90deg, #b38628, #d4af37 50%, #fff8dc);
-        animation: cu-creep 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        background: linear-gradient(90deg, #8a6d33, #c8a45c 60%, #f0e0b8);
+        animation: cu-creep 2.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
       @keyframes cu-creep {
         to {
-          transform: scaleX(0.4);
+          transform: scaleX(0.42);
         }
       }
-      .cu-word {
+      .cu-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1.5rem;
+      }
+      .cu-name {
         margin: 0;
-        font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-        font-size: 0.65rem;
-        font-weight: 600;
-        letter-spacing: 0.36em;
-        text-indent: 0.36em;
+        font-family: "Ephesis", "Snell Roundhand", cursive;
+        word-spacing: 0.14em;
+        font-size: clamp(2.6rem, 11vw, 5.5rem);
+        font-weight: 400;
+        line-height: 0.95;
+        color: #f7f4ee;
+        opacity: 0;
+        transform: translateY(0.25em);
+        transition:
+          opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .cu-core.is-ready .cu-name {
+        opacity: 1;
+        transform: none;
+      }
+      .cu-word {
+        margin: 0.35rem 0 0;
+        font-family:
+          "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+        font-size: 0.6rem;
+        font-weight: 500;
+        letter-spacing: 0.34em;
+        text-indent: 0.34em;
         text-transform: uppercase;
-        color: #d4af37;
-        opacity: 0.85;
+        color: rgba(200, 164, 92, 0.85);
+      }
+      #cu-count {
+        flex-shrink: 0;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: clamp(1.6rem, 5vw, 2.4rem);
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: rgba(200, 164, 92, 0.55);
+        font-variant-numeric: tabular-nums;
       }
       @media (prefers-reduced-motion: reduce) {
         #cu-fill {
           animation: none;
-          transform: scaleX(0.4);
+          transform: scaleX(0.42);
+        }
+        .cu-name {
+          opacity: 1;
+          transform: none;
+          transition: none;
         }
       }
     </style>
@@ -201,13 +226,16 @@
     <div id="root"></div>
 
     <div id="curtain" aria-hidden="true">
-      <div class="cu-half cu-left"></div>
-      <div class="cu-half cu-right"></div>
-      <div id="cu-seam"></div>
+      <div id="cu-wash"></div>
       <div class="cu-core">
-        <p class="cu-name">Ronak Dutta</p>
-        <div class="cu-bar"><i id="cu-fill"></i></div>
-        <p class="cu-word">Software Engineer</p>
+        <div class="cu-rule"><i id="cu-fill"></i></div>
+        <div class="cu-row">
+          <div>
+            <p class="cu-name">Ronak Dutta</p>
+            <p class="cu-word">Software Engineer — New Delhi</p>
+          </div>
+          <p id="cu-count">00</p>
+        </div>
       </div>
     </div>
 
@@ -219,14 +247,15 @@
       </style>
       <div
         style="
-          padding: 4rem;
+          padding: 4rem 1.5rem;
           font-family: Georgia, serif;
           color: #ede6d6;
-          background: #010101;
+          background: #07060a;
         "
       >
         <h1>Ronak Dutta</h1>
         <p>Software Engineer, New Delhi. This site requires JavaScript.</p>
+        <p><a style="color: #c8a45c" href="/resume.pdf">Read my resume</a></p>
       </div>
     </noscript>
     <script type="module" src="/src/main.jsx"></script>

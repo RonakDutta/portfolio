@@ -4,7 +4,9 @@ import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { initReveals } from "./lib/reveal";
 import Atmosphere from "./components/atmosphere/Atmosphere";
 import Curtain from "./components/Curtain";
-import LuxuryNav from "./components/brand/LuxuryNav";
+import Cursor from "./components/fx/Cursor";
+import ScrollProgress from "./components/ui/ScrollProgress";
+import SiteNav from "./components/brand/SiteNav";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
 import Work from "./sections/Work";
@@ -25,16 +27,18 @@ export default function App() {
   return (
     <>
       <Curtain env={env} />
+      <Cursor enabled={env.pointerFx} />
+      <ScrollProgress />
 
       <a
         href="#hero"
-        className="sr-focusable inline-flex min-h-11 items-center border border-gold-metal
-          bg-void px-5 text-sm text-ivory"
+        className="sr-focusable inline-flex min-h-11 items-center border border-brass
+          bg-ink px-5 text-sm text-ivory"
       >
         Skip to content
       </a>
 
-      <LuxuryNav />
+      <SiteNav />
       <Atmosphere env={env} />
 
       <main className="relative z-10">

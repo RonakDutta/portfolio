@@ -21,7 +21,7 @@ const FIELDS = [
       width: "78vw",
       height: "78vw",
       background:
-        "radial-gradient(closest-side, rgba(255,245,199,0.22) 0%, rgba(212,175,55,0.13) 26%, rgba(140,101,8,0.06) 52%, transparent 76%)",
+        "radial-gradient(closest-side, rgba(255,246,222,0.22) 0%, rgba(200,164,92,0.13) 26%, rgba(138,109,51,0.06) 52%, transparent 76%)",
     },
   },
   {
@@ -32,7 +32,7 @@ const FIELDS = [
       width: "72vw",
       height: "72vw",
       background:
-        "radial-gradient(closest-side, rgba(240,213,138,0.17) 0%, rgba(198,161,91,0.09) 30%, rgba(111,71,0,0.05) 58%, transparent 78%)",
+        "radial-gradient(closest-side, rgba(236,215,163,0.17) 0%, rgba(200,164,92,0.09) 30%, rgba(112,88,40,0.05) 58%, transparent 78%)",
     },
   },
   {
@@ -43,7 +43,7 @@ const FIELDS = [
       width: "88vw",
       height: "70vw",
       background:
-        "radial-gradient(closest-side, rgba(255,217,102,0.11) 0%, rgba(140,101,8,0.06) 38%, transparent 72%)",
+        "radial-gradient(closest-side, rgba(236,215,163,0.11) 0%, rgba(138,109,51,0.06) 38%, transparent 72%)",
     },
   },
 ];

@@ -1,33 +1,78 @@
 @import "tailwindcss";
 
+/* Self-hosted faces. These used to come from Google Fonts, which cost a
+   preconnect, a render-blocking stylesheet and a second origin on the
+   critical path. Latin subsets only — four variable files, 164 kB total. */
+
+@font-face {
+  font-family: "Ephesis";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/ephesis.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fonts/fraunces.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/instrument-sans.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @theme {
-  /* Deep Obsidian Velvet Stage. */
-  --color-void: #030304;
-  --color-black: #07070a;
-  --color-carbon: #0c0d12;
-  --color-coal: #12131b;
-  --color-graphite: #181a24;
-  --color-slate: #242738;
-  --color-line: rgba(212, 175, 55, 0.18);
+  /* Stage — a warm near-black, not a blue-black. */
+  --color-ink: #07060a;
+  --color-obsidian: #0b0a0f;
+  --color-carbon: #100e15;
+  --color-coal: #17151d;
+  --color-graphite: #201d28;
+  --color-slate: #2e2a38;
 
-  --color-ivory: #ffffff;
-  --color-pearl: #f3f4f8;
-  --color-sand: #c5c9d6;
-  --color-mute: #7c8296;
+  /* Paper — the inverted sheet the toolkit is printed on. */
+  --color-bone: #ece5d8;
+  --color-bone-deep: #ded5c3;
+  --color-espresso: #16120c;
+  --color-espresso-soft: #4a4237;
 
-  /* The 24K Liquid Gold Spectrum */
-  --color-bronze: #845a14;
-  --color-gold-dark: #b38628;
-  --color-gold: #d4af37;
-  --color-gold-metal: #e5be48;
-  --color-champagne: #f3e5ab;
-  --color-gold-bright: #ffd966;
-  --color-gold-white: #fff8dc;
+  /* Type on the stage. */
+  --color-ivory: #faf8f4;
+  --color-pearl: #e9e5dd;
+  --color-sand: #b3aca0;
+  --color-mute: #7a746b;
 
-  --font-display: "Cinzel", "Playfair Display", Georgia, serif;
-  --font-accent: "Playfair Display", Georgia, serif;
+  /* Brass, not bullion. Two accents so the page is never one-note. */
+  --color-brass-deep: #8a6d33;
+  --color-brass: #c8a45c;
+  --color-brass-lit: #ecd7a3;
+  --color-ember: #d9663f;
+
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-script: "Ephesis", "Snell Roundhand", "Apple Chancery", cursive;
   --font-sans:
-    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
 
   --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-silk: cubic-bezier(0.65, 0, 0.35, 1);
@@ -39,7 +84,7 @@
   }
 
   html {
-    background: var(--color-void);
+    background: var(--color-ink);
     overflow-x: clip;
   }
 
@@ -47,13 +92,13 @@
     margin: 0;
     color: var(--color-sand);
     font-family: var(--font-sans);
-    font-weight: 350;
-    font-size: clamp(0.95rem, 0.91rem + 0.2vw, 1.05rem);
-    line-height: 1.75;
+    font-weight: 400;
+    font-size: clamp(0.96rem, 0.92rem + 0.2vw, 1.06rem);
+    line-height: 1.7;
     overflow-x: clip;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    background-color: var(--color-void);
+    background-color: var(--color-ink);
   }
 
   h1,
@@ -62,9 +107,10 @@
   h4 {
     margin: 0;
     font-family: var(--font-display);
-    font-weight: 500;
-    line-height: 1.05;
-    letter-spacing: 0.02em;
+    font-weight: 400;
+    font-optical-sizing: auto;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
     color: var(--color-ivory);
     text-wrap: balance;
   }
@@ -74,7 +120,7 @@
   }
 
   :focus-visible {
-    outline: 1px solid var(--color-gold-bright);
+    outline: 1px solid var(--color-brass-lit);
     outline-offset: 4px;
   }
 
@@ -86,129 +132,122 @@
   }
 
   ::selection {
-    background: var(--color-gold-metal);
-    color: var(--color-void);
+    background: var(--color-brass);
+    color: var(--color-ink);
   }
 
   ::-webkit-scrollbar {
-    width: 7px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--color-void);
+    background: var(--color-ink);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(212, 175, 55, 0.25);
-    border-radius: 4px;
+    background: rgba(200, 164, 92, 0.28);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-gold);
+    background: var(--color-brass);
   }
   html {
     scrollbar-width: thin;
-    scrollbar-color: rgba(212, 175, 55, 0.25) var(--color-void);
+    scrollbar-color: rgba(200, 164, 92, 0.28) var(--color-ink);
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Typography
---------------------------------------------------------------------------- */
+/* Typography ------------------------------------------------------------ */
 
-@utility font-accent {
-  font-family: var(--font-accent);
+@utility script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  /* Ephesis sets a very narrow word space; two words run together without
+     this and read as one. */
+  word-spacing: 0.14em;
+  /* Ephesis sits high in its em box and swings a long descender. */
+  line-height: 1.25;
+  padding-bottom: 0.08em;
 }
 
 @utility eyebrow {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  line-height: 1.4;
-}
-
-@utility eyebrow-sm {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   line-height: 1.4;
 }
 
-/* Radiant Liquid 24k Gold Text */
-@utility text-foil {
+@utility eyebrow-sm {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* One static leaf gradient, used on a handful of words. Nothing on this page
+   animates its own fill any more — a page of shimmering headings is the most
+   recognisable generated-portfolio tell there is. */
+@utility text-leaf {
   background: linear-gradient(
-    105deg,
-    #b38628 0%,
-    #e5be48 20%,
-    #fff8dc 42%,
-    #f3e5ab 58%,
-    #d4af37 78%,
-    #845a14 100%
+    98deg,
+    #b28d47 0%,
+    #ecd7a3 34%,
+    #fff6de 50%,
+    #d8b978 68%,
+    #96773a 100%
   );
-  background-size: 240% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
-/* Pure Titanium / Platinum Lit Text */
 @utility text-ivory-lit {
-  background: linear-gradient(
-    175deg,
-    #ffffff 0%,
-    #f8f9fc 35%,
-    #d5d8e2 75%,
-    #8a90a2 100%
-  );
+  background: linear-gradient(172deg, #ffffff 0%, #f3efe6 42%, #b8b1a5 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
-/* ---------------------------------------------------------------------------
-   Surfaces & Glassmorphism
---------------------------------------------------------------------------- */
+/* Surfaces -------------------------------------------------------------- */
 
-@utility rule-gold {
+@utility glass-ink {
+  background: linear-gradient(
+    180deg,
+    rgba(16, 14, 21, 0.86) 0%,
+    rgba(7, 6, 10, 0.94) 100%
+  );
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+}
+
+@utility rule-brass {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--color-gold-dark) 8%,
-    var(--color-gold-bright) 50%,
-    var(--color-gold-dark) 92%,
+    var(--color-brass-deep) 10%,
+    var(--color-brass-lit) 50%,
+    var(--color-brass-deep) 90%,
     transparent
   );
 }
 
-@utility edge-gold {
-  box-shadow:
-    inset 0 0 0 1px rgba(212, 175, 55, 0.28),
-    inset 0 1px 0 rgba(255, 248, 220, 0.25);
-}
+/* The paper sheet. An opaque light section cut into the dark page — it breaks
+   the single-mood scroll that every dark portfolio has. */
+@utility paper {
+  background:
+    radial-gradient(120% 80% at 12% 0%, #f3ede1 0%, transparent 60%),
+    linear-gradient(180deg, #ece5d8 0%, #e4dccc 100%);
+  color: var(--color-espresso-soft);
 
-@utility gold-glow-card {
-  box-shadow:
-    0 10px 30px -10px rgba(0, 0, 0, 0.7),
-    0 0 20px -2px rgba(212, 175, 55, 0.12);
-  &:hover {
-    box-shadow:
-      0 20px 40px -12px rgba(0, 0, 0, 0.85),
-      0 0 28px 2px rgba(212, 175, 55, 0.22);
+  & h2,
+  & h3,
+  & h4 {
+    color: var(--color-espresso);
   }
-}
-
-/* Obsidian luxury glass with top-edge metallic bevel. */
-@utility glass-black {
-  background: linear-gradient(
-    180deg,
-    rgba(15, 16, 22, 0.88) 0%,
-    rgba(7, 7, 10, 0.94) 100%
-  );
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
 @utility sr-focusable {
@@ -223,24 +262,20 @@
   }
 }
 
-/* Gold underline drawn in from the left. */
-@utility gold-underline {
+@utility link-underline {
   position: relative;
   &::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -0.3em;
-    height: 1.5px;
+    bottom: -0.28em;
+    height: 1px;
     width: 100%;
-    background: linear-gradient(
-      90deg,
-      var(--color-gold-bright),
-      var(--color-gold-dark)
-    );
+    background: currentColor;
+    opacity: 0.7;
     transform: scaleX(0);
     transform-origin: 0 50%;
-    transition: transform 0.55s var(--ease-cine);
+    transition: transform 0.5s var(--ease-cine);
   }
   &:hover::after,
   &:focus-visible::after {
@@ -248,31 +283,139 @@
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Scroll reveals. Visible by default; `js-reveal` on <html> is only added once
+/* Form fields ----------------------------------------------------------- */
+
+@utility field {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(200, 164, 92, 0.24);
+  background: transparent;
+  padding: 1.55rem 0 0.6rem;
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  transition:
+    border-color 0.4s var(--ease-cine),
+    box-shadow 0.4s var(--ease-cine);
+
+  &::placeholder {
+    color: transparent;
+  }
+  &:focus {
+    outline: none;
+    border-bottom-color: var(--color-brass-lit);
+    box-shadow: 0 1px 0 0 var(--color-brass-lit);
+  }
+  &:focus-visible {
+    outline: none;
+  }
+  /* Chrome paints autofilled inputs a flat blue. */
+  &:-webkit-autofill,
+  &:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-ivory);
+    -webkit-box-shadow: 0 0 0 1000px var(--color-carbon) inset;
+    caret-color: var(--color-ivory);
+  }
+}
+
+/* The label rides up out of the field when it holds content or has focus. */
+@utility field-label {
+  position: absolute;
+  left: 0;
+  top: 1.5rem;
+  transform-origin: 0 50%;
+  color: var(--color-mute);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  pointer-events: none;
+  transition: transform 0.4s var(--ease-cine), color 0.4s var(--ease-cine);
+
+  .field:focus ~ &,
+  .field:not(:placeholder-shown) ~ & {
+    transform: translateY(-1.55rem) scale(0.62);
+    color: var(--color-brass);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+  }
+}
+
+/* Custom cursor --------------------------------------------------------- */
+
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor [role="button"] {
+  cursor: none;
+}
+html.has-cursor input,
+html.has-cursor textarea {
+  cursor: text;
+}
+
+/* Trail left behind the pointer. Built and thrown away by Cursor.jsx. */
+.cur-sparkle {
+  position: absolute;
+  width: var(--s, 6px);
+  height: var(--s, 6px);
+  margin: calc(var(--s, 6px) / -2) 0 0 calc(var(--s, 6px) / -2);
+  rotate: var(--r, 0deg);
+  background: #ecd7a3;
+  clip-path: polygon(
+    50% 0%,
+    58% 42%,
+    100% 50%,
+    58% 58%,
+    50% 100%,
+    42% 58%,
+    0% 50%,
+    42% 42%
+  );
+}
+
+/* Spark burst under a click. */
+.cur-spark {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.cur-spark i {
+  position: absolute;
+  left: -0.5px;
+  top: 0;
+  display: block;
+  width: 1px;
+  height: 10px;
+  transform-origin: 50% 100%;
+  background: linear-gradient(to top, rgba(236, 215, 163, 0), #ecd7a3);
+}
+
+/* Scroll reveals. Visible by default; `js-reveal` on <html> is only added once
    the observer in lib/reveal.js is running, so a failure to observe leaves
-   content on screen instead of blank.
---------------------------------------------------------------------------- */
+   content on screen instead of blank. */
 
 [data-reveal] {
   transition:
     opacity 0.9s var(--ease-cine),
-    transform 0.9s var(--ease-cine);
+    transform 0.9s var(--ease-cine),
+    filter 0.9s var(--ease-cine);
 }
 
 .js-reveal [data-reveal] {
   opacity: 0;
-  transform: translate3d(0, 20px, 0);
+  transform: translate3d(0, 22px, 0);
+  filter: blur(6px);
 }
 
 .js-reveal [data-reveal].is-in {
   opacity: 1;
   transform: none;
+  filter: none;
 }
 
-/* ---------------------------------------------------------------------------
-   Atmosphere motion
---------------------------------------------------------------------------- */
+/* Motion ---------------------------------------------------------------- */
 
 @keyframes aurora-a {
   0%,
@@ -310,34 +453,13 @@
   }
 }
 
-@keyframes ribbon-sway {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) skewY(0deg) scaleY(1);
-    opacity: var(--lo, 0.35);
-  }
-  50% {
-    transform: translate3d(2%, -2%, 0) skewY(-2.4deg) scaleY(1.08);
-    opacity: var(--hi, 0.8);
-  }
-}
-
-@keyframes foil-sweep {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-}
-
 @keyframes glow-breathe {
   0%,
   100% {
-    opacity: 0.55;
+    opacity: 0.5;
   }
   50% {
-    opacity: 0.95;
+    opacity: 0.9;
   }
 }
 
@@ -360,13 +482,39 @@
   }
 }
 
-@keyframes pulse-glow {
+/* Sparkles: a four-point star that opens, turns and closes. */
+@keyframes twinkle {
   0%,
   100% {
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+  40% {
+    opacity: var(--peak, 0.9);
   }
   50% {
-    box-shadow: 0 0 22px rgba(255, 217, 102, 0.8);
+    transform: scale(1) rotate(70deg);
+  }
+  60% {
+    opacity: var(--peak, 0.9);
+  }
+}
+
+@keyframes ember-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(217, 102, 63, 0.55);
+  }
+  70% {
+    opacity: 0.85;
+    box-shadow: 0 0 0 7px rgba(217, 102, 63, 0);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -379,20 +527,23 @@
 .animate-aurora-c {
   animation: aurora-c 44s ease-in-out infinite;
 }
-.animate-ribbon {
-  animation: ribbon-sway ease-in-out infinite;
-}
-.animate-foil {
-  animation: foil-sweep 7s ease-in-out infinite alternate;
-}
 .animate-glow-breathe {
   animation: glow-breathe 11s ease-in-out infinite;
 }
 .animate-cue-fall {
   animation: cue-fall 2.6s var(--ease-silk) infinite;
 }
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
+.animate-twinkle {
+  animation: twinkle var(--dur, 4s) ease-in-out var(--delay, 0s) infinite;
+}
+.animate-ember {
+  animation: ember-pulse 2.6s ease-out infinite;
+}
+.animate-marquee {
+  animation: marquee var(--dur, 42s) linear infinite;
+}
+.marquee-host:hover .animate-marquee {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -402,5 +553,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .animate-marquee {
+    animation: none !important;
+    transform: none !important;
   }
 }

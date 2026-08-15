@@ -4,58 +4,61 @@ import GoldGeometry from "../components/atmosphere/GoldGeometry";
 import { about } from "../data/content";
 
 function About() {
-
-
   return (
     <section
       id="about"
       aria-labelledby="about-title"
-      className="relative isolate overflow-x-clip py-28 sm:py-40 lg:py-48"
+      className="relative isolate overflow-x-clip py-24 sm:py-32 lg:py-44"
     >
       <GoldGeometry
         variant="frame"
-        className="pointer-events-none top-[6%] -left-[22%] aspect-square w-[70vmin] opacity-50 lg:-left-[8%] lg:w-[46vmin]"
+        className="pointer-events-none top-[4%] -left-[26%] aspect-square w-[76vmin] opacity-40
+          lg:-left-[10%] lg:w-[46vmin]"
       />
 
-      <div className="relative mx-auto w-full max-w-[108rem] px-6 sm:px-10">
+      <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
         <SectionTitle
           id="about-title"
           index={about.index}
           label={about.label}
           title={about.title}
-          itemClass="reveal"
+          script={about.script}
         />
 
-        <div aria-hidden="true" className="ab-rule mt-10 h-px w-full origin-left rule-gold sm:mt-14" />
-
-        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-20 lg:items-start">
-          <div className="space-y-6 text-[1.05rem] leading-relaxed text-sand/90 font-normal lg:space-y-8 lg:text-[1.2rem] lg:leading-[1.85] lg:max-w-2xl">
+        <div className="mt-14 grid gap-14 sm:mt-20 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-24">
+          <div>
             {about.body.map((para, i) => (
               <p
                 key={i}
                 data-reveal
-                className={
-                  i === 0
-                    ? "max-w-prose text-ivory/95 font-light lg:max-w-none"
-                    : "max-w-prose text-sand/85 font-light lg:max-w-none"
-                }
+                style={{ transitionDelay: `${i * 90}ms` }}
+                className={`max-w-[46ch] text-[1.08rem] leading-[1.8] lg:text-[1.25rem] lg:leading-[1.75] ${
+                  i === 0 ? "text-pearl" : "mt-7 text-sand/85"
+                }`}
               >
                 {para}
               </p>
             ))}
+
+            <p
+              data-reveal
+              aria-hidden="true"
+              className="script mt-10 text-[2.6rem] leading-none text-brass/70"
+            >
+              {about.signature}
+            </p>
           </div>
 
-          <dl className="grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-1">
-            {about.facts.map((fact) => (
-              <div
-                key={fact.term}
-                data-reveal
-                className="border-t border-gold-dark/25 pt-5"
-              >
-                <dt className="eyebrow-sm text-gold-metal/90 font-medium tracking-[0.24em]">
+          {/* Facts as a plain ledger: label above value, no card and no rule
+              between rows. The spacing separates them. */}
+          <dl className="grid grid-cols-1 gap-x-10 gap-y-9 self-start sm:grid-cols-2 lg:grid-cols-1 lg:gap-y-8">
+            {about.facts.map((fact, i) => (
+              <div key={fact.term} data-reveal style={{ transitionDelay: `${i * 70}ms` }}>
+                <dt className="flex items-center gap-2.5 eyebrow-sm text-brass/80">
+                  <span aria-hidden="true" className="h-1 w-1 rotate-45 bg-brass/70" />
                   {fact.term}
                 </dt>
-                <dd className="mt-2 text-[1.15rem] leading-snug font-medium text-ivory">
+                <dd className="mt-2.5 font-display text-[1.3rem] leading-snug text-ivory lg:text-[1.45rem]">
                   {fact.value}
                 </dd>
               </div>
