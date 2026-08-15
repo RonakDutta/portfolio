@@ -111,11 +111,28 @@ function GoldDust({ motes = 36, glints = 16, className = "" }) {
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      w = Math.round(rect.width * RES);
-      h = Math.round(rect.height * RES);
-      canvas.width = w;
-      canvas.height = h;
-      seed();
+      const nextW = Math.round(rect.width * RES);
+      const nextH = Math.round(rect.height * RES);
+      if (nextW === 0 || nextH === 0) return;
+
+      const isInitial = field.length === 0;
+      const widthChanged = Math.abs(nextW - w) > 2;
+
+      if (isInitial || widthChanged) {
+        w = nextW;
+        h = nextH;
+        canvas.width = w;
+        canvas.height = h;
+        seed();
+      } else if (Math.abs(nextH - h) > 0) {
+        w = nextW;
+        h = nextH;
+        canvas.width = w;
+        canvas.height = h;
+        for (const p of field) {
+          if (p.y > h) p.y = Math.random() * h;
+        }
+      }
     };
 
     resize();

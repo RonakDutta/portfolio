@@ -26,7 +26,10 @@ function Atmosphere({ env }) {
   const still = env.reducedMotion;
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-x-0 top-0 h-[100lvh] min-h-screen z-0 overflow-hidden"
+    >
       <div className="absolute inset-0 bg-ink" />
 
       <div
@@ -70,7 +73,7 @@ function Atmosphere({ env }) {
       {/* Volumetric bloom pooling low in the frame. It gives the black a floor
           and stops the lower half reading as empty. */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[55vh]"
+        className="absolute inset-x-0 bottom-0 h-[55lvh] min-h-[55vh]"
         style={{
           background:
             "radial-gradient(70% 100% at 50% 120%, rgba(200,164,92,0.11) 0%, rgba(138,109,51,0.04) 44%, transparent 76%)",
