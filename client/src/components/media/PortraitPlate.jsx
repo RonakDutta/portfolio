@@ -100,41 +100,29 @@ function PortraitPlate({
               style={{
                 "--crop": CROP,
                 transformOrigin: ORIGIN,
-                filter:
-                  "grayscale(0.96) contrast(1.2) brightness(1.03) sepia(0.16)",
+                filter: "contrast(1.08) brightness(0.96) saturate(1.04)",
               }}
             />
           </picture>
         )}
 
-        {/* Champagne rim from the upper right. Soft-light keeps it on the skin
-            instead of laying a colour wash over the whole plate. */}
+        {/* Subtle warm champagne key-light overlay */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 mix-blend-soft-light"
           style={{
             background:
-              "linear-gradient(248deg, rgba(255,245,199,0.85) 0%, rgba(212,175,55,0.3) 18%, transparent 44%)",
+              "linear-gradient(225deg, rgba(255,245,199,0.35) 0%, rgba(212,175,55,0.08) 25%, transparent 55%)",
           }}
         />
 
-        {/* A second, weaker bounce low and left, so the lighting has two
-            sources and the shadow side does not go completely dead. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 mix-blend-soft-light"
-          style={{
-            background:
-              "linear-gradient(28deg, rgba(198,161,91,0.3) 0%, transparent 34%)",
-          }}
-        />
-
+        {/* Delicate cinematic corner vignette: softly darkens perimeter while keeping subject bright */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(52% 47% at 50% 36%, transparent 24%, rgba(1,1,1,0.74) 58%, rgba(1,1,1,0.99) 100%)",
+              "radial-gradient(ellipse at 50% 38%, transparent 45%, rgba(3,3,4,0.35) 75%, rgba(3,3,4,0.7) 100%)",
           }}
         />
       </div>
