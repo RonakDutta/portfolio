@@ -71,13 +71,7 @@ function PortraitPlate({
       />
 
       <div
-        className="relative aspect-4/5 w-full overflow-hidden bg-carbon"
-        style={{
-          maskImage:
-            "radial-gradient(104% 104% at 66% 36%, #000 30%, rgba(0,0,0,0.55) 68%, transparent 97%)",
-          WebkitMaskImage:
-            "radial-gradient(104% 104% at 66% 36%, #000 30%, rgba(0,0,0,0.55) 68%, transparent 97%)",
-        }}
+        className="relative aspect-4/5 w-full overflow-hidden rounded-2xl border border-gold-dark/30 bg-carbon shadow-[0_0_40px_rgba(0,0,0,0.6)]"
       >
         {failed ? (
           <div className="absolute inset-0 flex items-center justify-center bg-coal">
@@ -141,30 +135,6 @@ function PortraitPlate({
           style={{
             background:
               "radial-gradient(52% 47% at 50% 36%, transparent 24%, rgba(1,1,1,0.74) 58%, rgba(1,1,1,0.99) 100%)",
-          }}
-        />
-
-        {/* Dissolve into the page on top, bottom and left edges so the plate
-            never reads as a cut rectangle pasted onto the background. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-1/4"
-          style={{
-            background: "linear-gradient(to bottom, #030304 0%, transparent 100%)",
-          }}
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4"
-          style={{
-            background: "linear-gradient(to top, #030304 0%, transparent 100%)",
-          }}
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 w-1/3"
-          style={{
-            background: "linear-gradient(to right, #030304 0%, transparent 100%)",
           }}
         />
       </div>
