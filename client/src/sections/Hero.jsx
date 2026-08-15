@@ -60,8 +60,8 @@ function Hero({ env }) {
       <div className="mx-auto grid w-full max-w-[108rem] items-center gap-0 px-6 sm:px-10 lg:grid-cols-12">
         {/* Plate */}
         <div
-          className="hero-plate relative order-1 -mx-6 sm:-mx-10 lg:order-2 lg:col-span-5
-            lg:col-start-8 lg:row-start-1 lg:mx-0 lg:w-full lg:max-w-[28rem]
+          className="hero-plate relative order-1 mx-auto w-full max-w-[280px] sm:max-w-[340px] mb-8 sm:mb-10 lg:order-2 lg:col-span-5
+            lg:col-start-8 lg:row-start-1 lg:mx-0 lg:w-full lg:max-w-[28rem] lg:mb-0
             lg:justify-self-end xl:max-w-[31rem]"
         >
           <PortraitPlate
@@ -73,7 +73,7 @@ function Hero({ env }) {
         </div>
 
         {/* Type */}
-        <div className="relative z-10 order-2 -mt-16 sm:-mt-24 lg:order-1 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:self-center">
+        <div className="relative z-10 order-2 mt-0 sm:mt-0 lg:order-1 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:self-center">
           <p className="hero-eyebrow flex items-center gap-4 eyebrow text-champagne">
             <span
               aria-hidden="true"

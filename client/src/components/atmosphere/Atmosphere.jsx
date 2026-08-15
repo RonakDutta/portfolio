@@ -47,12 +47,12 @@ function Atmosphere({ env }) {
         }}
       />
 
-      <GoldAurora still={still} intensity={env.lightweight ? 0.7 : 1} />
+      <GoldAurora still={still} intensity={1} />
 
-      {env.lightweight ? null : <GoldRibbons still={still} />}
+      <GoldRibbons still={still} />
 
-      {env.lightweight || still ? null : (
-        <GoldDust count={env.isMobile ? 22 : 46} className="opacity-70" />
+      {still ? null : (
+        <GoldDust count={env.isMobile ? 22 : 46} className="opacity-75" />
       )}
 
       {/* Volumetric bloom pooling low in the frame — it gives the black a

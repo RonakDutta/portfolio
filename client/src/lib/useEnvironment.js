@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 function useMediaQuery(query) {
   const subscribe = useCallback(
@@ -20,16 +20,6 @@ export function useEnvironment() {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const coarsePointer = useMediaQuery("(pointer: coarse)");
 
-  // Cheap device read, taken once. Used only to decide whether the heavier
-  // decorative layers are worth painting.
-  const [tier] = useState(() => {
-    if (typeof navigator === "undefined") return "high";
-    const cores = navigator.hardwareConcurrency ?? 4;
-    const memory = navigator.deviceMemory ?? 4;
-    if (cores <= 4 || memory <= 4) return "low";
-    return "high";
-  });
-
   return useMemo(
     () => ({
       reducedMotion,
@@ -38,8 +28,8 @@ export function useEnvironment() {
       // Pointer-driven flourishes: only where there is a real cursor and the
       // visitor has not asked for less movement.
       pointerFx: !coarsePointer && !reducedMotion,
-      lightweight: tier === "low" || reducedMotion,
+      lightweight: reducedMotion,
     }),
-    [reducedMotion, isMobile, coarsePointer, tier],
+    [reducedMotion, isMobile, coarsePointer],
   );
 }
