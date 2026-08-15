@@ -55,16 +55,16 @@ function GateArch({ className = "", narrow = false }) {
       <defs>
         {}
         <linearGradient id={stone} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#08060b" />
-          <stop offset="55%" stopColor="#0f0b12" />
-          <stop offset="100%" stopColor="#241511" />
+          <stop offset="0%" stopColor="#070609" />
+          <stop offset="55%" stopColor="#100d15" />
+          <stop offset="100%" stopColor="#1d1519" />
         </linearGradient>
 
         {}
         <linearGradient id={rim} x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stopColor="#ff7a18" stopOpacity="0.85" />
-          <stop offset="45%" stopColor="#ff4d00" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="#ff4d00" stopOpacity="0.05" />
+          <stop offset="0%" stopColor="#dcae74" stopOpacity="0.6" />
+          <stop offset="45%" stopColor="#b98a52" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="#b98a52" stopOpacity="0.04" />
         </linearGradient>
 
         <linearGradient id={grime} x1="0" y1="0" x2="0" y2="1">
@@ -129,15 +129,15 @@ function GateArch({ className = "", narrow = false }) {
         d={REVEAL}
         fill="none"
         stroke={`url(#${rim})`}
-        strokeWidth="6"
+        strokeWidth="4"
         strokeLinecap="round"
         vectorEffect="non-scaling-stroke"
       />
       <path
         d={REVEAL}
         fill="none"
-        stroke="#ffb347"
-        strokeOpacity="0.22"
+        stroke="#e9cda8"
+        strokeOpacity="0.16"
         strokeWidth="1.5"
         vectorEffect="non-scaling-stroke"
       />

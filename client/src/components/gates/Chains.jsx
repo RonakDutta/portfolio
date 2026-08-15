@@ -75,10 +75,10 @@ const list = registry.current;
           cx="0"
           cy={breakAt * PITCH}
           r="16"
-          fill="#ffb347"
-          opacity="0.5"
+          fill="#dcae74"
+          opacity="0.38"
         />
-        <circle cx="0" cy={breakAt * PITCH} r="6" fill="#fff3d6" />
+        <circle cx="0" cy={breakAt * PITCH} r="6" fill="#f3e3cc" />
       </g>
 
       <g ref={lower}>

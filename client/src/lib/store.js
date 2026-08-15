@@ -1,10 +1,15 @@
+/**
+ * Order here must match the order the sections are rendered in, since the
+ * scroll spy indexes into this array. Ids are unchanged from the original
+ * build so existing deep links keep working.
+ */
 export const SECTIONS = [
-  { id: "gates", label: "Gates of Hell", roman: "I" },
-  { id: "fallen", label: "The Fallen One", roman: "II" },
-  { id: "arsenal", label: "Arsenal", roman: "III" },
-  { id: "chambers", label: "Chambers", roman: "IV" },
-  { id: "chronicle", label: "Infernal Chronicle", roman: "V" },
-  { id: "summoning", label: "Summoning Circle", roman: "VI" },
+  { id: "gates", label: "Home", num: "00" },
+  { id: "fallen", label: "About", num: "01" },
+  { id: "chambers", label: "Projects", num: "02" },
+  { id: "arsenal", label: "Skills", num: "03" },
+  { id: "chronicle", label: "Experience", num: "04" },
+  { id: "summoning", label: "Contact", num: "05" },
 ];
 
 export const frame = {

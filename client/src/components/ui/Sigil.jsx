@@ -25,18 +25,18 @@ function Sigil({ className = "", title }) {
         <linearGradient id={iron} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#2c2333" />
           <stop offset="0.55" stopColor="#150f1d" />
-          <stop offset="1" stopColor="#2a1410" />
+          <stop offset="1" stopColor="#241b14" />
         </linearGradient>
         <linearGradient id={molten} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fff3d6" />
-          <stop offset="0.3" stopColor="#ffc061" />
-          <stop offset="0.66" stopColor="#ff4d00" />
-          <stop offset="1" stopColor="#8c2606" />
+          <stop offset="0" stopColor="#f3e3cc" />
+          <stop offset="0.3" stopColor="#dcae74" />
+          <stop offset="0.66" stopColor="#b98a52" />
+          <stop offset="1" stopColor="#4a3720" />
         </linearGradient>
         <linearGradient id={rim} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#ffb066" />
-          <stop offset="0.5" stopColor="#ff4d00" />
-          <stop offset="1" stopColor="#7a1a06" />
+          <stop offset="0" stopColor="#dcae74" />
+          <stop offset="0.5" stopColor="#b98a52" />
+          <stop offset="1" stopColor="#3d2d1a" />
         </linearGradient>
       </defs>
 
@@ -52,7 +52,7 @@ function Sigil({ className = "", title }) {
         className="sigil-facet"
         d="M2.5 32 32 2.5"
         fill="none"
-        stroke="#ffd9a3"
+        stroke="#e9cda8"
         strokeWidth="1.4"
         strokeOpacity="0.5"
       />
@@ -60,7 +60,7 @@ function Sigil({ className = "", title }) {
         className="sigil-rule"
         d={INNER}
         fill="none"
-        stroke="#ff4d00"
+        stroke="#b98a52"
         strokeWidth="0.9"
         strokeOpacity="0.32"
       />

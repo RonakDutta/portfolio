@@ -5,14 +5,12 @@ import { initPointer } from "./lib/store";
 import HellCanvas from "./components/HellCanvas";
 import Threshold from "./components/Threshold";
 import StoneNav from "./components/nav/StoneNav";
-import SparkTrail from "./components/ui/SparkTrail";
-import AudioToggleWidget from "./components/ui/AudioToggleWidget";
-import Gates from "./sections/Gates";
-import Fallen from "./sections/Fallen";
-import Arsenal from "./sections/Arsenal";
-import Chambers from "./sections/Chambers";
-import Chronicle from "./sections/Chronicle";
-import Summoning from "./sections/Summoning";
+import Hero from "./sections/Hero";
+import About from "./sections/About";
+import Work from "./sections/Work";
+import Skills from "./sections/Skills";
+import Record from "./sections/Record";
+import Contact from "./sections/Contact";
 
 export default function App() {
   const env = useEnvironment();
@@ -26,24 +24,25 @@ export default function App() {
 
       <a
         href="#gates"
-        className="sr-focusable inline-flex min-h-11 items-center bg-obsidian px-4 font-display text-bone"
+        className="sr-focusable inline-flex min-h-11 items-center border border-bronze/50
+          bg-obsidian px-4 font-mono text-sm text-bone"
       >
         Skip to content
       </a>
 
       <StoneNav />
-      <SparkTrail disabled={env.coarsePointer || env.reducedMotion} />
-      <AudioToggleWidget />
 
       <HellCanvas env={env} />
 
+      {/* Work sits directly after About: it is the thing most visitors came
+          for, and burying it behind the skills list helps nobody. */}
       <main id="descent" className="relative z-10">
-        <Gates env={env} />
-        <Fallen env={env} />
-        <Arsenal env={env} />
-        <Chambers env={env} />
-        <Chronicle env={env} />
-        <Summoning env={env} />
+        <Hero env={env} />
+        <About env={env} />
+        <Work env={env} />
+        <Skills env={env} />
+        <Record env={env} />
+        <Contact env={env} />
       </main>
     </>
   );

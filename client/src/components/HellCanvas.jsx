@@ -11,7 +11,7 @@ function StaticHell() {
       className="pointer-events-none fixed inset-0 z-0"
       style={{
         background:
-          "radial-gradient(120% 80% at 50% 118%, #ff4d00 0%, #8a1c03 18%, #2a0d0a 42%, #05030a 78%)",
+          "radial-gradient(110% 62% at 50% 126%, #8f350b 0%, #401607 18%, #140e15 46%, #050409 74%)",
       }}
     />
   );
@@ -24,8 +24,8 @@ function Vignette() {
       className="pointer-events-none fixed inset-0 z-1"
       style={{
         background: [
-          "radial-gradient(115% 75% at 50% 42%, transparent 30%, rgba(5,3,10,0.62) 100%)",
-          "linear-gradient(to bottom, rgba(5,3,10,0.85) 0%, transparent 35%)",
+          "radial-gradient(115% 72% at 50% 40%, transparent 26%, rgba(5,4,9,0.74) 100%)",
+          "linear-gradient(to bottom, rgba(5,4,9,0.88) 0%, transparent 35%)",
         ].join(","),
       }}
     />

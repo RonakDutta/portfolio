@@ -4,18 +4,18 @@
     <linearGradient id="iron" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#2c2333"/>
       <stop offset="0.55" stop-color="#150f1d"/>
-      <stop offset="1" stop-color="#2a1410"/>
+      <stop offset="1" stop-color="#241b14"/>
     </linearGradient>
     <linearGradient id="molten" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fff3d6"/>
-      <stop offset="0.3" stop-color="#ffc061"/>
-      <stop offset="0.66" stop-color="#ff4d00"/>
-      <stop offset="1" stop-color="#8c2606"/>
+      <stop offset="0" stop-color="#f3e3cc"/>
+      <stop offset="0.3" stop-color="#dcae74"/>
+      <stop offset="0.66" stop-color="#b98a52"/>
+      <stop offset="1" stop-color="#4a3720"/>
     </linearGradient>
     <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffb066"/>
-      <stop offset="0.5" stop-color="#ff4d00"/>
-      <stop offset="1" stop-color="#7a1a06"/>
+      <stop offset="0" stop-color="#dcae74"/>
+      <stop offset="0.5" stop-color="#b98a52"/>
+      <stop offset="1" stop-color="#3d2d1a"/>
     </linearGradient>
   </defs>
 
@@ -24,9 +24,9 @@
   <!-- Ember rim -->
   <path class="sigil-rim" d="M32 2.5 61.5 32 32 61.5 2.5 32Z" fill="none" stroke="url(#rim)" stroke-width="3"/>
   <!-- Light catching the upper-left facet -->
-  <path class="sigil-facet" d="M2.5 32 32 2.5" fill="none" stroke="#ffd9a3" stroke-width="1.4" stroke-opacity="0.5"/>
+  <path class="sigil-facet" d="M2.5 32 32 2.5" fill="none" stroke="#e9cda8" stroke-width="1.4" stroke-opacity="0.5"/>
   <!-- Inner rule cut into the face -->
-  <path class="sigil-rule" d="M32 10 54 32 32 54 10 32Z" fill="none" stroke="#ff4d00" stroke-width="0.9" stroke-opacity="0.32"/>
+  <path class="sigil-rule" d="M32 10 54 32 32 54 10 32Z" fill="none" stroke="#b98a52" stroke-width="0.9" stroke-opacity="0.32"/>
 
   <!-- Cinzel Black "R", drawn as a path so the mark never waits on a webfont -->
   <g class="sigil-letter" transform="translate(21.332 40.4)" fill="url(#molten)">

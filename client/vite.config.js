@@ -84,8 +84,6 @@ input: {
           if (id.includes("three") || id.includes("@react-three"))
             return "three";
           if (id.includes("gsap") || id.includes("lenis")) return "motion-core";
-          if (id.includes("framer-motion") || id.includes("motion-dom"))
-            return "framer";
           if (id.includes("react")) return "react-vendor";
         },
       },

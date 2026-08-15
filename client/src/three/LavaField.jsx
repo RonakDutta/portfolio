@@ -27,7 +27,7 @@ const vertexShader = (octaves) =>  `
     vec3 base = (modelMatrix * vec4(pos, 1.0)).xyz;
 
     // Domain scrolls with descent so the surface flows past as you fall.
-    float swell = fbm(vec3(base.xz * 0.035 + vec2(0.0, uFlow), uTime * 0.05));
+    float swell = fbm(vec3(base.xz * 0.055 + vec2(0.0, uFlow), uTime * 0.05));
 
     float heat = bloom(distance(base.xz, uHeatPoint), uRadius) * uHeatStrength;
 
@@ -73,7 +73,7 @@ const fragmentShader = (octaves, detail = "rich") =>  `
 
   void main() {
     // World-space domain: the mesh moves with the camera, the pattern does not.
-    vec2 p = vWorld.xz * 0.04 + vec2(0.0, uFlow);
+    vec2 p = vWorld.xz * 0.085 + vec2(0.0, uFlow);
     float t = uTime * 0.06;
 
     // Domain warp turns clean noise bands into something that churns.
@@ -89,25 +89,25 @@ const fragmentShader = (octaves, detail = "rich") =>  `
     // Veins glow where the crust has split. The band is deliberately narrow and
     // the falloff steep. A wide band reads as orange ground, not as molten
     // rock, and the whole illusion rests on most of this surface being black.
-    float veins = 1.0 - smoothstep(0.40, 0.53, crust);
-    veins = pow(veins, 2.4);
+    float veins = 1.0 - smoothstep(0.445, 0.495, crust);
+    veins = pow(veins, 3.6);
 
     ${
       detail === "rich"
         ? /* glsl */ `
     
-    float fine = 1.0 - smoothstep(0.44, 0.50, fbmLow(vec3(p * 2.6 + warp, t * 2.0)) * 0.5 + 0.5);
-    veins = max(veins, fine * 0.5);`
+    float fine = 1.0 - smoothstep(0.455, 0.49, fbmLow(vec3(p * 2.6 + warp, t * 2.0)) * 0.5 + 0.5);
+    veins = max(veins, fine * 0.3);`
         : ""
     }
 
     float heat = bloom(distance(vWorld.xz, uHeatPoint), uRadius) * uHeatStrength;
 
-    float temp = clamp(veins * uIntensity + heat * 1.35 + vSwell * 0.10, 0.0, 1.4);
+    float temp = clamp(veins * uIntensity + heat * 0.25 + vSwell * 0.04, 0.0, 1.4);
 
-    vec3 col = mix(uRock, uEmber, smoothstep(0.04, 0.42, temp));
-    col = mix(col, uHot, smoothstep(0.38, 0.82, temp));
-    col = mix(col, uCore, smoothstep(0.88, 1.25, temp));
+    vec3 col = mix(uRock, uEmber, smoothstep(0.17, 0.52, temp));
+    col = mix(col, uHot, smoothstep(0.52, 0.9, temp));
+    col = mix(col, uCore, smoothstep(0.96, 1.3, temp));
 
     ${
       detail === "rich"
@@ -122,7 +122,7 @@ const fragmentShader = (octaves, detail = "rich") =>  `
     // doing it here lets the far river dissolve instead of ending at an edge.
     float fade = 1.0 - smoothstep(55.0, 150.0, distance(vWorld.xz, uViewer));
 
-    gl_FragColor = vec4(col * fade, fade);
+    gl_FragColor = vec4(col * fade * 0.5, fade);
     #include <colorspace_fragment>
   }
 `;
@@ -149,15 +149,15 @@ const heat = useRef({ x: 0, z: -40, strength: 0 });
       uTime: { value: 0 },
       uFlow: { value: 0 },
       uSwell: { value: 1.15 },
-      uIntensity: { value: 0.95 },
-      uRadius: { value: 9 },
+      uIntensity: { value: 0.55 },
+      uRadius: { value: 7 },
       uHeatStrength: { value: 0 },
       uHeatPoint: { value: new THREE.Vector2(0, -40) },
       uViewer: { value: new THREE.Vector2() },
-      uRock: { value: new THREE.Color("#0d0605") },
-      uEmber: { value: new THREE.Color("#8a1c03") },
-      uHot: { value: new THREE.Color("#ff5a0a") },
-      uCore: { value: new THREE.Color("#ffe2a8") },
+      uRock: { value: new THREE.Color("#0a0709") },
+      uEmber: { value: new THREE.Color("#4d1604") },
+      uHot: { value: new THREE.Color("#c2410a") },
+      uCore: { value: new THREE.Color("#ffbe7a") },
     }),
     [],
   );
@@ -169,7 +169,7 @@ const heat = useRef({ x: 0, z: -40, strength: 0 });
     const s = frame.scroll;
     const m = mesh.current;
 
-const drop = 32 - 21 * s;
+const drop = 46 - 26 * s;
 
 camera.getWorldDirection(_fwd);
     _fwd.y = 0;
@@ -193,8 +193,8 @@ camera.getWorldDirection(_fwd);
     u.uTime.value = t;
     
     u.uFlow.value = -camera.position.y * 0.012 + t * 0.015;
-    u.uIntensity.value = 0.95 + 0.45 * s;
-    u.uSwell.value = 0.9 + 0.6 * s;
+    u.uIntensity.value = 0.5 + 0.3 * s;
+    u.uSwell.value = 0.8 + 0.45 * s;
     u.uViewer.value.set(camera.position.x, camera.position.z);
 
     if (coarsePointer) {
@@ -223,7 +223,7 @@ camera.getWorldDirection(_fwd);
     
     const gust = clamp01(Math.abs(frame.velocity) * 0.05);
     u.uHeatStrength.value = heat.current.strength * (1 + gust * 0.8);
-    u.uRadius.value = damp(u.uRadius.value, 10 + gust * 8, 3, dt);
+    u.uRadius.value = damp(u.uRadius.value, 7 + gust * 5, 3, dt);
   });
 
   return (
