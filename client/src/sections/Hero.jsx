@@ -60,7 +60,7 @@ function Hero({ env }) {
       <div className="mx-auto grid w-full max-w-[108rem] items-center gap-0 px-6 sm:px-10 lg:grid-cols-12">
         {/* Plate */}
         <div
-          className="hero-plate relative order-1 mx-auto w-full max-w-[280px] sm:max-w-[340px] mb-8 sm:mb-10 lg:order-2 lg:col-span-5
+          className="hero-plate relative order-1 -mx-6 sm:-mx-10 mb-8 sm:mb-12 lg:order-2 lg:col-span-5
             lg:col-start-8 lg:row-start-1 lg:mx-0 lg:w-full lg:max-w-[28rem] lg:mb-0
             lg:justify-self-end xl:max-w-[31rem]"
         >
