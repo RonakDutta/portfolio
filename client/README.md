@@ -48,11 +48,15 @@ Drop the file into `public/projects/` under that name and it appears. Until
 then the plate renders a labelled placeholder at the same ratio, so the layout
 is already final and nothing shifts when the real asset lands.
 
-Guidance for the captures:
+The three current captures are in place. Guidance for replacing them:
 
-- **The featured project renders at 16:9, the others at 16:10.** Supply at
-  least 2000×1125 for the flagship — it fills the full measure, up to ~1650 CSS
-  px on a wide screen.
+- **The plate is 2.104:1 on `sm` and up**, matching the ratio of the supplied
+  browser captures so nothing is cropped. Phones drop to 4:3 with a centre
+  crop, since a 2:1 band is too short to read as a product shot. If you swap in
+  captures at a different ratio, change `aspect-[2.104/1]` in `ProjectFrame` to
+  match — otherwise `object-cover` will crop them.
+- Supply at least 1900px wide for the flagship; it fills the full measure, up
+  to ~1650 CSS px on a wide screen.
 - **WebP or AVIF** where possible; PNG is fine under ~400 KB.
 - Capture the **most legible screen**, not a login page. These plates are the
   main visual anchor of the site.

@@ -3,9 +3,10 @@ import { memo, useCallback, useRef, useState } from "react";
 /**
  * The screenshot plate — treated as product photography, not as a card.
  *
- * Space is reserved from a fixed ratio, so nothing on the page moves
- * when an image decodes, and nothing moves later when a placeholder is
- * replaced by a real capture.
+ * Space is reserved from a fixed ratio — 2.104:1, matching the source
+ * captures, so nothing is cropped on desktop and nothing on the page moves
+ * when an image decodes. Phones drop to 4:3, where a 2:1 band would be too
+ * short to read as a product shot.
  *
  * Two effects, both cursor-only and both small: the image takes a 1.5% zoom,
  * and a soft champagne highlight follows the pointer across the glass. Touch
@@ -17,7 +18,6 @@ function ProjectFrame({
   label,
   priority = false,
   interactive = true,
-  ratio = "16/10",
   className = "",
 }) {
   const glass = useRef(null);
@@ -41,9 +41,7 @@ function ProjectFrame({
         onPointerMove={interactive ? track : undefined}
         onPointerEnter={interactive ? () => setLit(true) : undefined}
         onPointerLeave={interactive ? () => setLit(false) : undefined}
-        className={`edge-gold relative w-full overflow-hidden bg-jet ${
-          ratio === "16/9" ? "aspect-16/9" : "aspect-16/10"
-        }`}
+        className="edge-gold relative aspect-4/3 w-full overflow-hidden bg-jet sm:aspect-[2.104/1]"
       >
         {hasImage ? (
           <img
@@ -81,7 +79,7 @@ function ProjectFrame({
           style={{
             background:
               "linear-gradient(to bottom, rgba(245,242,234,0.045) 0%, transparent 18%)",
-            boxShadow: "inset 0 0 90px 12px rgba(2,2,2,0.5)",
+            boxShadow: "inset 0 0 70px 4px rgba(2,2,2,0.26)",
           }}
         />
       </div>

@@ -70,7 +70,6 @@ function ProjectCase({ project, index, env }) {
       src={image}
       alt={imageAlt}
       label={name}
-      ratio={featured ? "16/9" : "16/10"}
       priority={Boolean(featured)}
       interactive={!env.coarsePointer}
     />
@@ -149,8 +148,8 @@ function ProjectCase({ project, index, env }) {
         <div
           className={`grid gap-12 lg:items-center lg:gap-20 ${
             variant === "left"
-              ? "lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]"
-              : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]"
+              ? "lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]"
+              : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)]"
           }`}
         >
           <div className={variant === "right" ? "lg:order-2" : ""}>{plate}</div>

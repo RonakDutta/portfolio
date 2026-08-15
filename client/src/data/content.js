@@ -82,7 +82,7 @@ export const work = {
 
       image: "/projects/ats-workplace.png",
       imageAlt:
-        "ATS Workplace dashboard showing ranked candidates and resume scores",
+        "Candidate screening view: resumes ranked by semantic match score, each with an AI insight summary and its matched and missing skills",
       secondaryImage: null,
       secondaryImageAlt: null,
 
@@ -106,9 +106,9 @@ export const work = {
       name: "Business 4.0",
       category: "Community Meetup Platform",
 
-      image: "/projects/business40.png",
+      image: "/projects/business-40.png",
       imageAlt:
-        "Business 4.0 event listing page with member registration and RSVP",
+        "Business 4.0 landing page with member navigation, log in and sign up, introducing the meetup",
       secondaryImage: null,
       secondaryImageAlt: null,
 
@@ -134,7 +134,7 @@ export const work = {
 
       image: "/projects/safarsaathi.png",
       imageAlt:
-        "SafarSaathi admin dashboard showing fleet status and revenue tracking",
+        "SafarSaathi ride booking form with pickup location, duration and payment options, signed in as an administrator",
       secondaryImage: null,
       secondaryImageAlt: null,
 
