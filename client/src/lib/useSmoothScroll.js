@@ -87,9 +87,13 @@ export function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
 
-  if (window.__lenis) window.__lenis.scrollTo(target, { offset: navOffset(), duration: 1.4 });
-  else target.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (window.__lenis) {
+    window.__lenis.start();
+    window.__lenis.scrollTo(target, { offset: navOffset(), duration: 1.4 });
+  } else {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
-if (target.tabIndex < 0) target.tabIndex = -1;
+  if (target.tabIndex < 0) target.tabIndex = -1;
   target.focus({ preventScroll: true });
 }

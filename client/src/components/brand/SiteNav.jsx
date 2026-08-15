@@ -53,8 +53,12 @@ function SiteNav() {
   }, [open]);
 
   const select = useCallback((id) => {
+    document.documentElement.style.removeProperty("overflow");
+    window.__lenis?.start();
     setOpen(false);
-    scrollToSection(id);
+    requestAnimationFrame(() => {
+      scrollToSection(id);
+    });
   }, []);
 
   const solid = lifted && !open;
@@ -158,8 +162,8 @@ function SiteNav() {
       <div
         id="nav-panel"
         ref={panelRef}
-        inert={!open}
-        className={`fixed inset-0 -z-10 flex flex-col justify-between overflow-y-auto
+        inert={!open ? true : undefined}
+        className={`fixed inset-0 -z-10 overflow-y-auto overscroll-contain
           bg-ink px-6 pt-28 pb-10 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]
           lg:hidden ${
             open
@@ -167,52 +171,59 @@ function SiteNav() {
               : "pointer-events-none -translate-y-4 opacity-0"
           }`}
       >
-        <ul className="flex flex-col">
-          {SECTIONS.map((section, i) => (
-            <li key={section.id} className="overflow-hidden">
-              <button
-                type="button"
-                onClick={() => select(section.id)}
-                aria-current={i === active ? "true" : undefined}
-                className="flex w-full items-baseline gap-5 py-3 text-left"
-                style={{
-                  transitionDelay: open ? `${120 + i * 45}ms` : "0ms",
-                  transform: open ? "none" : "translateY(120%)",
-                  opacity: open ? 1 : 0,
-                  transition:
-                    "transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1)",
-                }}
-              >
-                <span className="eyebrow-sm text-brass/70">{section.num}</span>
-                <span
-                  className={`font-display text-[2.1rem] leading-tight tracking-tight transition-colors
-                    duration-[400ms] ${i === active ? "text-brass-lit" : "text-ivory"}`}
+        <div className="flex min-h-full flex-col justify-between gap-8">
+          <ul className="flex flex-col">
+            {SECTIONS.map((section, i) => (
+              <li key={section.id} className="overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => select(section.id)}
+                  aria-current={i === active ? "true" : undefined}
+                  className="flex w-full items-baseline gap-5 py-3 text-left"
+                  style={{
+                    transitionDelay: open ? `${120 + i * 45}ms` : "0ms",
+                    transform: open ? "none" : "translateY(120%)",
+                    opacity: open ? 1 : 0,
+                    transition:
+                      "transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1)",
+                  }}
                 >
-                  {section.label}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
+                  <span className="eyebrow-sm text-brass/70">{section.num}</span>
+                  <span
+                    className={`font-display text-[2.1rem] leading-tight tracking-tight transition-colors
+                      duration-[400ms] ${i === active ? "text-brass-lit" : "text-ivory"}`}
+                  >
+                    {section.label}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
 
-        <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
-          {[
-            { label: "Email", href: `mailto:${identity.email}` },
-            { label: "GitHub", href: identity.github },
-            { label: "LinkedIn", href: identity.linkedin },
-            { label: "Resume", href: identity.resume },
-          ].map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target={link.href.startsWith("http") ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              className="link-underline min-h-11 eyebrow-sm text-sand transition-colors
-                duration-500 hover:text-brass-lit"
-            >
-              {link.label}
-            </a>
-          ))}
+          <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 pt-6 border-t border-brass/10">
+            {[
+              { label: "Email", href: `mailto:${identity.email}` },
+              { label: "GitHub", href: identity.github },
+              { label: "LinkedIn", href: identity.linkedin },
+              { label: "Resume", href: identity.resume },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                onClick={() => {
+                  if (link.href.startsWith("mailto:")) {
+                    setOpen(false);
+                  }
+                }}
+                className="link-underline min-h-11 eyebrow-sm text-sand transition-colors
+                  duration-500 hover:text-brass-lit"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </header>

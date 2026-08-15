@@ -166,7 +166,7 @@ function Hero({ env }) {
           <a
             href={`mailto:${identity.email}`}
             data-cursor="Write"
-            className="link-underline inline-flex min-h-11 items-center eyebrow-sm text-sand
+            className="link-underline inline-flex min-h-11 items-center eyebrow-sm lowercase text-sand
               transition-colors duration-500 hover:text-brass-lit"
           >
             {identity.email}
