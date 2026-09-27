@@ -144,6 +144,7 @@ function ProjectShowcase({ project, index, env }) {
                     href={liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    arrow="up-right"
                   >
                     {work.openLabel}
                   </Action>
@@ -151,7 +152,13 @@ function ProjectShowcase({ project, index, env }) {
               ) : null}
               {githubUrl ? (
                 <Magnetic active={env.pointerFx}>
-                  <Action href={githubUrl} target="_blank" rel="noopener noreferrer">
+                  <Action
+                    variant="outline"
+                    href={githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    arrow="code"
+                  >
                     {work.sourceLabel}
                   </Action>
                 </Magnetic>

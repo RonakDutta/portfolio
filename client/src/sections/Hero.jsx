@@ -129,12 +129,13 @@ function Hero({ env }) {
             {hero.introRole}
           </p>
 
-          <div className="hero-fade mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <div className="hero-fade mt-9 flex flex-col items-stretch gap-3.5 sm:flex-row sm:items-center sm:gap-5">
             <Magnetic active={env.pointerFx}>
               <Action
                 variant="solid"
+                size="lg"
                 onClick={() => scrollToSection(hero.primary.target)}
-                arrow={null}
+                arrow="down"
                 className="w-full sm:w-auto"
               >
                 {hero.primary.label}
@@ -143,11 +144,13 @@ function Hero({ env }) {
 
             <Magnetic active={env.pointerFx}>
               <Action
+                variant="outline"
+                size="lg"
                 href={hero.secondary.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="Open PDF"
-                arrow={null}
+                arrow="download"
                 className="w-full sm:w-auto"
               >
                 {hero.secondary.label}

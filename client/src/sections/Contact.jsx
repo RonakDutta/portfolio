@@ -266,7 +266,7 @@ function Contact() {
                   >
                     {copied === "draft" ? contact.copiedLabel : contact.copyLabel}
                   </Action>
-                  <Action onClick={reset} arrow={null}>
+                  <Action variant="outline" onClick={reset} arrow={null}>
                     {contact.againLabel}
                   </Action>
                 </div>
@@ -323,8 +323,8 @@ function Contact() {
                   onBlur={blur}
                 />
 
-                <div className="mt-6">
-                  <Action variant="solid" type="submit" arrow={null}>
+                <div className="mt-7">
+                  <Action variant="solid" size="lg" type="submit" arrow="right">
                     {contact.sendLabel}
                   </Action>
                 </div>
