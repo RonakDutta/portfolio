@@ -7,11 +7,11 @@ import { identity, hero } from "../../data/content";
 /**
  * Site navigation bar and full-screen mobile drawer.
  *
- * Refined editorial design:
- * - Fluid pill tabs with active indicator glow.
- * - Humanist typography in Instrument Sans.
- * - Tactile capsule Resume CTA with micro-interaction.
- * - Live presence status beacon.
+ * Anti-AI editorial styling:
+ * - Clean typographic layout in Instrument Sans.
+ * - Active section indicator using the 4-point background gold glint star.
+ * - Perfectly aligned 'Open to work' status.
+ * - Minimal, distinct rectangular Resume link (no pill, no arrow).
  */
 function SiteNav() {
   const [active, setActive] = useState(frame.section);
@@ -72,24 +72,24 @@ function SiteNav() {
       >
         <nav
           aria-label="Primary"
-          className="mx-auto flex w-full max-w-[102rem] items-center justify-between gap-6 px-5 py-3.5 sm:px-9 sm:py-4"
+          className="mx-auto flex w-full max-w-[102rem] items-center justify-between gap-6 px-5 py-4 sm:px-9"
         >
           {/* Logo / Monogram */}
           <button
             type="button"
             onClick={() => select(SECTIONS[0].id)}
             data-cursor="Top"
-            className="group -ml-1 flex min-h-11 items-center gap-3 px-1 rounded-full focus-visible:ring-1 focus-visible:ring-brass"
+            className="group -ml-1 flex min-h-11 items-center gap-3 px-1"
           >
             <Monogram className="h-9 w-9 transition-transform duration-500 group-hover:scale-105" />
             <span className="sr-only">{identity.name}, back to the top</span>
-            <span className="hidden font-display text-[1rem] tracking-tight text-pearl sm:block">
+            <span className="hidden font-display text-[0.98rem] tracking-tight text-pearl sm:block">
               {identity.family}
             </span>
           </button>
 
           {/* Desktop Navigation Links */}
-          <ul className="hidden items-center gap-1.5 rounded-full border border-brass/15 bg-carbon/60 p-1.5 backdrop-blur-md lg:flex">
+          <ul className="hidden items-center gap-8 lg:flex">
             {SECTIONS.map((section, i) => {
               const isActive = i === active;
               return (
@@ -98,20 +98,24 @@ function SiteNav() {
                     type="button"
                     onClick={() => select(section.id)}
                     aria-current={isActive ? "true" : undefined}
-                    className={`group relative flex items-center gap-2 rounded-full px-4 py-2 font-sans text-[0.875rem]
-                      font-medium tracking-[-0.01em] transition-all duration-300 ${
-                        isActive
-                          ? "bg-brass/15 text-ivory ring-1 ring-brass/30 shadow-[0_0_16px_rgba(200,164,92,0.12)]"
-                          : "text-sand/75 hover:bg-white/[0.04] hover:text-ivory"
+                    className={`group relative flex min-h-11 items-center gap-2 font-sans text-[0.88rem]
+                      font-medium tracking-[-0.01em] transition-colors duration-300 ${
+                        isActive ? "text-ivory" : "text-sand/70 hover:text-ivory"
                       }`}
                   >
-                    {isActive ? (
-                      <span
-                        aria-hidden="true"
-                        className="h-1.5 w-1.5 rounded-full bg-brass shadow-[0_0_8px_rgba(200,164,92,0.8)]"
-                      />
-                    ) : null}
-                    {section.label}
+                    {/* 4-point background glint star shape */}
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 16 16"
+                      className={`h-2.5 w-2.5 shrink-0 fill-brass text-brass transition-all duration-300 ${
+                        isActive
+                          ? "scale-100 opacity-100"
+                          : "scale-0 opacity-0 group-hover:scale-75 group-hover:opacity-40"
+                      }`}
+                    >
+                      <path d="M8 0 Q 8.9 7.1 16 8 Q 8.9 8.9 8 16 Q 7.1 8.9 0 8 Q 7.1 7.1 8 0 Z" />
+                    </svg>
+                    <span>{section.label}</span>
                   </button>
                 </li>
               );
@@ -119,40 +123,24 @@ function SiteNav() {
           </ul>
 
           {/* Right Action Bar */}
-          <div className="flex items-center gap-4">
-            {/* Status Beacon */}
-            <div className="hidden items-center gap-2.5 rounded-full border border-brass/15 bg-carbon/40 px-3.5 py-1.5 font-sans text-[0.8rem] font-normal text-sand/80 xl:flex">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
-              </span>
-              <span>{hero.status}</span>
-            </div>
+          <div className="flex items-center gap-6">
+            {/* Open to work status: perfectly aligned text */}
+            <span className="hidden font-sans text-[0.84rem] text-sand/60 tracking-tight xl:block">
+              {hero.status}
+            </span>
 
-            {/* Resume Capsule */}
+            {/* Resume button: minimal rectangular border, distinct from Hero, no arrow */}
             <a
               href={identity.resume}
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="Open PDF"
-              className="group hidden min-h-10 items-center gap-2 rounded-full border border-brass/35 bg-brass/[0.08]
-                px-4.5 py-2 font-sans text-[0.82rem] font-medium tracking-tight text-brass-lit shadow-[0_2px_12px_-2px_rgba(200,164,92,0.15)]
-                transition-all duration-300 hover:border-brass hover:bg-brass hover:text-ink hover:shadow-[0_2px_18px_rgba(200,164,92,0.35)]
-                active:scale-95 sm:inline-flex"
+              className="hidden min-h-9 items-center border border-brass/35 bg-transparent px-4 py-1.5
+                font-sans text-[0.82rem] font-medium tracking-tight text-brass-lit
+                transition-colors duration-300 hover:border-brass hover:bg-brass hover:text-ink
+                sm:inline-flex"
             >
-              <span>Resume</span>
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 12 12"
-                className="h-3 w-3 shrink-0 transition-transform duration-300 group-hover:translate-y-0.5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 1.5v6.5M3.5 5.5 6 8l2.5-2.5M1.5 10.5h9" />
-              </svg>
+              Resume
             </a>
 
             {/* Mobile Menu Toggle Button */}
@@ -162,20 +150,19 @@ function SiteNav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="nav-panel"
-              className="group flex min-h-10 items-center gap-2.5 rounded-full border border-brass/25 bg-carbon/60
-                px-4 py-2 font-sans text-[0.84rem] font-medium text-sand transition-all duration-300
-                hover:border-brass/50 hover:text-ivory active:scale-95 lg:hidden"
+              className="flex min-h-11 min-w-11 items-center justify-end gap-3 font-sans text-[0.84rem]
+                font-medium text-sand transition-colors duration-300 hover:text-ivory lg:hidden"
             >
               <span>{open ? "Close" : "Menu"}</span>
-              <span aria-hidden="true" className="flex w-4 flex-col gap-[4px]">
+              <span aria-hidden="true" className="flex w-5 flex-col gap-[5px]">
                 <span
                   className={`block h-px w-full bg-brass transition-transform duration-300 ${
-                    open ? "translate-y-[2.5px] rotate-45" : ""
+                    open ? "translate-y-[3px] rotate-45" : ""
                   }`}
                 />
                 <span
                   className={`block h-px w-full bg-brass transition-transform duration-300 ${
-                    open ? "-translate-y-[2.5px] -rotate-45" : ""
+                    open ? "-translate-y-[3px] -rotate-45" : ""
                   }`}
                 />
               </span>
