@@ -164,7 +164,7 @@ export const work = {
         "Razorpay",
       ],
 
-      liveUrl: "https://safarsaathi-frontend.vercel.app/",
+      liveUrl: "https://safarsaathi-three.vercel.app/",
       githubUrl: null,
     },
   ],
