@@ -52,9 +52,8 @@ function ProjectPlate({
         onPointerMove={interactive ? track : undefined}
         onPointerEnter={interactive ? () => setLit(true) : undefined}
         onPointerLeave={interactive ? () => setLit(false) : undefined}
-        className="relative aspect-4/3 w-full overflow-hidden bg-carbon
-          shadow-[0_30px_80px_-30px_rgba(0,0,0,0.95)] ring-1 ring-brass/15
-          sm:aspect-[2.104/1]"
+        className="relative aspect-[2.104/1] w-full overflow-hidden bg-carbon
+          shadow-[0_30px_80px_-30px_rgba(0,0,0,0.95)] ring-1 ring-brass/15"
       >
         {hasImage ? (
           <picture>
