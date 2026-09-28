@@ -66,7 +66,7 @@ export const about = {
   script: "me",
 
   body: [
-    "I am a software engineer based in New Delhi, currently a software development intern at RARS Innoventa. My work spans backend services and React interfaces: product cataloguing, inventory, and order fulfillment systems.",
+    "I am a software engineer based in New Delhi, currently a software development intern at RARS Innoventa. My work spans backend services and interactive React applications across multiple platforms and products.",
     "Alongside work I am finishing a B.Tech in Industrial Internet of Things at GGSIPU. Most of what I know came from building things and then fixing what broke.",
   ],
 
