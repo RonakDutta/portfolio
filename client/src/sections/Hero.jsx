@@ -169,7 +169,7 @@ function Hero({ env }) {
           <a
             href={`mailto:${identity.email}`}
             data-cursor="Write"
-            className="link-underline inline-flex min-h-11 items-center eyebrow-sm lowercase text-sand
+            className="link-underline inline-flex min-h-11 items-center font-sans text-[0.85rem] font-medium lowercase text-sand/80
               transition-colors duration-500 hover:text-brass-lit"
           >
             {identity.email}
@@ -177,7 +177,7 @@ function Hero({ env }) {
 
           <span
             aria-hidden="true"
-            className="hidden shrink-0 items-center gap-4 eyebrow-sm text-mute sm:flex"
+            className="hidden shrink-0 items-center gap-4 font-sans text-[0.8rem] font-medium tracking-wider text-mute uppercase sm:flex"
           >
             {hero.scrollCue}
             <span className="relative block h-9 w-px overflow-hidden bg-brass/20">

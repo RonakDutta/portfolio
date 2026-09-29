@@ -2,16 +2,15 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, subscribe, frame } from "../../lib/store";
 import { scrollToSection } from "../../lib/useSmoothScroll";
 import Monogram from "./Monogram";
-import { identity, hero } from "../../data/content";
+import { identity } from "../../data/content";
 
 /**
  * Site navigation bar and full-screen mobile drawer.
  *
- * Anti-AI editorial styling:
+ * Bespoke editorial styling:
  * - Clean typographic layout in Instrument Sans.
- * - Active section indicator using the 4-point background gold glint star.
- * - Perfectly aligned 'Open to work' status.
- * - Minimal, distinct rectangular Resume link (no pill, no arrow).
+ * - Active section indicator using the 4-point gold star glint.
+ * - Tactile rounded Resume action.
  */
 function SiteNav() {
   const [active, setActive] = useState(frame.section);
@@ -123,22 +122,17 @@ function SiteNav() {
           </ul>
 
           {/* Right Action Bar */}
-          <div className="flex items-center gap-6">
-            {/* Open to work status: perfectly aligned text */}
-            <span className="hidden font-sans text-[0.84rem] text-sand/60 tracking-tight xl:block">
-              {hero.status}
-            </span>
-
-            {/* Resume button: minimal rectangular border, distinct from Hero, no arrow */}
+          <div className="flex items-center gap-5">
+            {/* Resume button: refined rounded action matching the site language */}
             <a
               href={identity.resume}
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="Open PDF"
-              className="hidden min-h-9 items-center border border-brass/35 bg-transparent px-4 py-1.5
-                font-sans text-[0.82rem] font-medium tracking-tight text-brass-lit
-                transition-colors duration-300 hover:border-brass hover:bg-brass hover:text-ink
-                sm:inline-flex"
+              className="hidden min-h-9 items-center rounded-full border border-brass/40 bg-brass/10 px-4.5 py-1.5
+                font-sans text-[0.82rem] font-medium tracking-tight text-brass-lit shadow-[0_1px_8px_rgba(200,164,92,0.12)]
+                transition-all duration-300 hover:border-brass hover:bg-brass hover:text-ink hover:shadow-[0_2px_14px_rgba(200,164,92,0.3)]
+                active:scale-95 sm:inline-flex"
             >
               Resume
             </a>
@@ -201,7 +195,7 @@ function SiteNav() {
                       "transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1)",
                   }}
                 >
-                  <span className="font-mono text-[0.78rem] text-brass/70">{section.num}</span>
+                  <span className="font-display text-[1.1rem] font-normal text-brass-lit/75">{section.num}</span>
                   <span
                     className={`font-display text-[2.1rem] leading-tight tracking-tight transition-colors
                       duration-[400ms] ${i === active ? "text-brass-lit" : "text-ivory"}`}

@@ -65,7 +65,7 @@ function Field({
       <p
         id={`${id}-error`}
         role={invalid ? "alert" : undefined}
-        className={`mt-2 font-mono text-[0.66rem] tracking-[0.08em] text-ember transition-opacity
+        className={`mt-2 font-sans text-[0.78rem] tracking-tight text-ember transition-opacity
           duration-300 ${invalid ? "opacity-100" : "opacity-0"}`}
       >
         {error || " "}
@@ -232,7 +232,7 @@ function Contact() {
                 {contact.formTitle}
               </h3>
               {!sent ? (
-                <span className="shrink-0 font-mono text-[0.66rem] text-mute">
+                <span className="shrink-0 font-sans text-[0.8rem] font-normal text-mute tracking-tight">
                   {values.message.length}/{MESSAGE_MAX}
                 </span>
               ) : null}
@@ -254,7 +254,7 @@ function Contact() {
                   .
                 </p>
 
-                <pre className="mt-7 max-h-52 overflow-auto border border-brass/15 bg-carbon/60 p-5 font-mono text-[0.76rem] leading-relaxed whitespace-pre-wrap text-sand/85">
+                <pre className="mt-7 max-h-52 overflow-auto border border-brass/15 bg-carbon/60 p-5 font-sans text-[0.84rem] leading-relaxed whitespace-pre-wrap text-sand/85">
                   {draft}
                 </pre>
 
@@ -338,10 +338,10 @@ function Contact() {
         </p>
 
         <footer className="mt-24 flex flex-col items-start justify-between gap-6 pt-8 sm:flex-row sm:items-center">
-          <p className="eyebrow-sm text-mute">
+          <p className="font-sans text-[0.88rem] tracking-tight text-mute">
             {contact.closing}{" "}
-            <span className="whitespace-nowrap text-sand/85">{identity.name}</span>
-            <span aria-hidden="true" className="mx-3 text-brass-deep">
+            <span className="whitespace-nowrap font-medium text-sand/90">{identity.name}</span>
+            <span aria-hidden="true" className="mx-2.5 text-brass-deep">
               /
             </span>
             {new Date().getFullYear()}
@@ -350,20 +350,22 @@ function Contact() {
           <button
             type="button"
             onClick={() => scrollToSection(SECTIONS[0].id)}
-            className="link-underline group inline-flex min-h-11 items-center gap-3 eyebrow-sm
-              text-sand transition-colors duration-500 hover:text-ivory"
+            className="link-underline group inline-flex min-h-11 items-center gap-2.5 font-sans text-[0.88rem]
+              font-medium tracking-tight text-sand transition-colors duration-300 hover:text-ivory"
           >
             {contact.backToTop}
             <svg
               aria-hidden="true"
               viewBox="0 0 12 12"
-              className="h-2.5 w-2.5 text-brass transition-transform duration-500 group-hover:-translate-y-1"
+              className="h-2.5 w-2.5 text-brass transition-transform duration-300 group-hover:-translate-y-1"
             >
               <path
                 d="M6 11V1M2 5l4-4 4 4"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.3"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </button>

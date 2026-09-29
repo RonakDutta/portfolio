@@ -78,10 +78,10 @@ function ProjectShowcase({ project, index, env }) {
   return (
     <article ref={root} aria-labelledby={headingId} className={`relative ${inset}`}>
       <div className="show-line flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[0.92rem]">
-        <span className="font-mono text-[0.78rem] text-brass">{number}</span>
-        <span className="text-sand/80">{category}</span>
-        {featured ? <span className="text-brass-lit">Featured</span> : null}
-        <span className="ml-auto font-mono text-[0.78rem] text-mute">{year}</span>
+        <span className="font-display text-[1.1rem] font-normal tracking-tight text-brass-lit">{number}</span>
+        <span className="font-sans text-sand/80">{category}</span>
+        {featured ? <span className="font-sans text-[0.82rem] font-medium tracking-wide text-brass-lit">Featured</span> : null}
+        <span className="ml-auto font-sans text-[0.84rem] text-mute">{year}</span>
       </div>
 
       <h3
@@ -120,13 +120,13 @@ function ProjectShowcase({ project, index, env }) {
           {stack?.length ? (
             <>
               <p className="font-display text-[1.05rem] text-brass/85">Built with</p>
-              <ul className="mt-4 flex flex-wrap gap-x-2.5 gap-y-2.5">
+              <ul className="mt-4 flex flex-wrap gap-2.5">
                 {stack.map((tech) => (
                   <li
                     key={tech}
-                    className="border border-brass/20 px-3 py-1.5 font-mono text-[0.68rem]
-                      tracking-[0.08em] text-sand/90 transition-colors duration-500
-                      hover:border-brass/50 hover:text-brass-lit"
+                    className="rounded-md border border-brass/20 bg-carbon/80 px-3.5 py-1.5 font-sans text-[0.82rem]
+                      font-medium text-sand/90 shadow-[0_1px_4px_rgba(0,0,0,0.3)] backdrop-blur-sm
+                      transition-all duration-300 hover:border-brass/50 hover:bg-brass/[0.08] hover:text-ivory"
                   >
                     {tech}
                   </li>
@@ -178,7 +178,7 @@ function ProjectShowcase({ project, index, env }) {
                 >
                   <span
                     aria-hidden="true"
-                    className="shrink-0 pt-[0.35em] font-mono text-[0.66rem] text-brass/60"
+                    className="shrink-0 pt-[0.2em] font-display text-[0.92rem] font-normal text-brass-lit/70"
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>

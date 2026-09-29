@@ -195,7 +195,7 @@ export default function Cursor({ enabled }) {
       />
       <span
         ref={label}
-        className="absolute top-0 left-0 mt-9 eyebrow-sm whitespace-nowrap text-brass-lit opacity-0"
+        className="absolute top-0 left-0 mt-9 font-sans text-[0.72rem] font-medium tracking-tight whitespace-nowrap text-brass-lit opacity-0"
       />
     </div>
   );
