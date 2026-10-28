@@ -1,65 +1,74 @@
 import { memo } from "react";
-import SectionTitle from "../components/typography/SectionTitle";
-import GoldGeometry from "../components/atmosphere/GoldGeometry";
-import { about } from "../data/content";
+import Heading from "../components/type/Heading";
+import LitText from "../components/type/LitText";
+import LitPortrait from "../components/media/LitPortrait";
+import { about, hero, identity } from "../data/content";
 
-function About() {
+/**
+ * Opened inside the moon. The hero's eclipse has swallowed the screen by the
+ * time this arrives, so the first light the reader sees again is the portrait,
+ * a sun of its own.
+ */
+function About({ env }) {
   return (
     <section
       id="about"
       aria-labelledby="about-title"
-      className="relative isolate overflow-x-clip py-24 sm:py-32 lg:py-44"
+      className="relative pt-28 pb-28 sm:pt-40 lg:pt-[28vh] lg:pb-44"
     >
-      <GoldGeometry
-        variant="frame"
-        turn={24}
-        className="pointer-events-none top-[4%] -left-[26%] aspect-square w-[76vmin] opacity-40
-          lg:-left-[10%] lg:w-[46vmin]"
-      />
-
-      <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
-        <SectionTitle
-          id="about-title"
-          title={about.title}
-          script={about.script}
-        />
-
-        <div className="mt-14 grid gap-14 sm:mt-20 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-24">
-          <div>
-            {about.body.map((para, i) => (
-              <p
-                key={i}
-                data-reveal
-                style={{ transitionDelay: `${i * 90}ms` }}
-                className={`max-w-[46ch] text-[1.08rem] leading-[1.8] lg:text-[1.25rem] lg:leading-[1.75] ${
-                  i === 0 ? "text-pearl" : "mt-7 text-sand/85"
-                }`}
-              >
-                {para}
-              </p>
-            ))}
-
-            <p
-              data-reveal
-              aria-hidden="true"
-              className="script mt-10 text-[2.6rem] leading-none text-brass/70"
-            >
-              {about.signature}
+      <div className="mx-auto grid w-full max-w-[112rem] gap-x-10 gap-y-20 px-5 sm:px-9 lg:grid-cols-12">
+        <div className="lg:col-span-5 lg:pt-6">
+          <div className="lg:sticky lg:top-[18vh]">
+            <div data-reveal="up" className="mx-auto w-[min(68vw,24rem)] lg:w-[min(30vw,28rem)]">
+              <LitPortrait portrait={hero.portrait} initials={identity.initials} env={env} />
+            </div>
+            <p data-reveal="up" className="label mt-[22%] text-center text-ash lg:mt-[24%]">
+              <span className="text-gold">{identity.name}</span>
+              <span aria-hidden="true" className="mx-2">
+                /
+              </span>
+              {env.pointerFx ? "Move your light across" : identity.region}
             </p>
           </div>
+        </div>
 
-          {/* Facts as a plain ledger: label above value, no card and no rule
-              between rows. The spacing separates them. */}
-          <dl className="grid grid-cols-1 gap-x-10 gap-y-9 self-start sm:grid-cols-2 lg:grid-cols-1 lg:gap-y-8">
+        <div className="lg:col-span-6 lg:col-start-7">
+          <Heading id="about-title" index="01" kicker="About" title={about.title} accent={about.script} />
+
+          <LitText
+            text={about.body[0]}
+            still={env.reducedMotion}
+            className="mt-14 text-[clamp(1.4rem,1.05rem+1.3vw,2.25rem)] leading-[1.22] font-[480] tracking-[-0.018em] text-ivory sm:mt-20"
+          />
+          <p
+            data-reveal="up"
+            className="mt-8 max-w-[38rem] text-[1.05rem] leading-relaxed text-bone/80 sm:text-[1.12rem]"
+          >
+            {about.body[1]}
+          </p>
+
+          <dl className="mt-16 grid gap-px overflow-hidden rounded-[1.5rem] bg-gold/12 sm:grid-cols-2">
             {about.facts.map((fact, i) => (
-              <div key={fact.term} data-reveal style={{ transitionDelay: `${i * 70}ms` }}>
-                <dt className="text-[0.88rem] text-brass/80">{fact.term}</dt>
-                <dd className="mt-2.5 font-display text-[1.3rem] leading-snug text-ivory lg:text-[1.45rem]">
+              <div
+                key={fact.term}
+                data-reveal="up"
+                style={{ transitionDelay: `${i * 70}ms` }}
+                className="bg-ink p-6 sm:p-7"
+              >
+                <dt className="label text-gold">{fact.term}</dt>
+                <dd className="mt-3 text-[1.12rem] leading-snug font-[560] text-ivory [font-stretch:108%]">
                   {fact.value}
                 </dd>
               </div>
             ))}
           </dl>
+
+          <p data-reveal="up" className="mt-12 flex items-center gap-4">
+            <span aria-hidden="true" className="h-px w-10 bg-gold/50" />
+            <span className="foil wide text-[1.9rem] leading-none font-[800] tracking-[-0.03em]">
+              {about.signature}
+            </span>
+          </p>
         </div>
       </div>
     </section>

@@ -1,9 +1,9 @@
 # Portfolio, Ronak Dutta
 
-A warm near-black stage, brass rather than bullion, and one paper-white sheet
-cut into the middle of the scroll. Type does the work: Fraunces for display,
-Ephesis for the cursive accents, Instrument Sans for reading, JetBrains Mono
-for the micro-labels.
+**Totality.** The golden aura of the old build, taken literally: the page is a
+total solar eclipse. A live WebGL corona burns around a black moon on the first
+screen, the visitor can pull the moon aside with the cursor and make the sun
+break through, and the page closes on the same eclipse it opened with.
 
 ```bash
 npm install
@@ -13,187 +13,99 @@ npm run preview  # serve the built output
 npm run lint
 ```
 
+## The arc of the page
+
+| Section | What happens |
+| --- | --- |
+| Overture | While the faces load, a moon creeps across a bare sun. At totality the last bead of light flares on the limb, the room goes dark and the eclipse flies onto the hero, where the live corona erupts out of it. Once per session. |
+| Hero | The name split around a total eclipse, a ring of the stack turning around the corona. Scrolling away, the halves of the name part and the eclipse holds still and swells until the moon is the whole screen. |
+| About | Read inside the moon. The portrait is a sun of its own, in a ring of rays; the visitor lights the face with the pointer. |
+| Work | Each capture opens out of a pinhole, rimmed with corona light, as it rises. |
+| Skills | The one gold sheet: the sun's limb rising over the dark, flattening as it climbs. Rows eclipse under the pointer. |
+| Experience | The dark comes back over the gold as the moon's limb, a lit arc. Years are cut in outline and fill with light. |
+| Recognition | Three struck medals that tip toward the pointer. |
+| Contact | The eclipse again, between LET'S and TALK. Reading progress in the nav is the same eclipse, reaching totality at the bottom of the page. |
+
 ## Where things are
 
-| Path                         | What it holds                                                    |
-| ---------------------------- | ---------------------------------------------------------------- |
-| `src/data/content.js`        | Every word on the page, and the project schema.                   |
-| `src/sections/`              | One file per section, presentation only.                          |
-| `src/components/atmosphere/` | Aurora, ribbons, dust, geometry, the torch, and the stack that composes them. |
-| `src/components/fx/`         | Cursor and magnetic hover.                                        |
-| `src/components/brand/`      | The RD monogram and the nav.                                      |
-| `src/components/projects/`   | `ProjectShowcase` + `ProjectPlate`.                               |
-| `src/components/media/`      | The hero portrait treatment.                                      |
-| `src/lib/store.js`           | Nav model and the scroll-spy channel, outside React.              |
-| `public/fonts/`              | The four self-hosted variable faces.                              |
-| `index.html`                 | The overture that covers a cold load.                             |
-| `404.html`                   | Built as a second entry, no bundle attached.                      |
+| Path | What it holds |
+| --- | --- |
+| `src/data/content.js` | Every word on the page, and the project schema. |
+| `src/sections/` | One file per section. |
+| `src/components/eclipse/EclipseField.jsx` | The corona: one fixed canvas, one fragment shader. |
+| `src/components/eclipse/Eclipse.jsx` | An eclipse anchor: the DOM moon, the diamond ring bead, the stack ring, pointer steering and the hero zoom. |
+| `src/lib/eclipse.js` | The registry anchors join so the field knows where to draw. |
+| `src/components/Curtain.jsx` | Drives the overture `index.html` paints. |
+| `src/components/type/` | `Heading` (section titles) and `LitText` (paragraphs read into the light). |
+| `src/components/work/ProjectCase.jsx` | One project and its aperture. |
+| `src/components/media/LitPortrait.jsx` | The portrait and its aura. |
+| `src/components/ui/` | `Button` and `Medal`. |
+| `src/components/brand/` | Monogram, nav, and the `PhaseMark` progress eclipse. |
+| `src/lib/store.js` | Nav model and the scroll-spy channel, outside React. |
+| `404.html` | Built as a second entry, no bundle attached. |
 
 ## Type
 
-Four variable faces, latin subsets, self-hosted from `public/fonts`, 164 kB in
-total. They used to come from Google Fonts, which cost a preconnect, a
-render-blocking stylesheet and a second origin on the critical path. The
-`@font-face` block is at the top of `src/index.css`; `index.html` preloads the
-three the first screen sets type in.
+Two variable families, both with a width axis, self-hosted from
+`public/fonts` (Latin subsets, 137 kB together):
 
-There is no italic face. `font-style: italic` anywhere in this project would
-be synthesised by the browser, so nothing asks for it.
+- **Mona Sans** for everything that is read. The width axis does the
+  expression: section titles pair a condensed hairline word with an expanded
+  black one, and the expanded word opens out from condensed as it is revealed
+  (`data-reveal="stretch"`, a `font-stretch` transition, not a transform).
+- **Martian Mono** for small labels only. Buttons and nav links are set in
+  Mona Sans at reading size, in sentence case.
 
-| Token            | Face            | Used for                                    |
-| ---------------- | --------------- | ------------------------------------------- |
-| `--font-display` | Fraunces        | Every heading, the ledger values, the ticker |
-| `--font-script`  | Ephesis         | Accent words only, never a whole line        |
-| `--font-sans`    | Instrument Sans | Body copy, form fields                       |
-| `--font-mono`    | JetBrains Mono  | Nav, buttons, indices, counters, errors      |
+`foil` is the gold: a still raking-light gradient clipped to the type.
 
-Ephesis sets a very narrow word space; the `script` utility widens it, or two
-words run together and read as one.
+## The corona
 
-## The atmosphere
+`EclipseField` draws around whichever registered anchor is nearest the middle
+of the screen, and skips the frame entirely when none is near or the moon has
+swallowed the viewport. Measured in solar radii from the anchor:
 
-`components/atmosphere/Atmosphere.jsx` is one fixed stack behind every section,
-so the page reads as a single continuous room rather than as a run of sections
-that each brought their own background. Bottom to top: warm near-black
-foundation, off-centre graphite depth, a blurred key light, the aurora, light
-ribbons at a quarter strength, metallic dust and glints, a low bloom, then
-vignette and grain.
+- **Streamers** are simplex noise sampled on the unit circle, so there is no
+  seam where the angle wraps, stretched along the radius and pushed outward
+  over time. They lean toward the pointer.
+- **The moon** is a DOM disc, so its limb is sharp at any pixel density. The
+  shader only needs its position, to leave a hole and to expose the
+  photosphere when the moon is pulled off centre.
+- **The diamond ring** is a bloom and an anamorphic streak from the limb point
+  furthest from the moon, plus a crisp DOM bead on the limb that spills over
+  the moon's edge.
+- **Clicking** near the sun sets off a flare.
 
-Everything is CSS, SVG or a 2D canvas. **There is no WebGL.** Reduced motion
-keeps every layer and stops all of them; phones get a thinner particle field.
-
-Only two things in the stack change per frame: the aurora, and the particle
-canvas. Everything else, ribbons included, is painted once. See the
-performance notes below for why that matters and what it cost to get there.
-
-## The torch
-
-On a real pointer, a warm pool of light follows the cursor around the dark
-stage, and inside it a guilloché lattice is engraved into the room
-(`components/atmosphere/Engraving.jsx`). The engraving exists only where the
-light falls. It is drawn once to a canvas; each frame is two opposite
-transforms, the lens moving with the pointer and the engraving inside it
-moving back, so the pattern stays pinned to the viewport. Touch and reduced
-motion never mount it.
-
-## Motion on the scroll
-
-Everything here is a scrubbed transform or opacity, never layout, and all of it
-is skipped under reduced motion.
-
-- **Hero exit.** Type lifts fastest, the portrait slower, and the orbit turns
-  behind both, so the first screen leaves as three planes.
-- **Ticker.** A flick of the wheel throws it forward and it coasts back to its
-  resting pace. It pauses off screen and slows to a stop under the pointer.
-- **Captures** enter with a smooth, simple fade into view as you scroll.
-- **The paper sheet** arrives slightly narrower than the page and settles out
-  to full bleed, then lifts again as you leave. Only the paper layer scales;
-  the type above it is never resampled.
-- **The chronology** draws its spine as you read, a spark rides the tip, and
-  each node lights as the line reaches it.
-- **Orbit and frame geometry** (`GoldGeometry turn={deg}`) rotate as their
-  section passes.
-
-Headings rise word by word out of clipped slots (`Words`, `.word-mask`). Buttons feature clean tactile metallic depth with smooth directional hover transitions.
-
-## The paper section
-
-Skills is the one light section, and it is deliberate, because a dark portfolio
-that stays dark for six screens reads as one long gradient. It is an opaque sheet
-(`paper` utility) sitting above the fixed atmosphere at `z-10`, with a
-multiply-blended noise overlay for tooth and a shadow on both edges so it
-reads as laid on the page rather than punched through it.
-
-`SectionTitle` takes `tone="paper"` to flip its colours for it.
-
-## The portrait
-
-Two earlier treatments of `public/portrait.jpg` failed the same way. A
-bordered, vignetted, gold-washed plate put a second dark edge inside a dark
-edge and laid a warm cast over one side of the face. Dissolving all four edges
-into the page instead only moved the problem, because the set it was shot on is a
-different black from the one this page is lit in, so a rectangle stayed visible
-whichever way the values fell.
-
-So the edge is deliberate. An arch, a single brass hairline along it, and the
-foot of it dissolving into the page. The only grade left is a touch of
-contrast, and no tint over skin. Swapping the photograph needs nothing changed
-unless the crop moves the head far off centre, in which case adjust
-`object-top`.
-
-## The particle field
-
-`components/atmosphere/GoldDust.jsx` is the dust and the glints together, on
-one canvas. They used to be a canvas plus sixty CSS-animated SVG stars; see
-the performance notes for why that changed. Counts come from `Atmosphere.jsx`
-and are halved on phones.
-
-## The custom cursor
-
-`components/fx/Cursor.jsx` holds a brass bead, a ring that lags, a label taken from
-`data-cursor` on whatever is under it, a spark burst on click, and a sparkle
-trail. Hover state is resolved from the event target, so anything added later
-is picked up for free.
-
-It only mounts for `env.pointerFx` (fine pointer, no reduced-motion request),
-and `has-cursor` is only put on `<html>` once it is actually running, so a
-failure can never leave a visitor with no pointer at all. Inputs keep the text
-caret.
+The output is premultiplied with alpha equal to its brightest channel, so it
+lays light over the page rather than a coloured sheet. Without WebGL the
+anchors fall back to a still CSS corona.
 
 ## Performance
 
-Measured with Playwright driving a full scroll of the page, sampling `rAF`
-deltas, on a CPU-throttled headless Chromium. Headless has no GPU, so every
-composite lands on the CPU and the absolute numbers are the pessimistic case;
-what matters is the direction.
+The rule: nothing that moves on the scroll may repaint. Measured with
+Playwright tracing a full scroll in headless Chromium, desktop and a 4x
+CPU-throttled phone.
 
-| | before | after |
-| --- | --- | --- |
-| transferred | 1983 kB | 449 kB |
-| phone median frame (6x throttle) | 50.0 ms | 16.7 ms |
-| phone frames over 32 ms | 161 | 14 |
-| phone long tasks | 8 | 0 |
-| laptop median frame (4x throttle) | 83.2 ms | 33.3 ms |
+- **The corona** renders at no more than 0.85 canvas pixels per CSS pixel
+  (0.6 on a phone), drops resolution on its own if frames run long, skips
+  noise far from the sun and inside the moon, and is not drawn at all while no
+  eclipse is near the screen. The anchors' per-frame helpers stand down off
+  screen too, and read sizes from observers rather than layout.
+- **The project aperture** is three transforms: a circular window scaled up
+  from a pinhole, the capture inside counter-scaled so it holds still, and the
+  ring. The first version animated `clip-path` and the ring's size, which
+  repainted the frame and forced a layout every scrolled frame.
+- **The portrait light** is a fixed radial mask on a layer that slides with
+  the pointer while the lit photograph inside slides back by the same amount.
+  Animating the mask position repainted two large images every frame.
+- **The Skills arc** is an ink cut-out flattened with `scaleY`, rather than an
+  animated `border-radius` over a large textured gradient.
+- **Gold foil is a still gradient.** Pinning it to the viewport made the light
+  glide as the page moved, and cost about 60% of all paint time on the scroll.
+- **The stack ring turns on a wrapper**, not on the `<svg>`, so the rotation
+  stays on the compositor.
 
-What was actually wrong, in order of what it cost:
-
-- **The project captures were PNG**, 825 kB and 743 kB of screenshot. They are
-  WebP at two widths now, with a downscaled PNG fallback, which is where three
-  quarters of the transfer went.
-- **Around sixty sparkles were sixty composited layers.** Each was its own
-  CSS-animated SVG, spread over five sections. They are particles in the dust
-  canvas now, which is one layer. This was level with everything else combined.
-- **`mix-blend-screen` on the aurora and `mix-blend-overlay` on the grain.** A
-  blend mode on a full-viewport layer makes the compositor re-read the backdrop
-  every frame the layer beneath it moves. Over a near-black stage plain alpha
-  is indistinguishable and each was worth about a frame per scroll tick.
-- **The aurora animated `scale` and `rotate`.** A compositor slides a layer for
-  free but re-rasterises it when the scale changes, and these are three layers
-  of roughly 1.2 megapixels. Translation and opacity only now.
-- **The ribbons swayed**, re-rasterising a full-viewport SVG every frame for a
-  layer at 25% opacity. Held still they look the same and cost nothing.
-- **The dust canvas built a fresh radial gradient per mote per frame.** Two
-  sprites are baked at mount and stamped with `drawImage`, and the backing
-  store is 0.75 canvas pixels per CSS pixel with no device-pixel multiplier,
-  since it is uploaded to the compositor on every frame.
-- **The nav's `backdrop-filter` is dropped under 768px.** A blurred bar pinned
-  over a scrolling page is re-blurred every frame; on a phone it becomes an
-  opaque bar instead.
-- **The cursor trail emitted a sparkle and a tween 18 times a second**, whether
-  or not the pointer was moving. It now needs real travel first.
-
-- **Scrubbed elements need `will-change: transform`.** GSAP's default
-  `force3D: "auto"` drops an element back to a 2D transform whenever a scrub
-  settles, so its layer is torn down and rebuilt as you scroll. On the project
-  captures that alone was about 40 long tasks per scroll of the page.
-- **Reveals do not animate `clip-path` or `filter` on phones.** Both repaint
-  every frame. The written-on script is two counter-moving transforms, and
-  the blur on ordinary reveals is dropped under 768px.
-
-If you add to the atmosphere, the rule that matters is: **animate only
-`transform: translate` and `opacity`, and never put a blend mode on anything
-the size of the viewport.** Both are easy to check by ablation, injecting a
-`display:none` for one layer at a time and re-running the scroll.
+Reduced motion keeps every surface and stops all of it: no overture, a still
+corona, no scrubs.
 
 ## Adding project screenshots
 
@@ -209,11 +121,11 @@ Each project in `src/data/content.js`:
   image: "/projects/ats-workplace",   // base path, no extension
   imageAlt: "…",
   liveUrl: "https://…",    // also makes the capture itself a link
-  githubUrl: null,         // set a URL and a Code button appears
+  githubUrl: null,
 }
 ```
 
-`image` is a **base path with no extension**. `ProjectPlate` appends
+`image` is a **base path with no extension**. `ProjectCase` appends
 `-800.webp`, `-1600.webp` and `-fallback.png`, so a new capture has to be run
 through the same three sizes. Drop the source PNG in `public/projects/` and:
 
@@ -227,19 +139,18 @@ await sharp(src).resize({ width: 1200 }).png({ palette: true })
   .toFile(`${base}-fallback.png`);
 ```
 
-- **The plate is 2.104:1 on `sm` and up**, matching the ratio of the supplied
-  browser captures so nothing is cropped. Phones drop to 4:3 with a centre
-  crop, since a 2:1 band is too short to read as a product shot. If you swap in
-  captures at a different ratio, change `aspect-[2.104/1]` in `ProjectPlate`.
+- **The frame is 2.104:1 at every size**, matching the ratio of the supplied
+  browser captures so nothing is ever cropped. On a phone it reaches nearly to
+  the screen edges to keep the band legible. If you swap in captures at a
+  different ratio, change `aspect-[2.104/1]` in `ProjectCase`.
 - Supply at least 1900px wide for the flagship; it fills the full measure.
 - Capture the most legible screen, not a login page.
 - Do not commit the multi-hundred-kilobyte source PNG. Only the three derived
   files are needed.
-- Only the featured image loads eagerly; the rest are lazy with
-  `fetchpriority="low"`.
+- Every capture loads lazily; none is on the first screen.
 
-A missing file renders a labelled placeholder at the same ratio, so the layout
-is already final and nothing shifts when the asset lands.
+A missing file renders the project name in place of the capture at the same
+ratio, so nothing shifts when the asset lands.
 
 ## The contact form
 
@@ -262,23 +173,12 @@ canonical link, the Open Graph tags and the JSON-LD at build time.
 
 ## Art direction rules
 
-- **Brass is light and metal, not paint.** It appears as aurora, rim light,
-  hairlines, the nav marker and one solid CTA per screen. Large fields stay
-  near-black or paper.
-- **Ember is for state, never decoration.** Form errors, and nothing else.
-- **Nothing animates its own fill.** The old build swept a gradient across
-  every heading on a timer; a page of shimmering type is the most recognisable
-  generated-portfolio tell there is.
-- **No numbered, letter-spaced, all-caps label over a section title.** Six of
-  those down a page is a template tell rather than a design. The titles say
-  what the sections are; small in-section labels are set in the display face at
-  reading size instead.
+- **Gold is light, not paint.** It is the corona, rims, foil on a word or two
+  per screen, and the one gold sheet. Everything else is the dark of the moon.
+- **Nothing pulses.** No breathing dots, no shimmering headings, no status
+  pills. Motion answers the scroll or the pointer.
+- **Nothing is a pill tag.** Stacks are set as text, divided by slashes.
 - **No em dashes**, in copy or in comments.
-- **Rules are a last resort.** Sections used to open with a hairline and
-  separate every row with another, and the page read as ruled rather than
-  designed. Experience hangs off one vertical line; About, Achievements and the
-  channel list use space instead.
-- **Two interactions per component, maximum.**
 - **Nothing pointer-dependent carries information.** All of it is gated on
   `env.pointerFx` / `env.coarsePointer`.
 
@@ -286,14 +186,11 @@ canonical link, the Open Graph tags and the JSON-LD at build time.
 
 - **The overture lives in `index.html`, not in a component.** It has to be
   painted by the parser; mounting it from React would put the flash it exists
-  to remove in front of it. It holds until `document.fonts.ready`, so the
-  display faces never swap in view, and it performs once per session.
+  to remove in front of it.
+- **The hero eclipse's moon and ring are hidden by `html.ecl-pending`** until
+  the overture's own eclipse has landed on them.
 - **Achievements has no nav entry.** The spy holds on Experience while it is on
   screen, which is where it belongs in the reading order.
-- **`Words` splits headings into per-word spans but keeps the spaces as real
-  text nodes.** The line still wraps, and it still copies as a sentence.
-- **Every project uses the same layout.** Mirroring image and text on
-  alternating rows is the most recognisable portfolio template there is; the
-  variety comes from which side the sheet is inset on instead.
-- **Contact's left column carries `min-w-0`.** Without it the email row sets
-  the grid track's width and the whole column grows past a phone viewport.
+- **Contact's left column carries `min-w-0`**, and the stack list's items are
+  `inline-block`. Without either, one long unbreakable row sets the grid
+  track's width and the column runs off a phone screen.

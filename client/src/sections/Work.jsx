@@ -1,30 +1,30 @@
 import { memo } from "react";
-import ProjectShowcase from "../components/projects/ProjectShowcase";
-import SectionTitle from "../components/typography/SectionTitle";
+import Heading from "../components/type/Heading";
+import ProjectCase from "../components/work/ProjectCase";
 import { work } from "../data/content";
+
+const LABELS = { open: "View live", how: "How it was built", stack: "Built with" };
 
 function Work({ env }) {
   return (
-    <section
-      id="work"
-      aria-labelledby="work-title"
-      className="relative isolate overflow-x-clip py-24 sm:py-32 lg:py-44"
-    >
-
-      <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
-        <SectionTitle
+    <section id="work" aria-labelledby="work-title" className="relative pt-16 pb-32 sm:pt-24 lg:pb-48">
+      <div className="mx-auto w-full max-w-[112rem] px-5 sm:px-9">
+        <Heading
           id="work-title"
+          index="02"
+          kicker="Projects, 2025 to 2026"
           title={work.title}
-          script={work.script}
-          size="xl"
+          accent={work.script}
         />
 
-        <div className="mt-12 space-y-28 sm:mt-16 sm:space-y-36 lg:space-y-44">
+        <div className="mt-24 space-y-36 sm:mt-32 lg:space-y-52">
           {work.projects.map((project, i) => (
-            <ProjectShowcase
+            <ProjectCase
               key={project.slug}
               project={project}
               index={i}
+              total={work.projects.length}
+              labels={{ ...LABELS, open: work.openLabel || LABELS.open }}
               env={env}
             />
           ))}

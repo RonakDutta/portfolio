@@ -1,74 +1,63 @@
 @import "tailwindcss";
 
-/* Self-hosted faces. These used to come from Google Fonts, which cost a
-   preconnect, a render-blocking stylesheet and a second origin on the
-   critical path. Latin subsets only: four variable files, 164 kB total. */
+/* Two families, both variable on width as well as weight, so a single face can
+   go from a hairline condensed whisper to an expanded black shout. Self-hosted,
+   Latin subset only. */
 
 @font-face {
-  font-family: "Ephesis";
+  font-family: "Mona Sans";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
   font-display: swap;
-  src: url("/fonts/ephesis.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src:
+    url("/fonts/mona-sans.woff2") format("woff2-variations"),
+    url("/fonts/mona-sans.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: "Fraunces";
+  font-family: "Martian Mono";
   font-style: normal;
-  font-weight: 300 700;
+  font-weight: 100 800;
+  font-stretch: 75% 112.5%;
   font-display: swap;
-  src: url("/fonts/fraunces.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Instrument Sans";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("/fonts/instrument-sans.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src:
+    url("/fonts/martian-mono.woff2") format("woff2-variations"),
+    url("/fonts/martian-mono.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @theme {
-  /* Stage: a warm near-black, not a blue-black. */
+  /* The dark side of the moon. */
   --color-ink: #07060a;
-  --color-obsidian: #0b0a0f;
-  --color-carbon: #100e15;
-  --color-coal: #17151d;
-  --color-graphite: #201d28;
-  --color-slate: #2e2a38;
+  --color-night: #0c0a10;
+  --color-coal: #131017;
+  --color-smoke: #1d1a22;
 
-  /* Paper: the inverted sheet the toolkit is printed on. */
-  --color-bone: #ece5d8;
-  --color-bone-deep: #ded5c3;
-  --color-espresso: #16120c;
-  --color-espresso-soft: #4a4237;
+  /* Light on it. */
+  --color-ivory: #f6f1e7;
+  --color-bone: #cdc4b4;
+  --color-ash: #8b8377;
 
-  /* Type on the stage. */
-  --color-ivory: #faf8f4;
-  --color-pearl: #e9e5dd;
-  --color-sand: #b3aca0;
-  --color-mute: #7a746b;
+  /* The corona, bronze to white gold. */
+  --color-gold-deep: #8a6d33;
+  --color-gold: #c8a45c;
+  --color-gold-lit: #ecd7a3;
+  --color-gold-white: #fff6de;
+  --color-flare: #e3793d;
 
-  /* Brass, not bullion. Two accents so the page is never one-note. */
-  --color-brass-deep: #8a6d33;
-  --color-brass: #c8a45c;
-  --color-brass-lit: #ecd7a3;
-  --color-ember: #d9663f;
-
-  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
-  --font-script: "Ephesis", "Snell Roundhand", "Apple Chancery", cursive;
-  --font-sans:
-    "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    sans-serif;
-  --font-mono:
-    "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    sans-serif;
+  --font-sans: "Mona Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Martian Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-silk: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-swing: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-orbit: orbit 140s linear infinite;
 }
 
 @layer base {
@@ -79,19 +68,28 @@
   html {
     background: var(--color-ink);
     overflow-x: clip;
+    /* The overture and the open menu both lock the page with overflow:
+       hidden, which takes the scrollbar away. Reserving its gutter for good
+       keeps the layout the same width either way, so nothing jumps sideways
+       when it comes back. */
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(200, 164, 92, 0.3) var(--color-ink);
   }
 
   body {
     margin: 0;
-    color: var(--color-sand);
+    color: var(--color-bone);
+    background-color: var(--color-ink);
     font-family: var(--font-sans);
     font-weight: 400;
-    font-size: clamp(0.96rem, 0.92rem + 0.2vw, 1.06rem);
-    line-height: 1.7;
+    font-stretch: 100%;
+    font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+    line-height: 1.65;
     overflow-x: clip;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    background-color: var(--color-ink);
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1,
@@ -99,11 +97,8 @@
   h3,
   h4 {
     margin: 0;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-optical-sizing: auto;
-    line-height: 1.02;
-    letter-spacing: -0.015em;
+    font-weight: 700;
+    line-height: 0.95;
     color: var(--color-ivory);
     text-wrap: balance;
   }
@@ -113,19 +108,19 @@
   }
 
   :focus-visible {
-    outline: 1px solid var(--color-brass-lit);
+    outline: 1px solid var(--color-gold-lit);
     outline-offset: 4px;
   }
 
   section[id] {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 4.5rem;
   }
   section[id]:focus {
     outline: none;
   }
 
   ::selection {
-    background: var(--color-brass);
+    background: var(--color-gold);
     color: var(--color-ink);
   }
 
@@ -136,60 +131,43 @@
     background: var(--color-ink);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(200, 164, 92, 0.28);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-brass);
-  }
-  html {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(200, 164, 92, 0.28) var(--color-ink);
+    background: rgba(200, 164, 92, 0.3);
   }
 }
 
-/* Typography ------------------------------------------------------------ */
+/* Type ------------------------------------------------------------------ */
 
-@utility script {
-  font-family: var(--font-script);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  /* Ephesis sets a very narrow word space; two words run together without
-     this and read as one. */
-  word-spacing: 0.14em;
-  /* Ephesis sits high in its em box and swings a long descender. */
-  line-height: 1.25;
-  padding-bottom: 0.08em;
+@utility wide {
+  font-stretch: 125%;
+}
+@utility narrow {
+  font-stretch: 75%;
 }
 
-@utility eyebrow {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  line-height: 1.4;
-}
-
-@utility eyebrow-sm {
-  font-family: var(--font-sans);
+/* The small print: monospaced, set wide and quiet. */
+@utility label {
+  font-family: var(--font-mono);
   font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  line-height: 1.4;
 }
 
-/* One static leaf gradient, used on a handful of words. Nothing on this page
-   animates its own fill any more, because a page of shimmering headings is the most
-   recognisable generated-portfolio tell there is. */
-@utility text-leaf {
-  background: linear-gradient(
-    98deg,
-    #b28d47 0%,
-    #ecd7a3 34%,
-    #fff6de 50%,
-    #d8b978 68%,
-    #96773a 100%
+/* Struck in gold: a raking light across the metal, brightest just past the
+   middle of the word. It is a still gradient on purpose. Pinning it to the
+   viewport made the light glide as the page moved, and cost a repaint of
+   every gold word on every scrolled frame. */
+@utility foil {
+  background-image: linear-gradient(
+    168deg,
+    #7a5d2b 0%,
+    #b8944c 24%,
+    #ecd7a3 44%,
+    #fff6de 54%,
+    #ecd7a3 64%,
+    #b8944c 82%,
+    #8a6d33 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -197,66 +175,28 @@
   -webkit-text-fill-color: transparent;
 }
 
-@utility text-ivory-lit {
-  background: linear-gradient(172deg, #ffffff 0%, #f3efe6 42%, #b8b1a5 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+/* A word struck letter by letter (each letter moves on its own): one gradient
+   spread across all of them, so the light still reads as a single sweep. */
+.foil-letter {
+  background-size: calc(var(--n) * 100%) 100%;
+  background-position: calc(var(--i) / (var(--n) - 1) * 100%) 0;
+}
+
+@utility outline-text {
   color: transparent;
   -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgba(200, 164, 92, 0.55);
 }
 
-/* Surfaces -------------------------------------------------------------- */
-
-@utility glass-ink {
-  background: linear-gradient(
-    180deg,
-    rgba(16, 14, 21, 0.86) 0%,
-    rgba(7, 6, 10, 0.94) 100%
-  );
-  backdrop-filter: blur(14px) saturate(1.12);
-  -webkit-backdrop-filter: blur(14px) saturate(1.12);
-}
-
-/* A backdrop filter on a bar pinned over a scrolling page is re-read and
-   re-blurred every frame. On a phone that is the most expensive thing in the
-   scroll, and at that size nobody is admiring the blur, so it becomes an
-   opaque bar instead. Unlayered on purpose, so it wins over the utility. */
-@media (max-width: 768px) {
-  .glass-ink {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: linear-gradient(
-      180deg,
-      rgba(12, 11, 16, 0.97) 0%,
-      rgba(7, 6, 10, 0.99) 100%
-    );
-  }
-}
-
-@utility rule-brass {
+@utility hairline {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--color-brass-deep) 10%,
-    var(--color-brass-lit) 50%,
-    var(--color-brass-deep) 90%,
+    rgba(200, 164, 92, 0.5) 18%,
+    rgba(236, 215, 163, 0.8) 50%,
+    rgba(200, 164, 92, 0.5) 82%,
     transparent
   );
-}
-
-/* The paper sheet. An opaque light section cut into the dark page. It breaks
-   the single-mood scroll that every dark portfolio has. */
-@utility paper {
-  background:
-    radial-gradient(120% 80% at 12% 0%, #f3ede1 0%, transparent 60%),
-    linear-gradient(180deg, #ece5d8 0%, #e4dccc 100%);
-  color: var(--color-espresso-soft);
-
-  & h2,
-  & h3,
-  & h4 {
-    color: var(--color-espresso);
-  }
 }
 
 @utility sr-focusable {
@@ -271,327 +211,216 @@
   }
 }
 
-@utility link-underline {
-  position: relative;
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -0.28em;
-    height: 1px;
-    width: 100%;
-    background: currentColor;
-    opacity: 0.7;
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    transition: transform 0.5s var(--ease-cine);
-  }
-  &:hover::after,
-  &:focus-visible::after {
-    transform: scaleX(1);
+/* A rule that draws itself under the text on hover. */
+@utility link-line {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.6s var(--ease-cine);
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
   }
 }
 
 /* Form fields ----------------------------------------------------------- */
 
 @utility field {
+  /* Block, not the inline default, or a textarea sits on the text baseline
+     and leaves a gap under itself that puts the focus glow below its rule
+     instead of on it. Native chrome off, so no platform box shows through. */
+  display: block;
+  appearance: none;
+  -webkit-appearance: none;
   width: 100%;
   min-width: 0;
   border: 0;
-  border-bottom: 1px solid rgba(200, 164, 92, 0.24);
+  border-bottom: 1px solid rgba(200, 164, 92, 0.22);
+  border-radius: 0;
   background: transparent;
-  padding: 1.55rem 0 0.6rem;
+  padding: 1.7rem 0 0.7rem;
   color: var(--color-ivory);
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1.6;
-  transition:
-    border-color 0.4s var(--ease-cine),
-    box-shadow 0.4s var(--ease-cine);
+  transition: border-color 0.4s var(--ease-cine);
 
   &::placeholder {
     color: transparent;
   }
   &:focus {
     outline: none;
-    border-bottom-color: var(--color-brass-lit);
-    box-shadow: 0 1px 0 0 var(--color-brass-lit);
+    border-bottom-color: var(--color-gold-lit);
   }
   &:focus-visible {
     outline: none;
   }
-  /* Chrome paints autofilled inputs a flat blue. */
   &:-webkit-autofill,
   &:-webkit-autofill:focus {
     -webkit-text-fill-color: var(--color-ivory);
-    -webkit-box-shadow: 0 0 0 1000px var(--color-carbon) inset;
+    -webkit-box-shadow: 0 0 0 1000px var(--color-coal) inset;
     caret-color: var(--color-ivory);
   }
 }
 
-/* The label rides up out of the field when it holds content or has focus. */
 @utility field-label {
   position: absolute;
   left: 0;
-  top: 1.5rem;
+  top: 1.7rem;
   transform-origin: 0 50%;
-  color: var(--color-mute);
+  color: var(--color-ash);
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: 1.05rem;
   pointer-events: none;
-  transition: transform 0.4s var(--ease-cine), color 0.4s var(--ease-cine);
+  transition:
+    transform 0.45s var(--ease-cine),
+    color 0.45s var(--ease-cine);
 
   .field:focus ~ &,
   .field:not(:placeholder-shown) ~ & {
-    transform: translateY(-1.55rem) scale(0.68);
-    color: var(--color-brass);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-family: var(--font-sans);
-    font-weight: 500;
+    transform: translateY(-1.5rem) scale(0.7);
+    color: var(--color-gold);
   }
 }
 
-/* Custom cursor --------------------------------------------------------- */
-
-html.has-cursor,
-html.has-cursor a,
-html.has-cursor button,
-html.has-cursor [role="button"] {
-  cursor: none;
-}
-html.has-cursor input,
-html.has-cursor textarea {
-  cursor: text;
-}
-
-/* Trail left behind the pointer. Built and thrown away by Cursor.jsx. */
-.cur-sparkle {
+/* Under the field: a light that runs along the rule while it has focus. */
+.field-glow {
   position: absolute;
-  width: var(--s, 6px);
-  height: var(--s, 6px);
-  margin: calc(var(--s, 6px) / -2) 0 0 calc(var(--s, 6px) / -2);
-  rotate: var(--r, 0deg);
-  background: #ecd7a3;
-  clip-path: polygon(
-    50% 0%,
-    58% 42%,
-    100% 50%,
-    58% 58%,
-    50% 100%,
-    42% 58%,
-    0% 50%,
-    42% 42%
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--color-gold-deep), var(--color-gold-white), var(--color-gold-deep));
+  box-shadow: 0 0 12px 1px rgba(236, 215, 163, 0.45);
+  transition: transform 0.7s var(--ease-cine);
+}
+.field:focus ~ .field-glow {
+  transform: scaleX(1);
+}
+
+/* Eclipse -------------------------------------------------------------- */
+
+/* Held dark while the overture's own eclipse is still in the air. */
+html.ecl-pending [data-eclipse-moon],
+html.ecl-pending [data-eclipse-ring],
+html.ecl-pending [data-eclipse-bead] {
+  opacity: 0;
+}
+
+/* No WebGL: a still corona in CSS, so the page keeps its sun. */
+.no-gl .ecl-fallback {
+  display: block;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 246, 222, 0.95) 30%,
+    rgba(236, 215, 163, 0.55) 33%,
+    rgba(200, 164, 92, 0.22) 46%,
+    rgba(138, 109, 51, 0.08) 66%,
+    transparent 100%
   );
 }
 
-/* Spark burst under a click. */
-.cur-spark {
-  position: absolute;
-  width: 0;
-  height: 0;
-}
-.cur-spark i {
-  position: absolute;
-  left: -0.5px;
-  top: 0;
-  display: block;
-  width: 1px;
-  height: 10px;
-  transform-origin: 50% 100%;
-  background: linear-gradient(to top, rgba(236, 215, 163, 0), #ecd7a3);
+@keyframes cue {
+  0% {
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+  45% {
+    transform: scaleX(1);
+    transform-origin: 0 50%;
+  }
+  55% {
+    transform: scaleX(1);
+    transform-origin: 100% 50%;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: 100% 50%;
+  }
 }
 
-/* Scroll reveals. Visible by default; `js-reveal` on <html> is only added once
-   the observer in lib/reveal.js is running, so a failure to observe leaves
-   content on screen instead of blank. */
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Reveals ---------------------------------------------------------------
+   Visible by default. `js-reveal` is only put on <html> once the observer in
+   lib/reveal.js is running, so a failure leaves content on screen. */
 
 [data-reveal] {
   transition:
-    opacity 0.9s var(--ease-cine),
-    transform 0.9s var(--ease-cine),
-    filter 0.9s var(--ease-cine);
+    opacity 1s var(--ease-cine),
+    transform 1.1s var(--ease-cine);
 }
 
-.js-reveal [data-reveal]:not([data-reveal="mask"]) {
+.js-reveal [data-reveal="up"],
+.js-reveal [data-reveal=""] {
   opacity: 0;
-  transform: translate3d(0, 22px, 0);
-  filter: blur(6px);
+  transform: translate3d(0, 28px, 0);
 }
 
 .js-reveal [data-reveal].is-in {
   opacity: 1;
   transform: none;
-  filter: none;
 }
 
-/* A blur on every word of every heading is a paint per element per frame of
-   its transition. On a phone that is most of what a reveal costs, and at that
-   size the rise alone reads the same. */
-@media (max-width: 768px) {
-  .js-reveal [data-reveal]:not([data-reveal="mask"]) {
-    filter: none;
-  }
-}
-
-/* Heading words rise out of a slot instead of fading up through a blur: the
-   way a line of metal type is dropped into the forme. The slot is padded so
-   descenders are not shaved, then pulled back so the line does not grow. */
-.word-mask {
+/* Words rise out of a slot, one line of type dropped into place. */
+.slot {
   display: inline-block;
   overflow: clip;
-  padding: 0.04em 0.06em 0.16em;
-  margin: -0.04em -0.06em -0.16em;
+  padding: 0.06em 0.04em 0.1em;
+  margin: -0.06em -0.04em -0.1em;
   vertical-align: top;
 }
-.word-mask > span {
+.slot > span {
   display: inline-block;
-  transition: transform 1.15s var(--ease-cine);
 }
-.js-reveal .word-mask > span {
-  transform: translate3d(0, 108%, 0);
+[data-reveal="slot"] .slot > span {
+  transition: transform 1.25s var(--ease-cine);
 }
-.js-reveal .word-mask.is-in > span {
+.js-reveal [data-reveal="slot"] .slot > span {
+  transform: translate3d(0, 110%, 0);
+}
+.js-reveal [data-reveal="slot"].is-in .slot > span {
   transform: none;
 }
 
-
-/* The chronology's spine and its nodes, lit as the reader reaches them. */
-.tl-node {
+/* The accent word arrives condensed and opens out to full width: the variable
+   axis doing the animation, not a transform. */
+[data-reveal="stretch"] {
   transition:
-    background-color 0.6s var(--ease-cine) 0.35s,
-    box-shadow 0.6s var(--ease-cine) 0.35s,
-    scale 0.5s var(--ease-cine);
+    font-stretch 1.6s var(--ease-cine),
+    letter-spacing 1.6s var(--ease-cine),
+    opacity 1s var(--ease-cine);
 }
-.is-in > .tl-node {
-  background-color: var(--color-brass);
-  box-shadow: 0 0 0 4px rgba(200, 164, 92, 0.12);
+.js-reveal [data-reveal="stretch"] {
+  font-stretch: 75%;
+  letter-spacing: -0.06em;
+  opacity: 0;
 }
-
-
-/* Motion ---------------------------------------------------------------- */
-
-/* Translation and opacity only. These fields are enormous, and a compositor
-   can slide a layer for free but has to re-rasterise it whenever the scale or
-   the rotation changes. The old keyframes did both, on three layers of roughly
-   1.2 megapixels each, every frame: on a 1440px viewport that alone was two
-   dropped frames per scroll tick. The drift reads the same. */
-@keyframes aurora-a {
-  0%,
-  100% {
-    transform: translate3d(-6%, -3%, 0);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translate3d(8%, 6%, 0);
-    opacity: 0.95;
-  }
+.js-reveal [data-reveal="stretch"].is-in {
+  font-stretch: 125%;
+  letter-spacing: -0.035em;
+  opacity: 1;
 }
 
-@keyframes aurora-b {
-  0%,
-  100% {
-    transform: translate3d(6%, 5%, 0);
-    opacity: 0.36;
-  }
-  50% {
-    transform: translate3d(-9%, -7%, 0);
-    opacity: 0.8;
-  }
+/* A year cut in outline, then filled with light from the floor up. */
+.yr-fill {
+  transition: clip-path 1.9s var(--ease-cine) 0.3s;
+}
+.js-reveal .yr .yr-fill {
+  clip-path: inset(100% 0 -10% 0);
+}
+.js-reveal .yr.is-in .yr-fill {
+  clip-path: inset(-10% 0 -10% 0);
 }
 
-@keyframes aurora-c {
-  0%,
-  100% {
-    transform: translate3d(0, 7%, 0);
-    opacity: 0.28;
-  }
-  50% {
-    transform: translate3d(-5%, -6%, 0);
-    opacity: 0.66;
-  }
-}
-
-@keyframes glow-breathe {
-  0%,
-  100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 0.9;
-  }
-}
-
-@keyframes cue-fall {
-  0% {
-    transform: scaleY(0);
-    transform-origin: 50% 0%;
-  }
-  45% {
-    transform: scaleY(1);
-    transform-origin: 50% 0%;
-  }
-  55% {
-    transform: scaleY(1);
-    transform-origin: 50% 100%;
-  }
-  100% {
-    transform: scaleY(0);
-    transform-origin: 50% 100%;
-  }
-}
-
-/* Sparkles: a four-point star that opens, turns and closes. */
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0;
-    transform: scale(0.2) rotate(0deg);
-  }
-  40% {
-    opacity: var(--peak, 0.9);
-  }
-  50% {
-    transform: scale(1) rotate(70deg);
-  }
-  60% {
-    opacity: var(--peak, 0.9);
-  }
-}
-
-@keyframes ember-pulse {
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(217, 102, 63, 0.55);
-  }
-  70% {
-    opacity: 0.85;
-    box-shadow: 0 0 0 7px rgba(217, 102, 63, 0);
-  }
-}
-
-.animate-aurora-a {
-  animation: aurora-a 26s ease-in-out infinite;
-}
-.animate-aurora-b {
-  animation: aurora-b 34s ease-in-out infinite;
-}
-.animate-aurora-c {
-  animation: aurora-c 44s ease-in-out infinite;
-}
-.animate-glow-breathe {
-  animation: glow-breathe 11s ease-in-out infinite;
-}
-.animate-cue-fall {
-  animation: cue-fall 2.6s var(--ease-silk) infinite;
-}
-.animate-twinkle {
-  animation: twinkle var(--dur, 4s) ease-in-out var(--delay, 0s) infinite;
-}
-.animate-ember {
-  animation: ember-pulse 2.6s ease-out infinite;
-}
+/* Motion off ------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
   *,

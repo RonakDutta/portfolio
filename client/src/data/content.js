@@ -1,9 +1,8 @@
 /**
  * Portfolio content: concise, direct, human.
  *
- * `script` fields are the words set in Ephesis. They are always a fragment of
- * a longer line, never the whole thing: the cursive is an accent on the page,
- * and a paragraph of it would be unreadable.
+ * `script` fields are the struck word of each section title: set expanded,
+ * black and in gold foil beside the quieter condensed `title`.
  */
 
 export const identity = {
@@ -155,14 +154,7 @@ export const work = {
         "Integrated Razorpay for payments and built driver onboarding workflows.",
       ],
 
-      stack: [
-        "React",
-        "Node.js",
-        "Express",
-        "PostgreSQL",
-        "Twilio",
-        "Razorpay",
-      ],
+      stack: ["React", "Node.js", "Express", "PostgreSQL", "Twilio", "Razorpay"],
 
       liveUrl: "https://safarsaathi-three.vercel.app/",
       githubUrl: null,
@@ -173,7 +165,7 @@ export const work = {
 export const skills = {
   title: "The",
   script: "toolkit",
-  note: "Printed plainly, because a wall of glowing badges tells you nothing about what someone can actually do.",
+  note: "What I reach for day to day, from the interface down to the database.",
 
   groups: [
     {
@@ -268,8 +260,7 @@ export const contact = {
     { key: "resume", label: "Resume", value: "resume.pdf" },
   ],
 
-  availability:
-    "Based in New Delhi. Available for full-time roles, internships and remote work.",
+  availability: "Based in New Delhi. Available for full-time roles, internships and remote work.",
 
   closing: "Designed and built by",
   backToTop: "Back to top",

@@ -1,147 +1,112 @@
-import { memo, useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SectionTitle from "../components/typography/SectionTitle";
+import { memo } from "react";
+import Heading from "../components/type/Heading";
 import { experience } from "../data/content";
 
-gsap.registerPlugin(ScrollTrigger);
-
-/**
- * The chronology, hung off one vertical line.
- *
- * Every entry used to be separated by its own horizontal rule, so the section
- * read as a stack of dividers with text between them. One line down the left
- * with a node per entry does the same job once instead of six times.
- */
-function Entry({ year, period, title, org, detail, as: Heading = "h4" }) {
+function Entry({ item, i }) {
   return (
-    <li data-reveal className="group relative pl-8 pb-12 last:pb-0 sm:pl-12">
-      <span
-        aria-hidden="true"
-        className="tl-node absolute top-[0.6rem] left-0 h-2 w-2 -translate-x-1/2 rotate-45
-          border border-brass bg-ink group-hover:scale-150"
-      />
-
-      <p className="text-[0.88rem] text-brass/85">{period}</p>
-
-      <Heading className="mt-3 font-display text-[clamp(1.4rem,3.4vw,2.05rem)] leading-tight font-normal text-ivory">
-        {title}
-      </Heading>
-
-      <p className="mt-1.5 text-[0.98rem] text-sand/80">{org}</p>
-
-      {detail ? (
-        <p className="mt-4 max-w-[54ch] text-[0.96rem] leading-relaxed text-sand/70">
-          {detail}
-        </p>
-      ) : null}
-
-      <span aria-hidden="true" className="sr-only">
-        {year}
+    <li
+      data-reveal="up"
+      style={{ transitionDelay: `${i * 90}ms` }}
+      className="yr group grid grid-cols-[minmax(0,auto)_1fr] gap-x-6 border-t border-gold/15 py-9 sm:gap-x-10 sm:py-11"
+    >
+      {/* The year, cut in outline and then filled with light as it arrives. */}
+      <span aria-hidden="true" className="relative block">
+        <span className="narrow outline-text block text-[clamp(3.4rem,8vw,6.5rem)] leading-[0.8] font-[300] tracking-[-0.03em]">
+          {item.year}
+        </span>
+        <span className="yr-fill foil narrow absolute inset-0 block text-[clamp(3.4rem,8vw,6.5rem)] leading-[0.8] font-[300] tracking-[-0.03em]">
+          {item.year}
+        </span>
       </span>
+
+      <div className="min-w-0">
+        <p className="label text-gold">{item.period}</p>
+        <h4 className="mt-3 text-[clamp(1.25rem,1rem+0.8vw,1.75rem)] leading-[1.12] font-[720] tracking-[-0.02em] text-ivory [font-stretch:112%]">
+          {item.title}
+        </h4>
+        <p className="mt-2 text-[1rem] font-[520] text-bone">{item.org}</p>
+        <p className="mt-4 max-w-[34rem] text-[0.98rem] leading-relaxed text-bone/70">{item.detail}</p>
+      </div>
     </li>
   );
 }
 
 /**
- * The spine is drawn as the reader goes down it, with a spark riding the tip,
- * and each node lights as the line arrives (see `.tl-node`). The faint full
- * line underneath is always there, so nothing is missing before the scrub
- * has caught up.
+ * The dark comes back over the gold the way the moon's limb comes back over the
+ * sun: this section's top edge is an arc laid over the end of the toolkit.
  */
-function Timeline({ children, still }) {
-  const root = useRef(null);
-  const line = useRef(null);
-  const spark = useRef(null);
-
-  useLayoutEffect(() => {
-    if (still) return;
-
-    const ctx = gsap.context(() => {
-      const scrollTrigger = {
-        trigger: root.current,
-        start: "top 72%",
-        end: "bottom 62%",
-        scrub: 0.6,
-        invalidateOnRefresh: true,
-      };
-      gsap.fromTo(line.current, { scaleY: 0 }, { scaleY: 1, ease: "none", scrollTrigger });
-      gsap.fromTo(
-        spark.current,
-        { y: 0 },
-        { y: () => root.current.offsetHeight, ease: "none", scrollTrigger },
-      );
-    }, root);
-
-    return () => ctx.revert();
-  }, [still]);
-
+function Experience() {
   return (
-    <ol ref={root} className="relative">
-      <span
+    <section id="experience" aria-labelledby="experience-title" className="relative z-[1] -mt-[9vw] pt-[9vw]">
+      <svg
         aria-hidden="true"
-        className="absolute inset-y-0 left-0 w-px bg-brass/15"
-      />
-      <span
-        ref={line}
-        aria-hidden="true"
-        className="absolute inset-y-0 left-0 w-px origin-top will-change-transform"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(236,215,163,0.85), rgba(200,164,92,0.45) 70%, rgba(200,164,92,0.2))",
-        }}
-      />
-      {still ? null : (
-        <span
-          ref={spark}
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 left-0 h-6 w-6 -translate-x-1/2 -translate-y-1/2 will-change-transform"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(255,246,222,1) 0%, rgba(236,215,163,0.55) 28%, rgba(200,164,92,0) 100%)",
-          }}
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[calc(9vw+2px)] w-full overflow-visible"
+      >
+        <path d="M0,100 Q50,-100 100,100 Z" fill="#07060a" />
+        <path
+          d="M0,100 Q50,-100 100,100"
+          fill="none"
+          stroke="rgba(236,215,163,0.28)"
+          strokeWidth="5"
+          vectorEffect="non-scaling-stroke"
         />
-      )}
-      {children}
-    </ol>
-  );
-}
-
-function Experience({ env }) {
-  return (
-    <section
-      id="experience"
-      aria-labelledby="experience-title"
-      className="relative isolate overflow-x-clip py-24 sm:py-32 lg:py-44"
-    >
-      <div className="mx-auto w-full max-w-[102rem] px-6 sm:px-9">
-        <SectionTitle
-          id="experience-title"
-          title={experience.title}
-          script={experience.script}
+        <path
+          d="M0,100 Q50,-100 100,100"
+          fill="none"
+          stroke="#fff6de"
+          strokeOpacity="0.9"
+          strokeWidth="1"
+          vectorEffect="non-scaling-stroke"
         />
+      </svg>
+      <div className="relative bg-ink pt-20 pb-24 sm:pb-32">
+        <div className="mx-auto w-full max-w-[112rem] px-5 sm:px-9">
+          <Heading
+            id="experience-title"
+            index="04"
+            kicker="Work and education"
+            title={experience.title}
+            accent={experience.script}
+          />
 
-        <div className="mt-14 grid gap-14 sm:mt-20 lg:grid-cols-2 lg:gap-24">
-          <div>
-            <p data-reveal className="mb-8 font-display text-[1.1rem] text-sand/70">
-              {experience.workTitle}
-            </p>
-            <Timeline still={env.reducedMotion}>
-              {experience.roles.map((role) => (
-                <Entry key={role.title} {...role} as="h3" />
-              ))}
-            </Timeline>
-          </div>
+          <div className="mt-20 grid gap-x-16 gap-y-20 sm:mt-28 lg:grid-cols-2">
+            <div>
+              <h3
+                data-reveal="up"
+                className="flex items-center gap-4 text-[1.05rem] font-[650] text-ivory [font-stretch:112%]"
+              >
+                {experience.workTitle}
+                <span
+                  aria-hidden="true"
+                  className="h-px flex-1 bg-gradient-to-r from-gold/40 to-transparent"
+                />
+              </h3>
+              <ol className="mt-6">
+                {experience.roles.map((role, i) => (
+                  <Entry key={role.title} item={role} i={i} />
+                ))}
+              </ol>
+            </div>
 
-          <div>
-            <p data-reveal className="mb-8 font-display text-[1.1rem] text-sand/70">
-              {experience.educationTitle}
-            </p>
-            <Timeline still={env.reducedMotion}>
-              {experience.education.map((item) => (
-                <Entry key={item.title} {...item} as="h3" />
-              ))}
-            </Timeline>
+            <div>
+              <h3
+                data-reveal="up"
+                className="flex items-center gap-4 text-[1.05rem] font-[650] text-ivory [font-stretch:112%]"
+              >
+                {experience.educationTitle}
+                <span
+                  aria-hidden="true"
+                  className="h-px flex-1 bg-gradient-to-r from-gold/40 to-transparent"
+                />
+              </h3>
+              <ol className="mt-6">
+                {experience.education.map((item, i) => (
+                  <Entry key={item.title} item={item} i={i} />
+                ))}
+              </ol>
+            </div>
           </div>
         </div>
       </div>
