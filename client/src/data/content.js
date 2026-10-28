@@ -66,15 +66,15 @@ export const about = {
   script: "me",
 
   body: [
-    "I am a software engineer based in New Delhi, currently a software development intern at RARS Innoventa. My work spans backend services and interactive React applications across multiple platforms and products.",
-    "Alongside work I am finishing a B.Tech in Industrial Internet of Things at GGSIPU. Most of what I know came from building things and then fixing what broke.",
+    "I am a software engineer based in New Delhi, previously a software development intern at RARS Innoventa. My work spans backend services and interactive React applications across multiple platforms and products.",
+    "Alongside building software, I am finishing a B.Tech in Industrial Internet of Things at GGSIPU. Most of what I know came from building things and then fixing what broke.",
   ],
 
   signature: "Ronak",
 
   facts: [
     { term: "Based in", value: "New Delhi, India" },
-    { term: "Currently", value: "SDE Intern, RARS Innoventa" },
+    { term: "Previously", value: "SDE Intern, RARS Innoventa" },
     { term: "Studying", value: "B.Tech Industrial IoT, GGSIPU" },
     { term: "Working in", value: "Full-stack development" },
   ],
@@ -198,11 +198,11 @@ export const experience = {
   roles: [
     {
       year: "2026",
-      period: "June 2026 to now",
+      period: "June to Sept 2026",
       title: "Software Development Intern",
       org: "RARS Innoventa",
       detail:
-        "Developing backend services and React interfaces for a B2B marketplace and community platform, covering event RSVPs, member onboarding, and payment integrations.",
+        "Developed backend services and React interfaces for a B2B marketplace and community platform, covering event RSVPs, member onboarding, and payment integrations.",
     },
   ],
 
