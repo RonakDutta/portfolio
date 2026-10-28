@@ -12,6 +12,7 @@ function About() {
     >
       <GoldGeometry
         variant="frame"
+        turn={24}
         className="pointer-events-none top-[4%] -left-[26%] aspect-square w-[76vmin] opacity-40
           lg:-left-[10%] lg:w-[46vmin]"
       />
@@ -38,12 +39,16 @@ function About() {
               </p>
             ))}
 
-            <p
-              data-reveal
-              aria-hidden="true"
-              className="script mt-10 text-[2.6rem] leading-none text-brass/70"
-            >
-              {about.signature}
+            <p aria-hidden="true" className="mt-10">
+              <span
+                data-reveal="ink"
+                style={{ transitionDelay: "250ms" }}
+                className="ink"
+              >
+                <span className="script text-[2.6rem] leading-none text-brass/70">
+                  {about.signature}
+                </span>
+              </span>
             </p>
           </div>
 

@@ -59,10 +59,30 @@ function ProjectShowcase({ project, index, env }) {
           { clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, ease: "expo.out" },
           0.15,
         );
+
+      // The capture travels a little slower than the page around it, so it
+      // reads as a print lifted off the sheet rather than glued to it.
+      if (!env.isMobile) {
+        const rise = root.current.querySelector(".plate-rise");
+        gsap.fromTo(
+          rise,
+          { y: 70 },
+          {
+            y: -40,
+            ease: "none",
+            scrollTrigger: {
+              trigger: rise,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          },
+        );
+      }
     }, root);
 
     return () => ctx.revert();
-  }, [env.reducedMotion]);
+  }, [env.reducedMotion, env.isMobile]);
 
   const plate = (
     <ProjectPlate
@@ -96,7 +116,7 @@ function ProjectShowcase({ project, index, env }) {
         {description}
       </p>
 
-      <div className="mt-9 sm:mt-12">
+      <div className="plate-rise mt-9 will-change-transform sm:mt-12">
         {liveUrl ? (
           <a
             href={liveUrl}

@@ -1,13 +1,17 @@
 import { memo } from "react";
 
 /**
- * Rounded Action button component.
+ * The house button. Rounded, brass or ink, and two things happen on hover:
  *
- * Tactile, elegant rounded design:
- * - Fluid rounded-full geometry with layered metallic depth.
- * - Refined Instrument Sans typography with optical balance.
- * - Solid brass gradient and carbon glass outline variants.
- * - Clean custom SVG directional glyphs.
+ * - The label rolls. The word slides up out of its slot and a second copy
+ *   rises in under it, the way a split-flap board turns.
+ * - Solid: one band of light crosses the brass, the way it would catch a
+ *   lamp as you tilt it. Outline: brass pours up from the bottom and the
+ *   label turns to ink.
+ *
+ * Both are hover-only (Tailwind 4 gates `hover:` to real pointers), are
+ * transforms, and reset the moment the pointer leaves. On touch the button
+ * is simply the button.
  */
 function Action({
   children,
@@ -31,12 +35,11 @@ function Action({
   const variantClasses = isSolid
     ? `bg-gradient-to-r from-brass-lit via-brass to-brass text-ink font-semibold
        shadow-[0_2px_16px_-2px_rgba(200,164,92,0.38),0_0_0_1px_rgba(236,215,163,0.4)]
-       hover:shadow-[0_6px_24px_-2px_rgba(200,164,92,0.55),0_0_0_1px_rgba(255,246,222,0.7)]
-       hover:brightness-105 active:brightness-95`
-    : `bg-carbon/80 text-pearl font-medium backdrop-blur-md
-       border border-brass/30 hover:border-brass/75 hover:bg-brass/[0.12] hover:text-ivory
+       hover:shadow-[0_8px_28px_-4px_rgba(200,164,92,0.6),0_0_0_1px_rgba(255,246,222,0.75)]`
+    : `bg-carbon/80 text-pearl font-medium hover:text-ink
+       border border-brass/30 hover:border-brass
        shadow-[0_2px_12px_-2px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(200,164,92,0.15)]
-       hover:shadow-[0_4px_20px_-2px_rgba(200,164,92,0.22),inset_0_1px_0_0_rgba(200,164,92,0.3)]`;
+       hover:shadow-[0_6px_24px_-4px_rgba(200,164,92,0.4)]`;
 
   const renderIcon = () => {
     if (!arrow) return null;
@@ -141,14 +144,45 @@ function Action({
       href={href}
       onClick={onClick}
       type={href ? undefined : "button"}
-      className={`group relative inline-flex items-center justify-center gap-3 rounded-full
-        font-sans tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
-        select-none active:scale-[0.98] hover:-translate-y-0.5 active:translate-y-0
-        ${sizeClasses} ${variantClasses} ${className}`}
+      className={`group relative isolate inline-flex items-center justify-center gap-3 overflow-hidden
+        rounded-full font-sans tracking-[-0.01em] transition-[color,border-color,box-shadow,translate,scale]
+        duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] select-none hover:-translate-y-0.5
+        active:translate-y-0 active:scale-[0.97] ${sizeClasses} ${variantClasses} ${className}`}
       {...rest}
     >
-      <span className="relative z-10 flex items-center gap-3">
-        <span>{children}</span>
+      {isSolid ? (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 -left-1/2 -z-10 w-1/2 -translate-x-full skew-x-[-20deg]
+            bg-gradient-to-r from-transparent via-white/45 to-transparent opacity-0 transition-[translate,opacity]
+            duration-0 group-hover:translate-x-[420%] group-hover:opacity-100 group-hover:duration-[900ms]
+            group-hover:ease-[cubic-bezier(0.65,0,0.35,1)]"
+        />
+      ) : (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 translate-y-[101%] rounded-[inherit]
+            bg-gradient-to-r from-brass-lit via-brass to-brass transition-transform duration-500
+            ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0"
+        />
+      )}
+
+      <span className="relative flex items-center gap-3">
+        <span className="relative block overflow-hidden">
+          <span
+            className="block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+              group-hover:-translate-y-full"
+          >
+            {children}
+          </span>
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 top-full block transition-transform duration-500
+              ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full"
+          >
+            {children}
+          </span>
+        </span>
         {renderIcon()}
       </span>
     </Tag>

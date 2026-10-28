@@ -45,8 +45,8 @@ export default function App() {
         <Hero env={env} />
         <About />
         <Work env={env} />
-        <Skills />
-        <Experience />
+        <Skills env={env} />
+        <Experience env={env} />
         {/* Achievements has no nav entry; the spy holds on Experience through
             it, which is where it sits in the reading order. */}
         <Achievements />

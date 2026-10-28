@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import gsap from "gsap";
 
 /**
@@ -16,27 +16,40 @@ export default function Magnetic({
   className = "",
 }) {
   const host = useRef(null);
+  const pull = useRef(null);
+  const spring = useRef(null);
+
+  // One pair of quickTo setters per mount instead of a fresh tween on every
+  // pointermove event.
+  useEffect(() => {
+    const node = host.current;
+    if (!active || !node) return;
+    pull.current = {
+      x: gsap.quickTo(node, "x", { duration: 0.7, ease: "power3.out" }),
+      y: gsap.quickTo(node, "y", { duration: 0.7, ease: "power3.out" }),
+    };
+    return () => {
+      pull.current = null;
+      gsap.killTweensOf(node);
+    };
+  }, [active]);
 
   const move = useCallback(
     (e) => {
       const node = host.current;
-      if (!node) return;
+      if (!node || !pull.current) return;
+      spring.current?.kill();
       const r = node.getBoundingClientRect();
       const dx = e.clientX - (r.left + r.width / 2);
       const dy = e.clientY - (r.top + r.height / 2);
-
-      gsap.to(node, {
-        x: dx * strength * radius,
-        y: dy * strength * radius,
-        duration: 0.7,
-        ease: "power3.out",
-      });
+      pull.current.x(dx * strength * radius);
+      pull.current.y(dy * strength * radius);
     },
     [strength, radius],
   );
 
   const reset = useCallback(() => {
-    gsap.to(host.current, {
+    spring.current = gsap.to(host.current, {
       x: 0,
       y: 0,
       duration: 1.1,

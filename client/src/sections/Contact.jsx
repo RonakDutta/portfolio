@@ -144,6 +144,7 @@ function Contact() {
     >
       <GoldGeometry
         variant="orbit"
+        turn={60}
         className="pointer-events-none top-[38%] left-1/2 aspect-square w-[150vmin]
           -translate-x-1/2 -translate-y-1/2 opacity-40 lg:w-[92vmin]"
       />

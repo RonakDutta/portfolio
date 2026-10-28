@@ -36,6 +36,12 @@ function ProjectPlate({
 
   const hasImage = Boolean(src) && !broken;
 
+  // A capture that was already in the cache can finish decoding before the
+  // load listener is attached, and would then sit at opacity 0 for good.
+  const settle = useCallback((img) => {
+    if (img?.complete && img.naturalWidth > 0) img.classList.add("is-loaded");
+  }, []);
+
   return (
     <figure className={`group/plate relative ${className}`}>
       <span
@@ -70,9 +76,10 @@ function ProjectPlate({
               loading={priority ? "eager" : "lazy"}
               fetchPriority={priority ? "high" : "low"}
               decoding="async"
+              ref={settle}
+              onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
               onError={() => setBroken(true)}
-              className={`absolute inset-0 h-full w-full object-cover object-top
-                transition-transform duration-[1300ms] ease-[cubic-bezier(0.16,1,0.3,1)]
+              className={`plate-img absolute inset-0 h-full w-full object-cover object-top
                 ${interactive ? "group-hover/plate:scale-[1.015]" : ""}`}
             />
           </picture>

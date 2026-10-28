@@ -15,17 +15,38 @@ import { identity } from "../../data/content";
 function SiteNav() {
   const [active, setActive] = useState(frame.section);
   const [lifted, setLifted] = useState(false);
+  const [tucked, setTucked] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleRef = useRef(null);
   const panelRef = useRef(null);
 
   useEffect(() => subscribe(setActive), []);
 
+  // Reading down tucks the bar away; any move back up brings it straight
+  // back. A little travel is needed in either direction first, so the bar
+  // does not flicker on a trackpad's tremor. Resolved once per frame.
   useEffect(() => {
-    const onScroll = () => setLifted(window.scrollY > 40);
-    onScroll();
+    let last = window.scrollY;
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const y = window.scrollY;
+      setLifted(y > 40);
+      if (y < 120) setTucked(false);
+      else if (y - last > 8) setTucked(true);
+      else if (last - y > 8) setTucked(false);
+      else return;
+      last = y;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(read);
+    };
+    read();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   // Lock the page behind the sheet, including the smooth scroller
@@ -65,8 +86,9 @@ function SiteNav() {
   return (
     <header className="fixed inset-x-0 top-0 z-[70]">
       <div
-        className={`relative transition-colors duration-700 ${
-          solid ? "glass-ink" : "bg-transparent"
+        className={`relative transition-[background-color,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
+          focus-within:translate-y-0 ${solid ? "glass-ink" : "bg-transparent"} ${
+          tucked && !open ? "-translate-y-full" : "translate-y-0"
         }`}
       >
         <nav

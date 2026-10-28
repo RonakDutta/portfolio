@@ -1,4 +1,8 @@
-import { memo, useId } from "react";
+import { memo, useId, useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * The house geometry: thin gold arcs and orbital curves, drawn at three
@@ -9,18 +13,51 @@ import { memo, useId } from "react";
  *
  * `variant` picks the arrangement; all of them share the same stroke language
  * so the site reads as one identity.
+ *
+ * `turn` (degrees) lets the drawing rotate as its section passes through the
+ * viewport, so the arcs feel engraved on something that moves with you. It is
+ * a single composited rotation on a layer that is never repainted.
  */
-function GoldGeometry({ variant = "orbit", className = "" }) {
+function GoldGeometry({ variant = "orbit", turn = 0, className = "" }) {
   const uid = useId().replace(/:/g, "");
+  const svg = useRef(null);
+
+  useLayoutEffect(() => {
+    const node = svg.current;
+    if (!turn || !node) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const tween = gsap.fromTo(
+      node,
+      { rotate: -turn / 2 },
+      {
+        rotate: turn / 2,
+        ease: "none",
+        scrollTrigger: {
+          trigger: node.parentElement,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      },
+    );
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+      gsap.set(node, { clearProps: "transform" });
+    };
+  }, [turn]);
   const stroke = `gg-${uid}`;
   const faint = `ggf-${uid}`;
 
   return (
     <svg
+      ref={svg}
       aria-hidden="true"
       viewBox="-200 -200 400 400"
       fill="none"
       className={`pointer-events-none absolute ${className}`}
+      style={turn ? { willChange: "transform" } : undefined}
     >
       <defs>
         <linearGradient id={stroke} x1="0" y1="0" x2="1" y2="1">
