@@ -2,10 +2,9 @@ import { useEffect } from "react";
 import { useEnvironment } from "./lib/useEnvironment";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { initReveals } from "./lib/reveal";
-import Atmosphere from "./components/atmosphere/Atmosphere";
 import Curtain from "./components/Curtain";
-import Cursor from "./components/fx/Cursor";
-import ScrollProgress from "./components/ui/ScrollProgress";
+import Atmosphere from "./components/Atmosphere";
+import EclipseField from "./components/eclipse/EclipseField";
 import SiteNav from "./components/brand/SiteNav";
 import Hero from "./sections/Hero";
 import About from "./sections/About";
@@ -19,38 +18,30 @@ export default function App() {
   const env = useEnvironment();
   useSmoothScroll(env);
 
-  useEffect(
-    () => initReveals({ reducedMotion: env.reducedMotion }),
-    [env.reducedMotion],
-  );
+  useEffect(() => initReveals({ reducedMotion: env.reducedMotion }), [env.reducedMotion]);
 
   return (
     <>
       <Curtain env={env} />
-      <Cursor enabled={env.pointerFx} />
-      <ScrollProgress />
 
-      <a
-        href="#hero"
-        className="sr-focusable inline-flex min-h-11 items-center border border-brass
-          bg-ink px-5 text-sm text-ivory"
-      >
+      <a href="#hero" className="sr-focusable label inline-flex min-h-11 items-center bg-gold px-5 text-ink">
         Skip to content
       </a>
 
-      <SiteNav />
       <Atmosphere env={env} />
+      <EclipseField env={env} />
+      <SiteNav />
 
       <main className="relative z-10">
         <Hero env={env} />
-        <About />
+        <About env={env} />
         <Work env={env} />
         <Skills env={env} />
-        <Experience env={env} />
-        {/* Achievements has no nav entry; the spy holds on Experience through
+        <Experience />
+        {/* Recognition has no nav entry; the spy holds on Experience through
             it, which is where it sits in the reading order. */}
-        <Achievements />
-        <Contact />
+        <Achievements env={env} />
+        <Contact env={env} />
       </main>
     </>
   );

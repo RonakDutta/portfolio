@@ -1,143 +1,156 @@
 import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SectionTitle from "../components/typography/SectionTitle";
+import Heading from "../components/type/Heading";
 import { skills } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * The toolkit, printed on paper.
+ * The one sheet of gold on the page.
  *
- * This is the one light section on the site. A dark portfolio that stays dark
- * for six screens reads as one long gradient; cutting a warm sheet into the
- * middle of it gives the scroll a middle, and gives this section a reason to
- * be plain: it is a specification page, not a wall of glowing badges.
- *
- * The sheet is laid down as you arrive: it comes in a little narrower than
- * the page and settles out to full bleed, then lifts again as you leave. Only
- * the paper layer scales. The type sits above it at rest, so it is never
- * resampled and never soft.
+ * It rises over the dark as a limb of the sun, a long shallow arc that
+ * flattens almost straight as it reaches the top of the screen. The type on
+ * it is ink. Each row of the index goes dark under the pointer, an eclipse
+ * passing over it, and its words come up in gold.
  */
 function Skills({ env }) {
-  const root = useRef(null);
   const sheet = useRef(null);
+  const arc = useRef(null);
 
   useLayoutEffect(() => {
-    if (env.reducedMotion) return;
-
+    if (env.reducedMotion) return undefined;
+    // The arc is an ink cut-out laid over the sheet's top corners, flattened
+    // with a transform, so the scrub never repaints the gold under it.
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        sheet.current,
-        { scaleX: 0.955 },
+        arc.current,
+        { scaleY: 1 },
         {
-          scaleX: 1,
+          scaleY: 0.12,
           ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top bottom",
-            end: "top 30%",
-            scrub: true,
-          },
-          immediateRender: true,
+          scrollTrigger: { trigger: sheet.current, start: "top bottom", end: "top 15%", scrub: 0.4 },
         },
       );
-      gsap.fromTo(
-        sheet.current,
-        { scaleX: 1 },
-        {
-          scaleX: 0.955,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root.current,
-            start: "bottom 70%",
-            end: "bottom top",
-            scrub: true,
-          },
-          immediateRender: false,
-        },
-      );
-    }, root);
-
+    }, sheet);
     return () => ctx.revert();
   }, [env.reducedMotion]);
 
   return (
-    <section
-      ref={root}
-      id="skills"
-      aria-labelledby="skills-title"
-      className="paper relative isolate z-10 overflow-x-clip py-24 sm:py-32 lg:py-40"
-      style={{ background: "none" }}
-    >
+    <section id="skills" aria-labelledby="skills-title" className="relative">
       <div
         ref={sheet}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 origin-center will-change-transform
-          shadow-[0_-40px_80px_-40px_rgba(0,0,0,0.9),0_40px_80px_-40px_rgba(0,0,0,0.9)]"
+        className="relative overflow-hidden pt-28 pb-28 text-ink sm:pt-36 lg:pt-44 lg:pb-40"
         style={{
           background:
-            "radial-gradient(120% 80% at 12% 0%, #f3ede1 0%, transparent 60%), linear-gradient(180deg, #ece5d8 0%, #e4dccc 100%)",
+            "radial-gradient(90% 60% at 50% 0%, #fbeccb 0%, rgba(251,236,203,0) 60%), linear-gradient(180deg, #e9cf92 0%, #d4b06a 30%, #c39d55 70%, #b38c47 100%)",
         }}
       >
-        {/* Paper tooth. Without it the sheet is a flat swatch. */}
-        <span
-          className="absolute inset-0 opacity-[0.5] mix-blend-multiply"
+        <svg
+          ref={arc}
+          aria-hidden="true"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute inset-x-0 -top-px z-[1] h-[16vw] w-full origin-top overflow-visible"
+          style={{ transform: env.reducedMotion ? "scaleY(0.12)" : undefined }}
+        >
+          <path d="M0,0 L0,100 Q50,-100 100,100 L100,0 Z" fill="#07060a" />
+          <path
+            d="M0,100 Q50,-100 100,100"
+            fill="none"
+            stroke="rgba(236,215,163,0.35)"
+            strokeWidth="6"
+            vectorEffect="non-scaling-stroke"
+          />
+          <path
+            d="M0,100 Q50,-100 100,100"
+            fill="none"
+            stroke="#fff6de"
+            strokeWidth="1.25"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+        {/* Fine turned lines in the metal, like the face of a watch. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 left-1/2 aspect-square w-[180vmax] -translate-x-1/2 -translate-y-1/2 opacity-[0.16]"
           style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.16'/%3E%3C/svg%3E\")",
-            backgroundSize: "200px 200px",
+            background:
+              "repeating-radial-gradient(circle, rgba(74,58,30,0.55) 0px, rgba(74,58,30,0.55) 1px, transparent 1px, transparent 9px)",
           }}
         />
-      </div>
 
-      <div className="relative mx-auto w-full max-w-[102rem] px-6 sm:px-9">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
-          <SectionTitle
-            id="skills-title"
-            title={skills.title}
-            script={skills.script}
-            tone="paper"
-          />
-
-          <p
-            data-reveal
-            className="max-w-[42ch] font-display text-[1.05rem] leading-relaxed text-espresso-soft lg:justify-self-end lg:text-right"
-          >
-            {skills.note}
-          </p>
-        </div>
-
-        <dl className="mt-16 grid gap-x-16 gap-y-12 sm:mt-20 sm:grid-cols-2 lg:mt-24 lg:gap-y-16">
-          {skills.groups.map((group, i) => (
-            <div
-              key={group.name}
-              data-reveal
-              style={{ transitionDelay: `${i * 60}ms` }}
-              className={i === skills.groups.length - 1 ? "sm:col-span-2" : ""}
+        <div className="relative mx-auto w-full max-w-[112rem] px-5 sm:px-9">
+          <div className="grid items-end gap-10 lg:grid-cols-12">
+            <Heading
+              id="skills-title"
+              index="03"
+              kicker="What I work with"
+              title={skills.title}
+              accent={skills.script}
+              tone="gold"
+              className="lg:col-span-8"
+            />
+            <p
+              data-reveal="up"
+              className="max-w-[24rem] text-[1.05rem] leading-relaxed font-[480] text-ink/75 lg:col-span-4 lg:justify-self-end lg:pb-4"
             >
-              <dt className="font-display text-[1rem] tracking-wide text-brass-deep">
-                {group.name}
-              </dt>
+              {skills.note}
+            </p>
+          </div>
 
-              <dd className="mt-3.5">
-                <ul className="flex flex-wrap gap-x-8 gap-y-1.5">
-                  {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className="font-display text-[1.55rem] leading-tight font-normal
-                        tracking-[-0.02em] text-espresso transition-colors duration-500
-                        hover:text-brass-deep sm:text-[1.85rem]"
-                    >
+          <ul className="mt-20 border-t border-ink/25 sm:mt-28">
+            {skills.groups.map((group, i) => (
+              <li
+                key={group.name}
+                data-reveal="up"
+                className="group relative isolate grid gap-3 border-b border-ink/25 py-7 sm:py-9 lg:grid-cols-12 lg:items-baseline lg:gap-8"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute -inset-x-5 inset-y-0 -z-10 origin-bottom scale-y-0 rounded-[1.25rem] bg-ink transition-transform duration-700
+                    ease-[var(--ease-cine)] group-hover:scale-y-100 sm:-inset-x-9"
+                />
+                <h3 className="label flex items-baseline gap-3 text-ink/70 transition-colors duration-500 group-hover:text-gold lg:col-span-3">
+                  <span>{String(i + 1).padStart(2, "0")}</span>
+                  <span className="text-[0.78rem] tracking-[0.04em]">{group.name}</span>
+                  <span className="text-ink/45 transition-colors duration-500 group-hover:text-ash">
+                    ({group.items.length})
+                  </span>
+                </h3>
+                <p
+                  className="text-[clamp(1.6rem,1rem+2.4vw,3.6rem)] leading-[1.08] font-[720] tracking-[-0.03em] text-ink
+                    transition-[color,translate] duration-700 ease-[var(--ease-cine)] [font-stretch:115%] group-hover:translate-x-3
+                    group-hover:text-gold-lit lg:col-span-9"
+                >
+                  {group.items.map((item, j) => (
+                    <span key={item} className="inline-block whitespace-nowrap">
                       {item}
-                    </li>
+                      {j < group.items.length - 1 ? (
+                        <span
+                          aria-hidden="true"
+                          className="mx-[0.28em] font-[200] text-ink/35 transition-colors duration-700 group-hover:text-gold/50"
+                        >
+                          /
+                        </span>
+                      ) : null}
+                    </span>
                   ))}
-                </ul>
-              </dd>
-            </div>
-          ))}
-        </dl>
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
+      {/* The rim light the limb throws on the dark above it, and on itself. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-40 z-[2] h-80"
+        style={{
+          background:
+            "radial-gradient(60% 50% at 50% 100%, rgba(236,215,163,0.28) 0%, rgba(200,164,92,0.1) 45%, transparent 75%)",
+        }}
+      />
     </section>
   );
 }

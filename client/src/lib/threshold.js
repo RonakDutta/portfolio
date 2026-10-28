@@ -1,7 +1,6 @@
 const SESSION_KEY = "curtain:opened";
 
-let crossed =
-  typeof document === "undefined" || !document.getElementById("curtain");
+let crossed = typeof document === "undefined" || !document.getElementById("curtain");
 
 const waiters = new Set();
 

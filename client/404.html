@@ -12,37 +12,26 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/fraunces.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/instrument-sans.woff2"
-      crossorigin
-    />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/mona-sans.woff2" crossorigin />
 
     <style>
-      /* The same four self-hosted faces the site uses. This page carries no
-         bundle, so it declares the two it actually sets type in. */
+      /* The site's own faces. This page carries no bundle, so it declares the
+         two it sets type in. */
       @font-face {
-        font-family: "Fraunces";
+        font-family: "Mona Sans";
         font-style: normal;
-        font-weight: 300 700;
+        font-weight: 200 900;
+        font-stretch: 75% 125%;
         font-display: swap;
-        src: url("/fonts/fraunces.woff2") format("woff2");
+        src: url("/fonts/mona-sans.woff2") format("woff2");
       }
       @font-face {
-        font-family: "Instrument Sans";
+        font-family: "Martian Mono";
         font-style: normal;
-        font-weight: 400 600;
+        font-weight: 100 800;
+        font-stretch: 75% 112.5%;
         font-display: swap;
-        src: url("/fonts/instrument-sans.woff2") format("woff2");
+        src: url("/fonts/martian-mono.woff2") format("woff2");
       }
       *,
       *::before,
@@ -58,201 +47,174 @@
         min-height: 100svh;
         display: grid;
         place-items: center;
-        padding: 2rem 1.5rem;
-        color: #b3aca0;
-        font-family: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
-        font-weight: 300;
-        font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.2rem);
-        line-height: 1.7;
+        padding: 3rem 1.25rem;
+        color: #cdc4b4;
+        font-family:
+          "Mona Sans",
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          sans-serif;
+        font-size: clamp(1rem, 0.95rem + 0.3vw, 1.12rem);
+        line-height: 1.65;
         text-align: center;
         overflow-x: clip;
         -webkit-font-smoothing: antialiased;
       }
-
-      .ground {
-        position: fixed;
-        inset: 0;
-        z-index: -2;
-        background: radial-gradient(
-          120% 80% at 50% 118%,
-          rgba(200, 164, 92, 0.16) 0%,
-          rgba(138, 109, 51, 0.06) 30%,
-          transparent 68%
-        );
-        opacity: 1;
-      }
-      .vignette {
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        background:
-          radial-gradient(
-            115% 75% at 50% 42%,
-            transparent 30%,
-            rgba(7, 6, 10, 0.74) 100%
-          ),
-          linear-gradient(to bottom, rgba(7, 6, 10, 0.9) 0%, transparent 35%);
-      }
-
       main {
+        max-width: 36rem;
+      }
+
+      /* A lost sun: a still eclipse in CSS. */
+      .eclipse {
         position: relative;
-        max-width: 34rem;
+        width: min(46vw, 13rem);
+        aspect-ratio: 1;
+        margin: 0 auto 3.5rem;
+      }
+      .eclipse::before {
+        content: "";
+        position: absolute;
+        inset: -85%;
+        border-radius: 50%;
+        background:
+          repeating-conic-gradient(from 0deg, rgba(255, 246, 222, 0.22) 0deg 0.7deg, transparent 0.7deg 6deg),
+          radial-gradient(
+            closest-side,
+            rgba(255, 246, 222, 0.95) 34%,
+            rgba(236, 215, 163, 0.5) 37%,
+            rgba(200, 164, 92, 0.18) 50%,
+            rgba(138, 109, 51, 0.06) 70%,
+            transparent 100%
+          );
+        -webkit-mask-image: radial-gradient(closest-side, #000 40%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
+        mask-image: radial-gradient(closest-side, #000 40%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
+        animation: turn 160s linear infinite;
+      }
+      .eclipse::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: #07060a;
+      }
+      @keyframes turn {
+        to {
+          transform: rotate(360deg);
+        }
       }
 
-      .code {
-        margin: 1.75rem 0 0;
-        font-family: "Fraunces", ui-serif, Georgia, serif;
-        font-weight: 300;
-        font-size: clamp(4.5rem, 22vw, 9rem);
-        line-height: 0.86;
-        letter-spacing: -0.02em;
-        background: linear-gradient(
-          180deg,
-          #faf8f4 0%,
-          #ece5d8 34%,
-          #b3aca0 72%,
-          #625c53 100%
-        );
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        -webkit-text-fill-color: transparent;
+      .label {
+        margin: 0;
+        font-family: "Martian Mono", ui-monospace, Menlo, monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #c8a45c;
       }
-
       h1 {
-        margin: 0.75rem 0 0;
-        font-family: "Fraunces", ui-serif, Georgia, serif;
-        font-weight: 700;
-        font-size: clamp(1.1rem, 4.2vw, 1.5rem);
-        line-height: 1.2;
-        letter-spacing: 0.02em;
-        color: #faf8f4;
+        margin: 1.25rem 0 0;
+        font-stretch: 125%;
+        font-weight: 850;
+        font-size: clamp(2rem, 7vw, 3.4rem);
+        line-height: 0.95;
+        letter-spacing: -0.035em;
+        text-transform: uppercase;
+        color: #f6f1e7;
         text-wrap: balance;
       }
-
-      p {
+      p.lede {
         margin: 1.25rem auto 0;
         max-width: 26rem;
-        color: #b3aca0;
         text-wrap: pretty;
-      }
-
-      .rule {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        max-width: 20rem;
-        margin: 1.75rem auto 0;
-      }
-      .rule span:first-child,
-      .rule span:last-child {
-        height: 1px;
-        flex: 1;
-        background: linear-gradient(90deg, transparent, rgba(200, 164, 92, 0.45));
-      }
-      .rule span:last-child {
-        background: linear-gradient(270deg, transparent, rgba(200, 164, 92, 0.45));
-      }
-      .rule i {
-        width: 7px;
-        height: 7px;
-        rotate: 45deg;
-        border: 1px solid rgba(200, 164, 92, 0.55);
       }
 
       .back {
         position: relative;
+        isolation: isolate;
         display: inline-flex;
         align-items: center;
-        gap: 0.75rem;
-        min-height: 2.75rem;
-        margin-top: 2.25rem;
-        padding: 0.9rem 2rem;
-        border: 1px solid rgba(200, 164, 92, 0.9);
-        background: #c8a45c;
-        color: #07060a;
-        font-family: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-        font-size: 0.62rem;
-        font-weight: 500;
-        letter-spacing: 0.26em;
-        text-transform: uppercase;
-        text-decoration: none;
+        gap: 1.5rem;
+        height: 3.4rem;
+        margin-top: 2.5rem;
+        padding: 0 0.4rem 0 1.6rem;
         overflow: hidden;
-        transition:
-          color 0.35s ease,
-          border-color 0.35s ease;
+        border-radius: 999px;
+        background: linear-gradient(110deg, #a8843f 0%, #d9b974 30%, #f3e2b6 55%, #c8a45c 100%);
+        color: #07060a;
+        font-weight: 560;
+        text-decoration: none;
+        box-shadow: 0 14px 44px -14px rgba(200, 164, 92, 0.65);
+        transition: color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
       }
-      .back::before {
+      .back .disc {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 2.6rem;
+        height: 2.6rem;
+      }
+      .back .disc::before {
         content: "";
         position: absolute;
         inset: 0;
-        z-index: 0;
-        background: #ecd7a3;
-        transform: scaleY(0);
-        transform-origin: 50% 100%;
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: -1;
+        border-radius: 50%;
+        background: #07060a;
+        transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .back:hover,
       .back:focus-visible {
-        color: #07060a;
-        border-color: rgba(236, 215, 163, 1);
+        color: #ecd7a3;
       }
-      .back:hover::before,
-      .back:focus-visible::before {
-        transform: scaleY(1);
-      }
-      .back span,
-      .back svg {
-        position: relative;
-        z-index: 1;
+      .back:hover .disc::before,
+      .back:focus-visible .disc::before {
+        transform: scale(16);
       }
       .back svg {
-        width: 11px;
-        height: 14px;
-        transition: transform 0.3s ease;
-      }
-      .back:hover svg {
-        transform: translateY(-2px);
+        width: 12px;
+        height: 12px;
+        color: #ecd7a3;
       }
 
       :focus-visible {
         outline: 1px solid #ecd7a3;
-        outline-offset: 3px;
+        outline-offset: 4px;
       }
 
       @media (prefers-reduced-motion: reduce) {
+        .eclipse::before {
+          animation: none;
+        }
         .back,
-        .back::before {
+        .back .disc::before {
           transition: none;
         }
       }
     </style>
   </head>
   <body>
-    <div class="ground"></div>
-    <div class="vignette"></div>
-
-
     <main>
-      <p class="code">404</p>
+      <div class="eclipse" aria-hidden="true"></div>
 
-      <h1>This page does not exist</h1>
-
-      <div class="rule"><span></span><i></i><span></span></div>
-
-      <p>
-        The link may be out of date, or the page may have moved.
-      </p>
+      <p class="label">Error 404</p>
+      <h1>Lost in totality</h1>
+      <p class="lede">This page does not exist. The link may be out of date, or the page may have moved.</p>
 
       <a class="back" href="/">
         <span>Back to the homepage</span>
-        <svg viewBox="0 0 12 16" aria-hidden="true" fill="none">
-          <path
-            d="M6 16V3M1 8l5-6 5 6"
-            stroke="currentColor"
-            stroke-width="1.6"
-          />
-        </svg>
+        <span class="disc">
+          <svg viewBox="0 0 14 14" aria-hidden="true">
+            <path
+              d="M13 7H1M6 2L1 7l5 5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
       </a>
     </main>
   </body>

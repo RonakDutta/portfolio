@@ -2,15 +2,16 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, subscribe, frame } from "../../lib/store";
 import { scrollToSection } from "../../lib/useSmoothScroll";
 import Monogram from "./Monogram";
+import PhaseMark from "./PhaseMark";
+import { Arrow } from "../ui/Button";
 import { identity } from "../../data/content";
 
 /**
- * Site navigation bar and full-screen mobile drawer.
+ * The bar, and the full-screen index it opens into on small screens.
  *
- * Bespoke editorial styling:
- * - Clean typographic layout in Instrument Sans.
- * - Active section indicator using the 4-point gold star glint.
- * - Tactile rounded Resume action.
+ * Set entirely in the mono, small and spaced, so it reads as the instrument
+ * panel and never competes with the type on the page. The active section is
+ * lit and underscored; the eclipse at the right edge is the reading progress.
  */
 function SiteNav() {
   const [active, setActive] = useState(frame.section);
@@ -22,9 +23,6 @@ function SiteNav() {
 
   useEffect(() => subscribe(setActive), []);
 
-  // Reading down tucks the bar away; any move back up brings it straight
-  // back. A little travel is needed in either direction first, so the bar
-  // does not flicker on a trackpad's tremor. Resolved once per frame.
   useEffect(() => {
     let last = window.scrollY;
     let raf = 0;
@@ -49,10 +47,8 @@ function SiteNav() {
     };
   }, []);
 
-  // Lock the page behind the sheet, including the smooth scroller
   useEffect(() => {
-    if (!open) return;
-
+    if (!open) return undefined;
     document.documentElement.style.overflow = "hidden";
     window.__lenis?.stop();
 
@@ -62,7 +58,6 @@ function SiteNav() {
       toggleRef.current?.focus();
     };
     window.addEventListener("keydown", onKey);
-
     panelRef.current?.querySelector("button, a")?.focus({ preventScroll: true });
 
     return () => {
@@ -76,42 +71,50 @@ function SiteNav() {
     document.documentElement.style.removeProperty("overflow");
     window.__lenis?.start();
     setOpen(false);
-    requestAnimationFrame(() => {
-      scrollToSection(id);
-    });
+    requestAnimationFrame(() => scrollToSection(id));
   }, []);
 
-  const solid = lifted && !open;
+  const socials = [
+    { label: "Email", href: `mailto:${identity.email}` },
+    { label: "GitHub", href: identity.github },
+    { label: "LinkedIn", href: identity.linkedin },
+    { label: "Resume", href: identity.resume },
+  ];
 
   return (
     <header className="fixed inset-x-0 top-0 z-[70]">
       <div
-        className={`relative transition-[background-color,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
-          focus-within:translate-y-0 ${solid ? "glass-ink" : "bg-transparent"} ${
+        className={`relative transition-[translate,background-color] duration-700 ease-[var(--ease-cine)] focus-within:translate-y-0 ${
           tucked && !open ? "-translate-y-full" : "translate-y-0"
         }`}
       >
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-x-0 top-0 h-[150%] bg-gradient-to-b from-ink via-ink/80 to-transparent
+            transition-opacity duration-700 ${lifted && !open ? "opacity-100" : "opacity-0"}`}
+        />
         <nav
           aria-label="Primary"
-          className="mx-auto flex w-full max-w-[102rem] items-center justify-between gap-6 px-5 py-4 sm:px-9"
+          className="relative mx-auto flex h-16 w-full max-w-[112rem] items-center justify-between gap-6 px-5 sm:h-20 sm:px-9"
         >
-          {/* Logo / Monogram */}
           <button
             type="button"
             onClick={() => select(SECTIONS[0].id)}
-            data-cursor="Top"
             className="group -ml-1 flex min-h-11 items-center gap-3 px-1"
           >
-            <Monogram className="h-9 w-9 transition-transform duration-500 group-hover:scale-105" />
+            <Monogram className="h-8 w-8 group-hover:rotate-[-8deg]" />
             <span className="sr-only">{identity.name}, back to the top</span>
-            <span className="hidden font-display text-[0.98rem] tracking-tight text-pearl sm:block">
-              {identity.family}
+            <span
+              aria-hidden="true"
+              className="hidden text-[0.95rem] font-[650] tracking-[-0.01em] text-ivory [font-stretch:112%] sm:block"
+            >
+              {identity.name}
             </span>
           </button>
 
-          {/* Desktop Navigation Links */}
-          <ul className="hidden items-center gap-8 lg:flex">
-            {SECTIONS.map((section, i) => {
+          <ul className="hidden items-center gap-1 lg:flex">
+            {SECTIONS.slice(1).map((section) => {
+              const i = SECTIONS.indexOf(section);
               const isActive = i === active;
               return (
                 <li key={section.id}>
@@ -119,66 +122,56 @@ function SiteNav() {
                     type="button"
                     onClick={() => select(section.id)}
                     aria-current={isActive ? "true" : undefined}
-                    className={`group relative flex min-h-11 items-center gap-2 font-sans text-[0.88rem]
-                      font-medium tracking-[-0.01em] transition-colors duration-300 ${
-                        isActive ? "text-ivory" : "text-sand/70 hover:text-ivory"
-                      }`}
+                    className={`group relative flex min-h-11 items-baseline gap-1.5 px-3.5 text-[0.9rem] font-[520] transition-colors duration-500 ${
+                      isActive ? "text-gold-lit" : "text-bone/65 hover:text-ivory"
+                    }`}
                   >
-                    {/* 4-point background glint star shape */}
-                    <svg
-                      aria-hidden="true"
-                      viewBox="0 0 16 16"
-                      className={`h-2.5 w-2.5 shrink-0 fill-brass text-brass transition-all duration-300 ${
-                        isActive
-                          ? "scale-100 opacity-100"
-                          : "scale-0 opacity-0 group-hover:scale-75 group-hover:opacity-40"
-                      }`}
-                    >
-                      <path d="M8 0 Q 8.9 7.1 16 8 Q 8.9 8.9 8 16 Q 7.1 8.9 0 8 Q 7.1 7.1 8 0 Z" />
-                    </svg>
+                    <span className={`font-mono text-[0.6rem] ${isActive ? "text-gold" : "text-ash/60"}`}>
+                      {section.num}
+                    </span>
                     <span>{section.label}</span>
+                    <span
+                      aria-hidden="true"
+                      className={`absolute inset-x-3.5 bottom-1.5 h-px origin-left bg-gold-lit transition-transform duration-700 ease-[var(--ease-cine)] ${
+                        isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-50"
+                      }`}
+                    />
                   </button>
                 </li>
               );
             })}
           </ul>
 
-          {/* Right Action Bar */}
-          <div className="flex items-center gap-5">
-            {/* Resume button: refined rounded action matching the site language */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            <PhaseMark className="h-6 w-6" />
             <a
               href={identity.resume}
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="Open PDF"
-              className="hidden min-h-9 items-center rounded-full border border-brass/40 bg-brass/10 px-4.5 py-1.5
-                font-sans text-[0.82rem] font-medium tracking-tight text-brass-lit shadow-[0_1px_8px_rgba(200,164,92,0.12)]
-                transition-all duration-300 hover:border-brass hover:bg-brass hover:text-ink hover:shadow-[0_2px_14px_rgba(200,164,92,0.3)]
-                active:scale-95 sm:inline-flex"
+              className="group hidden min-h-11 items-center gap-2 text-[0.9rem] font-[560] text-ivory transition-colors duration-500 hover:text-gold-lit sm:inline-flex"
             >
-              Resume
+              <span className="link-line">Resume</span>
+              <Arrow dir="out" className="text-gold" />
             </a>
 
-            {/* Mobile Menu Toggle Button */}
             <button
               ref={toggleRef}
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="nav-panel"
-              className="flex min-h-11 min-w-11 items-center justify-end gap-3 font-sans text-[0.84rem]
-                font-medium text-sand transition-colors duration-300 hover:text-ivory lg:hidden"
+              className="flex min-h-11 min-w-11 items-center justify-end gap-3 text-[0.92rem] font-[560] text-ivory lg:hidden"
             >
               <span>{open ? "Close" : "Menu"}</span>
-              <span aria-hidden="true" className="flex w-5 flex-col gap-[5px]">
+              <span aria-hidden="true" className="relative block h-3 w-5">
                 <span
-                  className={`block h-px w-full bg-brass transition-transform duration-300 ${
-                    open ? "translate-y-[3px] rotate-45" : ""
+                  className={`absolute left-0 h-px w-full bg-gold-lit transition-transform duration-500 ${
+                    open ? "top-1.5 rotate-45" : "top-0.5"
                   }`}
                 />
                 <span
-                  className={`block h-px w-full bg-brass transition-transform duration-300 ${
-                    open ? "-translate-y-[3px] -rotate-45" : ""
+                  className={`absolute left-0 h-px w-full bg-gold-lit transition-transform duration-500 ${
+                    open ? "top-1.5 -rotate-45" : "top-2.5"
                   }`}
                 />
               </span>
@@ -187,67 +180,61 @@ function SiteNav() {
         </nav>
       </div>
 
-      {/* Mobile Navigation Drawer Sheet */}
       <div
         id="nav-panel"
         ref={panelRef}
         inert={!open ? true : undefined}
-        className={`fixed inset-0 -z-10 overflow-y-auto overscroll-contain
-          bg-ink px-6 pt-28 pb-10 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)]
-          lg:hidden ${
+        className={`fixed inset-0 -z-10 overflow-y-auto overscroll-contain bg-ink px-5 pt-24 pb-8 transition-[opacity,clip-path]
+          duration-700 ease-[var(--ease-swing)] sm:px-9 lg:hidden ${
             open
-              ? "pointer-events-auto translate-y-0 opacity-100"
-              : "pointer-events-none -translate-y-4 opacity-0"
+              ? "pointer-events-auto opacity-100 [clip-path:circle(150%_at_100%_0%)]"
+              : "pointer-events-none opacity-0 [clip-path:circle(0%_at_100%_0%)]"
           }`}
       >
-        <div className="flex min-h-full flex-col justify-between gap-8">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-[30vw] -bottom-[30vw] aspect-square w-[90vw] rounded-full"
+          style={{
+            background:
+              "radial-gradient(closest-side, rgba(200,164,92,0.22) 0%, rgba(138,109,51,0.08) 50%, transparent 100%)",
+          }}
+        />
+        <div className="relative flex min-h-full flex-col justify-between gap-10">
           <ul className="flex flex-col">
             {SECTIONS.map((section, i) => (
-              <li key={section.id} className="overflow-hidden">
+              <li key={section.id} className="overflow-hidden border-b border-gold/10">
                 <button
                   type="button"
                   onClick={() => select(section.id)}
                   aria-current={i === active ? "true" : undefined}
-                  className="flex w-full items-baseline gap-5 py-3.5 text-left"
+                  className="flex w-full items-baseline justify-between gap-5 py-3 text-left"
                   style={{
-                    transitionDelay: open ? `${120 + i * 45}ms` : "0ms",
-                    transform: open ? "none" : "translateY(120%)",
-                    opacity: open ? 1 : 0,
-                    transition:
-                      "transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1)",
+                    transitionDelay: open ? `${160 + i * 50}ms` : "0ms",
+                    transform: open ? "none" : "translateY(100%)",
+                    transition: "transform 0.8s cubic-bezier(0.16,1,0.3,1)",
                   }}
                 >
-                  <span className="font-display text-[1.1rem] font-normal text-brass-lit/75">{section.num}</span>
                   <span
-                    className={`font-display text-[2.1rem] leading-tight tracking-tight transition-colors
-                      duration-[400ms] ${i === active ? "text-brass-lit" : "text-ivory"}`}
+                    className={`wide text-[clamp(1.9rem,9vw,3.4rem)] leading-none font-[800] tracking-[-0.035em] uppercase ${
+                      i === active ? "foil" : "text-ivory"
+                    }`}
                   >
                     {section.label}
                   </span>
+                  <span className="label text-gold">{section.num}</span>
                 </button>
               </li>
             ))}
           </ul>
 
-          <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-brass/10 pt-6">
-            {[
-              { label: "Email", href: `mailto:${identity.email}` },
-              { label: "GitHub", href: identity.github },
-              { label: "LinkedIn", href: identity.linkedin },
-              { label: "Resume", href: identity.resume },
-            ].map((link) => (
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {socials.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
+                target={link.href.startsWith("http") || link.href.endsWith(".pdf") ? "_blank" : undefined}
                 rel="noopener noreferrer"
-                onClick={() => {
-                  if (link.href.startsWith("mailto:")) {
-                    setOpen(false);
-                  }
-                }}
-                className="link-underline min-h-11 font-sans text-[0.88rem] font-medium text-sand transition-colors
-                  duration-500 hover:text-brass-lit"
+                className="link-line inline-flex min-h-11 items-center text-[0.95rem] text-bone hover:text-gold-lit"
               >
                 {link.label}
               </a>

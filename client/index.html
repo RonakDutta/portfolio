@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="ecl-pending">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,32 +40,22 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Faces are served from this origin (see @font-face in src/index.css),
-         so there is no third party on the critical path. The three that the
-         first screen actually sets type in are fetched up front. -->
+    <!-- Faces are served from this origin (see @font-face in src/index.css).
+         Both are fetched up front: the first screen sets type in each. -->
     <link
       rel="preload"
       as="font"
       type="font/woff2"
-      href="/fonts/fraunces.woff2"
+      href="/fonts/mona-sans.woff2"
       crossorigin
     />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
-      href="/fonts/instrument-sans.woff2"
+      href="/fonts/martian-mono.woff2"
       crossorigin
     />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/ephesis.woff2"
-      crossorigin
-    />
-
-    <link rel="preload" as="image" href="/portrait-560.webp" type="image/webp" />
 
     <title>Ronak Dutta, Software Engineer</title>
 
@@ -101,123 +91,168 @@
       }
     </script>
 
-    <!-- The overture. Painted by the parser rather than by React, so there is
-         never a white flash in front of the thing that exists to prevent one.
-         Everything below is inert markup: Curtain.jsx animates and removes it. -->
+    <!-- The overture: an eclipse forms while the page loads, then flies onto
+         the hero and hands over to the live corona. Painted by the parser
+         rather than by React, so nothing flashes in front of it. Curtain.jsx
+         drives it and removes it. -->
     <style>
       html {
         background: #07060a;
+      }
+      @property --p {
+        syntax: "<number>";
+        inherits: true;
+        initial-value: 0;
       }
       #curtain {
         position: fixed;
         inset: 0;
         z-index: 100;
         overflow: hidden;
-        background: #07060a;
-        will-change: clip-path;
+        background-color: #07060a;
+        color: #cdc4b4;
+        font-family: "Martian Mono", ui-monospace, Menlo, monospace;
+        font-size: 0.66rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
       }
-      #cu-wash {
+      #cu-stage {
+        --d: min(36vmin, 22rem);
         position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(
-            80% 60% at 50% 108%,
-            rgba(200, 164, 92, 0.16) 0%,
-            transparent 70%
-          ),
-          radial-gradient(
-            60% 50% at 18% -10%,
-            rgba(200, 164, 92, 0.07) 0%,
-            transparent 70%
-          );
-      }
-      .cu-core {
-        position: absolute;
-        inset: auto 0 0 0;
-        padding: 0 1.5rem 1.75rem;
+        left: 50%;
+        top: 50%;
+        width: var(--d);
+        height: var(--d);
+        margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
+        animation: cu-creep 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         will-change: transform;
       }
-      @media (min-width: 640px) {
-        .cu-core {
-          padding: 0 2.5rem 2.25rem;
-        }
-      }
-      .cu-rule {
-        position: relative;
-        height: 1px;
-        width: 100%;
-        margin-bottom: 1.5rem;
-        background: rgba(200, 164, 92, 0.16);
-        overflow: hidden;
-      }
-      #cu-fill {
-        display: block;
-        height: 100%;
-        width: 100%;
-        transform: scaleX(0);
-        transform-origin: 0 50%;
-        background: linear-gradient(90deg, #8a6d33, #c8a45c 60%, #f0e0b8);
-        animation: cu-creep 2.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
       @keyframes cu-creep {
-        to {
-          transform: scaleX(0.42);
+        from {
+          --p: 0;
         }
+        to {
+          --p: 0.55;
+        }
+      }
+      #cu-stage i {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+      }
+      #cu-halo {
+        inset: -95% !important;
+        background: radial-gradient(
+          closest-side,
+          rgba(255, 246, 222, 0.9) 33%,
+          rgba(236, 215, 163, 0.45) 35.5%,
+          rgba(200, 164, 92, 0.18) 46%,
+          rgba(138, 109, 51, 0.07) 64%,
+          transparent 100%
+        );
+        opacity: calc(var(--p) * var(--p) * 0.95);
+      }
+      #cu-sun {
+        background: radial-gradient(
+          circle,
+          #fffaf0 0%,
+          #fff0c8 50%,
+          #f1d18a 80%,
+          #d29f52 100%
+        );
+        box-shadow:
+          0 0 30px 4px rgba(255, 236, 190, calc(0.55 - var(--p) * 0.5)),
+          0 0 140px 40px rgba(200, 164, 92, calc(0.3 - var(--p) * 0.25));
+      }
+      #cu-moon {
+        background: #07060a;
+        transform: translateX(calc((1 - var(--p)) * -118%)) scale(1.015);
+      }
+      #cu-diamond {
+        inset: 50% auto auto 99.5% !important;
+        width: 0;
+        height: 0;
+        opacity: 0;
+      }
+      #cu-diamond::before,
+      #cu-diamond::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+      #cu-diamond::before {
+        width: calc(var(--d) * 0.7);
+        height: calc(var(--d) * 0.7);
+        background: radial-gradient(
+          closest-side,
+          #fff 0%,
+          rgba(255, 246, 222, 0.8) 12%,
+          rgba(236, 215, 163, 0.25) 40%,
+          transparent 100%
+        );
+      }
+      #cu-diamond::after {
+        width: calc(var(--d) * 2.6);
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 246, 222, 0.85) 50%,
+          transparent
+        );
+        border-radius: 0;
       }
       .cu-row {
+        position: absolute;
+        left: 0;
+        right: 0;
         display: flex;
-        align-items: flex-end;
         justify-content: space-between;
-        gap: 1.5rem;
+        align-items: flex-end;
+        gap: 1rem;
+        padding: 0 1.25rem;
       }
-      .cu-name {
+      .cu-row p {
         margin: 0;
-        font-family: "Ephesis", "Snell Roundhand", cursive;
-        word-spacing: 0.14em;
-        font-size: clamp(2.6rem, 11vw, 5.5rem);
-        font-weight: 400;
-        line-height: 0.95;
-        color: #f7f4ee;
-        opacity: 0;
-        transform: translateY(0.25em);
-        transition:
-          opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-          transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        line-height: 1.6;
       }
-      .cu-core.is-ready .cu-name {
-        opacity: 1;
-        transform: none;
+      .cu-row.top {
+        top: 1.4rem;
       }
-      .cu-word {
-        margin: 0.35rem 0 0;
-        font-family:
-          "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
-        font-size: 0.72rem;
-        font-weight: 500;
-        letter-spacing: 0.18em;
-        text-indent: 0.18em;
-        text-transform: uppercase;
-        color: rgba(200, 164, 92, 0.85);
+      .cu-row.bottom {
+        bottom: 1.4rem;
+      }
+      @media (min-width: 640px) {
+        .cu-row {
+          padding: 0 2.25rem;
+        }
+        .cu-row.top {
+          top: 1.9rem;
+        }
+        .cu-row.bottom {
+          bottom: 1.9rem;
+        }
       }
       #cu-count {
-        flex-shrink: 0;
-        font-family: "Fraunces", ui-serif, Georgia, serif;
-        font-size: clamp(1.6rem, 5vw, 2.4rem);
-        font-weight: 400;
-        line-height: 1;
-        letter-spacing: -0.02em;
-        color: rgba(200, 164, 92, 0.65);
+        font-family: "Mona Sans", ui-sans-serif, system-ui, sans-serif;
+        font-stretch: 125%;
+        font-weight: 800;
+        font-size: clamp(2.4rem, 9vw, 6rem);
+        line-height: 0.8;
+        letter-spacing: -0.04em;
+        color: #f6f1e7;
         font-variant-numeric: tabular-nums;
       }
+      .cu-gold {
+        color: #c8a45c;
+      }
       @media (prefers-reduced-motion: reduce) {
-        #cu-fill {
+        #cu-stage {
           animation: none;
-          transform: scaleX(0.42);
-        }
-        .cu-name {
-          opacity: 1;
-          transform: none;
-          transition: none;
+          --p: 1;
         }
       }
     </style>
@@ -226,16 +261,19 @@
     <div id="root"></div>
 
     <div id="curtain" aria-hidden="true">
-      <div id="cu-wash"></div>
-      <div class="cu-core">
-        <div class="cu-rule"><i id="cu-fill"></i></div>
-        <div class="cu-row">
-          <div>
-            <p class="cu-name">Ronak Dutta</p>
-            <p class="cu-word">Software Engineer, New Delhi</p>
-          </div>
-          <p id="cu-count">00</p>
-        </div>
+      <div class="cu-row top">
+        <p>Ronak Dutta</p>
+        <p id="cu-phase" class="cu-gold">Partial phase</p>
+      </div>
+      <div id="cu-stage">
+        <i id="cu-halo"></i>
+        <i id="cu-sun"></i>
+        <i id="cu-moon"></i>
+        <i id="cu-diamond"></i>
+      </div>
+      <div class="cu-row bottom">
+        <p>Software Engineer<br /><span class="cu-gold">New Delhi, India</span></p>
+        <p id="cu-count">000</p>
       </div>
     </div>
 
@@ -248,8 +286,8 @@
       <div
         style="
           padding: 4rem 1.5rem;
-          font-family: Georgia, serif;
-          color: #ede6d6;
+          font-family: system-ui, sans-serif;
+          color: #f6f1e7;
           background: #07060a;
         "
       >
