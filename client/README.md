@@ -19,7 +19,7 @@ npm run lint
 | ---------------------------- | ---------------------------------------------------------------- |
 | `src/data/content.js`        | Every word on the page, and the project schema.                   |
 | `src/sections/`              | One file per section, presentation only.                          |
-| `src/components/atmosphere/` | Aurora, ribbons, dust, geometry, and the stack that composes them. |
+| `src/components/atmosphere/` | Aurora, ribbons, dust, geometry, the torch, and the stack that composes them. |
 | `src/components/fx/`         | Cursor and magnetic hover.                                        |
 | `src/components/brand/`      | The RD monogram and the nav.                                      |
 | `src/components/projects/`   | `ProjectShowcase` + `ProjectPlate`.                               |
@@ -65,6 +65,41 @@ keeps every layer and stops all of them; phones get a thinner particle field.
 Only two things in the stack change per frame: the aurora, and the particle
 canvas. Everything else, ribbons included, is painted once. See the
 performance notes below for why that matters and what it cost to get there.
+
+## The torch
+
+On a real pointer, a warm pool of light follows the cursor around the dark
+stage, and inside it a guilloché lattice is engraved into the room
+(`components/atmosphere/Engraving.jsx`). The engraving exists only where the
+light falls. It is drawn once to a canvas; each frame is two opposite
+transforms, the lens moving with the pointer and the engraving inside it
+moving back, so the pattern stays pinned to the viewport. Touch and reduced
+motion never mount it.
+
+## Motion on the scroll
+
+Everything here is a scrubbed transform or opacity, never layout, and all of it
+is skipped under reduced motion.
+
+- **Hero exit.** Type lifts fastest, the portrait slower, and the orbit turns
+  behind both, so the first screen leaves as three planes.
+- **Ticker.** A flick of the wheel throws it forward and it coasts back to its
+  resting pace. It pauses off screen and slows to a stop under the pointer.
+- **Captures** travel a little slower than the page (laptop only) and fade up
+  as they decode instead of arriving in one hard frame.
+- **The paper sheet** arrives slightly narrower than the page and settles out
+  to full bleed, then lifts again as you leave. Only the paper layer scales;
+  the type above it is never resampled.
+- **The chronology** draws its spine as you read, a spark rides the tip, and
+  each node lights as the line reaches it.
+- **Orbit and frame geometry** (`GoldGeometry turn={deg}`) rotate as their
+  section passes.
+
+Headings rise word by word out of clipped slots (`Words`, `.word-mask`), and
+script accents are written on left to right (`.ink`): an outer window slides
+one way while the word inside slides back, so neither repaints. Buttons roll
+their label on hover; the solid one catches one band of light, the outline
+one fills with brass from the bottom.
 
 ## The paper section
 
@@ -151,6 +186,14 @@ What was actually wrong, in order of what it cost:
   opaque bar instead.
 - **The cursor trail emitted a sparkle and a tween 18 times a second**, whether
   or not the pointer was moving. It now needs real travel first.
+
+- **Scrubbed elements need `will-change: transform`.** GSAP's default
+  `force3D: "auto"` drops an element back to a 2D transform whenever a scrub
+  settles, so its layer is torn down and rebuilt as you scroll. On the project
+  captures that alone was about 40 long tasks per scroll of the page.
+- **Reveals do not animate `clip-path` or `filter` on phones.** Both repaint
+  every frame. The written-on script is two counter-moving transforms, and
+  the blur on ordinary reveals is dropped under 768px.
 
 If you add to the atmosphere, the rule that matters is: **animate only
 `transform: translate` and `opacity`, and never put a blend mode on anything

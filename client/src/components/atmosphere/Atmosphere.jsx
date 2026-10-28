@@ -2,6 +2,7 @@ import { memo } from "react";
 import GoldAurora from "./GoldAurora";
 import GoldRibbons from "./GoldRibbons";
 import GoldDust from "./GoldDust";
+import Engraving from "./Engraving";
 
 /**
  * The world the site sits in. One fixed stack behind every section, so the
@@ -15,8 +16,9 @@ import GoldDust from "./GoldDust";
  *   4  the aurora
  *   5  light ribbons
  *   6  metallic dust and glints
- *   7  bloom pooling low in the frame
- *   8  vignette + film grain
+ *   7  the torch, and the engraving it uncovers (real pointers only)
+ *   8  bloom pooling low in the frame
+ *   9  vignette + film grain
  *
  * Reduced motion keeps every layer and stops all of them: the room still looks
  * lit, it just stops moving. Phones get a thinner dust field, which is the only
@@ -69,6 +71,8 @@ function Atmosphere({ env }) {
           className="opacity-80"
         />
       )}
+
+      {env.pointerFx ? <Engraving /> : null}
 
       {/* Volumetric bloom pooling low in the frame. It gives the black a floor
           and stops the lower half reading as empty. */}

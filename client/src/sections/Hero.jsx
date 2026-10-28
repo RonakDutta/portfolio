@@ -42,6 +42,20 @@ function Hero({ env }) {
         );
 
       release = onCrossed(() => intro.play());
+
+      // Leaving the hero: the three planes come apart. Type lifts fastest,
+      // the portrait slower, the orbit turns behind both, so the first screen
+      // reads as depth rather than as a flat card scrolling away. Transforms
+      // and opacity only, scrubbed straight off the scroll position.
+      const out = {
+        trigger: section.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      };
+      gsap.to(".hero-copy", { yPercent: -18, opacity: 0.15, ease: "none", scrollTrigger: out });
+      gsap.to(".hero-drift", { yPercent: -8, ease: "none", scrollTrigger: out });
+      gsap.to(".hero-geo", { rotate: 38, ease: "none", scrollTrigger: out });
     }, section);
 
     return () => {
@@ -60,7 +74,7 @@ function Hero({ env }) {
     >
       <GoldGeometry
         variant="orbit"
-        className="hero-geo top-[46%] right-[-30%] aspect-square w-[110vmin] -translate-y-1/2
+        className="hero-geo will-change-transform top-[46%] right-[-30%] aspect-square w-[110vmin] -translate-y-1/2
           opacity-70 lg:right-[-8%] lg:w-[68vmin]"
       />
 
@@ -74,16 +88,18 @@ function Hero({ env }) {
             lg:order-2 lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:mx-0 lg:w-full
             lg:max-w-[25rem] lg:justify-self-end xl:max-w-[27rem]"
         >
-          <PortraitPlate
-            portrait={hero.portrait}
-            initials={identity.initials}
-            reducedMotion={env.reducedMotion}
-            priority
-          />
+          <div className="hero-drift will-change-transform">
+            <PortraitPlate
+              portrait={hero.portrait}
+              initials={identity.initials}
+              reducedMotion={env.reducedMotion}
+              priority
+            />
+          </div>
         </div>
 
         {/* Type */}
-        <div className="relative z-10 order-2 lg:order-1 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:self-center">
+        <div className="hero-copy relative z-10 will-change-transform order-2 lg:order-1 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:self-center">
           <p className="hero-status text-[0.95rem] text-sand/70">
             {hero.status}
             <span aria-hidden="true" className="mx-2.5 text-brass/50">
@@ -163,7 +179,7 @@ function Hero({ env }) {
       {/* Ticker + scroll cue. Full bleed on purpose: it is the line that tells
           you the page keeps going. */}
       <div className="hero-fade relative mt-14 lg:mt-20">
-        <Marquee items={hero.ticker} duration={48} />
+        <Marquee items={hero.ticker} duration={48} still={env.reducedMotion} />
 
         <div className="mx-auto mt-6 flex w-full max-w-[102rem] items-end justify-between gap-5 px-6 sm:px-9">
           <a

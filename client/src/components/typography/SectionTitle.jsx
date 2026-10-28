@@ -37,13 +37,19 @@ function SectionTitle({
         {title && script ? " " : null}
         {script ? (
           <span
-            data-reveal
-            style={{ transitionDelay: "140ms" }}
-            className={`script inline-block pr-[0.12em] align-baseline text-[1.34em] leading-[0.9] ${
-              paper ? "text-brass-deep" : "text-leaf"
-            }`}
+            data-reveal="ink"
+            style={{
+              transitionDelay: `${180 + (title ? title.split(" ").length : 0) * 70}ms`,
+            }}
+            className="ink align-baseline"
           >
-            {script}
+            <span
+              className={`script pr-[0.12em] text-[1.34em] leading-[0.9] ${
+                paper ? "text-brass-deep" : "text-leaf"
+              }`}
+            >
+              {script}
+            </span>
           </span>
         ) : null}
       </h2>
