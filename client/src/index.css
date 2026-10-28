@@ -413,7 +413,7 @@ html.has-cursor textarea {
     filter 0.9s var(--ease-cine);
 }
 
-.js-reveal [data-reveal]:not([data-reveal="mask"], [data-reveal="ink"]) {
+.js-reveal [data-reveal]:not([data-reveal="mask"]) {
   opacity: 0;
   transform: translate3d(0, 22px, 0);
   filter: blur(6px);
@@ -429,7 +429,7 @@ html.has-cursor textarea {
    its transition. On a phone that is most of what a reveal costs, and at that
    size the rise alone reads the same. */
 @media (max-width: 768px) {
-  .js-reveal [data-reveal]:not([data-reveal="mask"], [data-reveal="ink"]) {
+  .js-reveal [data-reveal]:not([data-reveal="mask"]) {
     filter: none;
   }
 }
@@ -455,35 +455,6 @@ html.has-cursor textarea {
   transform: none;
 }
 
-/* Script written on: a window that runs left to right with the pen. The
-   outer slot slides in from the left while the word inside slides back by the
-   same amount, so the word holds still and only the window over it moves. Two
-   transforms, nothing repainted, where a clip-path would repaint the glyphs
-   on every frame. The slot is padded so Ephesis's swashes are not shaved. */
-.ink {
-  display: inline-block;
-  overflow: clip;
-  padding: 0.12em 0.2em 0.28em;
-  margin: -0.12em -0.2em -0.28em;
-}
-.ink > span {
-  display: inline-block;
-}
-.ink,
-.ink > span {
-  transition: transform 1.7s var(--ease-silk);
-  transition-delay: inherit;
-}
-.js-reveal .ink {
-  transform: translate3d(-101%, 0, 0);
-}
-.js-reveal .ink > span {
-  transform: translate3d(101%, 0, 0);
-}
-.js-reveal .ink.is-in,
-.js-reveal .ink.is-in > span {
-  transform: none;
-}
 
 /* The chronology's spine and its nodes, lit as the reader reaches them. */
 .tl-node {
@@ -497,16 +468,6 @@ html.has-cursor textarea {
   box-shadow: 0 0 0 4px rgba(200, 164, 92, 0.12);
 }
 
-/* Captures fade up as they decode rather than arriving in one hard frame. */
-.plate-img {
-  opacity: 0;
-  transition:
-    opacity 0.8s var(--ease-cine),
-    transform 1.3s var(--ease-cine);
-}
-.plate-img.is-loaded {
-  opacity: 1;
-}
 
 /* Motion ---------------------------------------------------------------- */
 
