@@ -39,16 +39,12 @@ function About() {
               </p>
             ))}
 
-            <p aria-hidden="true" className="mt-10">
-              <span
-                data-reveal="ink"
-                style={{ transitionDelay: "250ms" }}
-                className="ink"
-              >
-                <span className="script text-[2.6rem] leading-none text-brass/70">
-                  {about.signature}
-                </span>
-              </span>
+            <p
+              data-reveal
+              aria-hidden="true"
+              className="script mt-10 text-[2.6rem] leading-none text-brass/70"
+            >
+              {about.signature}
             </p>
           </div>
 

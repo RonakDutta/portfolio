@@ -53,40 +53,19 @@ function ProjectShowcase({ project, index, env }) {
           stagger: 0.07,
           ease: "expo.out",
         })
-        .fromTo(
-          ".plate-wipe",
-          { clipPath: "inset(0% 0% 100% 0%)" },
-          { clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, ease: "expo.out" },
+        .from(
+          ".plate-fade",
+          { opacity: 0, duration: 1, ease: "power2.out" },
           0.15,
         );
-
-      // The capture travels a little slower than the page around it, so it
-      // reads as a print lifted off the sheet rather than glued to it.
-      if (!env.isMobile) {
-        const rise = root.current.querySelector(".plate-rise");
-        gsap.fromTo(
-          rise,
-          { y: 70 },
-          {
-            y: -40,
-            ease: "none",
-            scrollTrigger: {
-              trigger: rise,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            },
-          },
-        );
-      }
     }, root);
 
     return () => ctx.revert();
-  }, [env.reducedMotion, env.isMobile]);
+  }, [env.reducedMotion]);
 
   const plate = (
     <ProjectPlate
-      className="plate-wipe"
+      className="plate-fade"
       src={image}
       alt={imageAlt}
       label={name}
@@ -116,7 +95,7 @@ function ProjectShowcase({ project, index, env }) {
         {description}
       </p>
 
-      <div className="plate-rise mt-9 will-change-transform sm:mt-12">
+      <div className="mt-9 sm:mt-12">
         {liveUrl ? (
           <a
             href={liveUrl}

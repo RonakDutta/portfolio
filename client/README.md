@@ -85,8 +85,7 @@ is skipped under reduced motion.
   behind both, so the first screen leaves as three planes.
 - **Ticker.** A flick of the wheel throws it forward and it coasts back to its
   resting pace. It pauses off screen and slows to a stop under the pointer.
-- **Captures** travel a little slower than the page (laptop only) and fade up
-  as they decode instead of arriving in one hard frame.
+- **Captures** enter with a smooth, simple fade into view as you scroll.
 - **The paper sheet** arrives slightly narrower than the page and settles out
   to full bleed, then lifts again as you leave. Only the paper layer scales;
   the type above it is never resampled.
@@ -95,11 +94,7 @@ is skipped under reduced motion.
 - **Orbit and frame geometry** (`GoldGeometry turn={deg}`) rotate as their
   section passes.
 
-Headings rise word by word out of clipped slots (`Words`, `.word-mask`), and
-script accents are written on left to right (`.ink`): an outer window slides
-one way while the word inside slides back, so neither repaints. Buttons roll
-their label on hover; the solid one catches one band of light, the outline
-one fills with brass from the bottom.
+Headings rise word by word out of clipped slots (`Words`, `.word-mask`). Buttons feature clean tactile metallic depth with smooth directional hover transitions.
 
 ## The paper section
 
