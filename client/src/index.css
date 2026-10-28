@@ -68,6 +68,11 @@
   html {
     background: var(--color-ink);
     overflow-x: clip;
+    /* The overture and the open menu both lock the page with overflow:
+       hidden, which takes the scrollbar away. Reserving its gutter for good
+       keeps the layout the same width either way, so nothing jumps sideways
+       when it comes back. */
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: rgba(200, 164, 92, 0.3) var(--color-ink);
   }
@@ -222,6 +227,12 @@
 /* Form fields ----------------------------------------------------------- */
 
 @utility field {
+  /* Block, not the inline default, or a textarea sits on the text baseline
+     and leaves a gap under itself that puts the focus glow below its rule
+     instead of on it. Native chrome off, so no platform box shows through. */
+  display: block;
+  appearance: none;
+  -webkit-appearance: none;
   width: 100%;
   min-width: 0;
   border: 0;

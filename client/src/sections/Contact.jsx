@@ -53,7 +53,7 @@ function Field({
           autoComplete={name === "email" ? "email" : name === "name" ? "name" : undefined}
           aria-invalid={invalid || undefined}
           aria-describedby={invalid ? `${id}-error` : undefined}
-          className={`field ${rows ? "resize-y" : ""}`}
+          className={`field ${rows ? "min-h-[9rem] resize-none [field-sizing:content] max-h-[22rem]" : ""}`}
           style={invalid ? { borderBottomColor: "#e3793d" } : undefined}
         />
         <label htmlFor={id} className="field-label">
