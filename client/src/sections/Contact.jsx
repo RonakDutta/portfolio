@@ -144,8 +144,10 @@ function Contact({ env }) {
     <section id="contact" aria-labelledby="contact-title" className="relative pt-20 pb-8 sm:pt-28">
       <div className="mx-auto w-full max-w-[112rem] px-5 sm:px-9">
         <p data-reveal="up" className="label flex items-center justify-center gap-3 text-gold">
-          <span>06</span>
-          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gold-lit shadow-[0_0_10px_1px_rgba(236,215,163,0.55)]" />
+          <span className="text-ash">06</span>
+          <span aria-hidden="true" className="text-ash/60">
+            /
+          </span>
           <span>Get in touch</span>
         </p>
 

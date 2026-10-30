@@ -114,10 +114,9 @@ function ProjectCase({ project, index, total, labels, env }) {
         <div className="[container-type:inline-size] lg:col-span-9">
           <p data-reveal="up" className="label flex flex-wrap items-center gap-x-3 gap-y-1 text-gold">
             <span>
-              {num} / {String(total).padStart(2, "0")}
+              {num} <span className="text-ash">/ {String(total).padStart(2, "0")}</span>
             </span>
-            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gold-lit shadow-[0_0_10px_1px_rgba(236,215,163,0.55)]" />
-            <span className="text-bone">{project.category}</span>
+            <span className="ml-3 text-bone">{project.category}</span>
             {project.featured ? (
               <>
                 <span aria-hidden="true" className="text-ash">

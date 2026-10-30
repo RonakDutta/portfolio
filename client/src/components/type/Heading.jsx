@@ -21,13 +21,14 @@ function Heading({ id, index, kicker, title, accent, tone = "dark", align = "lef
             align === "center" ? "justify-center" : ""
           }`}
         >
-          {index ? <span>{index}</span> : null}
-          <span
-            aria-hidden="true"
-            className={`h-1.5 w-1.5 rounded-full ${
-              onGold ? "bg-ink/60" : "bg-gold-lit shadow-[0_0_10px_1px_rgba(236,215,163,0.55)]"
-            }`}
-          />
+          {index ? (
+            <>
+              <span className={onGold ? "text-ink/50" : "text-ash"}>{index}</span>
+              <span aria-hidden="true" className={onGold ? "text-ink/35" : "text-ash/60"}>
+                /
+              </span>
+            </>
+          ) : null}
           <span>{kicker}</span>
         </p>
       ) : null}
