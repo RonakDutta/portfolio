@@ -116,7 +116,7 @@ function ProjectCase({ project, index, total, labels, env }) {
             <span>
               {num} / {String(total).padStart(2, "0")}
             </span>
-            <span aria-hidden="true" className="h-px w-8 bg-gold/50" />
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gold-lit shadow-[0_0_10px_1px_rgba(236,215,163,0.55)]" />
             <span className="text-bone">{project.category}</span>
             {project.featured ? (
               <>

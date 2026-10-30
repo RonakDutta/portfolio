@@ -145,7 +145,7 @@ function Contact({ env }) {
       <div className="mx-auto w-full max-w-[112rem] px-5 sm:px-9">
         <p data-reveal="up" className="label flex items-center justify-center gap-3 text-gold">
           <span>06</span>
-          <span aria-hidden="true" className="h-px w-8 bg-gold/50" />
+          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gold-lit shadow-[0_0_10px_1px_rgba(236,215,163,0.55)]" />
           <span>Get in touch</span>
         </p>
 
