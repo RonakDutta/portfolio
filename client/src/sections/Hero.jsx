@@ -31,9 +31,8 @@ function Letters({ word, foil = false, className = "" }) {
  * On a wide screen everything hangs off the eclipse at dead centre, on two
  * rows either side of its horizon: the given name above it to the left, the
  * family name below it to the right, and the statement in the lower left,
- * standing on the same line as the family name. On a phone the same pieces
- * stack into a single screen, with the eclipse taking whatever height the
- * type leaves it, so the statement and the actions are there on arrival.
+ * standing on the same line as the family name. On a phone the same pieces stack, with
+ * the eclipse between the two halves of the name.
  *
  * Scrolling away, the halves of the name part outward and the eclipse holds
  * still and swells until the moon covers the screen; the next section is read
@@ -70,17 +69,11 @@ function Hero({ env }) {
       };
       gsap.to(".hero-given", { xPercent: -28, opacity: 0, ease: "power1.in", scrollTrigger: out });
       gsap.to(".hero-family", { xPercent: 28, opacity: 0, ease: "power1.in", scrollTrigger: out });
-      // On a phone the statement sits low on the screen, so it is given longer
-      // before it goes or it would be fading as it is being read.
       gsap.to(".hero-ui", {
         y: -60,
         opacity: 0,
         ease: "power1.in",
-        scrollTrigger: {
-          ...out,
-          end: () => (window.innerWidth < 1024 ? "75% top" : "45% top"),
-          invalidateOnRefresh: true,
-        },
+        scrollTrigger: { ...out, end: "45% top" },
       });
     }, section);
 
@@ -97,7 +90,7 @@ function Hero({ env }) {
       id="hero"
       ref={section}
       aria-labelledby="hero-title"
-      className="relative isolate flex h-[100svh] min-h-[36rem] flex-col overflow-clip px-5 pt-20 pb-7 sm:px-9 sm:pt-24 lg:block lg:min-h-[42rem] lg:p-0"
+      className="relative isolate flex flex-col overflow-clip px-5 pt-24 pb-8 sm:px-9 lg:block lg:h-[100svh] lg:min-h-[42rem] lg:p-0"
       style={{ "--d": "min(34vmin, 21rem)", "--f": "min(13.4vw, 19svh, 15.5rem)" }}
     >
       <h1 id="hero-title" className="sr-only">
@@ -113,25 +106,22 @@ function Hero({ env }) {
       </p>
 
       {/* The given name, above and left of the eclipse. */}
-      <div className="hero-given relative z-[1] order-2 mt-4 will-change-transform sm:mt-6 lg:absolute lg:bottom-[calc(50%+var(--d)*0.44)] lg:left-9 lg:mt-0">
+      <div className="hero-given relative z-[1] order-2 mt-6 will-change-transform lg:absolute lg:bottom-[calc(50%+var(--d)*0.44)] lg:left-9 lg:mt-0">
         <Letters
           word={identity.given.toUpperCase()}
-          className="wide text-[clamp(2.9rem,min(17.5vw,9svh),5.5rem)] leading-[0.82] font-[850] tracking-[-0.045em] text-ivory sm:text-[clamp(4rem,17vw,9rem)] lg:text-[length:var(--f)]"
+          className="wide text-[clamp(3.6rem,21vw,6.5rem)] leading-[0.82] font-[850] tracking-[-0.045em] text-ivory sm:text-[clamp(4rem,17vw,9rem)] lg:text-[length:var(--f)]"
         />
       </div>
 
-      {/* The eclipse. On a phone it fills the room left between the halves of
-          the name; on a wide screen the wrapper drops out of the layout. */}
-      <div className="order-3 flex min-h-0 flex-1 items-center justify-center lg:contents">
-        <Eclipse
-          env={env}
-          primary
-          zoom
-          ring={hero.ticker}
-          className="relative z-[2] aspect-square h-[52%] max-h-[min(50vw,20rem)] shrink-0
-            lg:absolute lg:top-1/2 lg:left-1/2 lg:h-auto lg:max-h-none lg:w-[var(--d)] lg:-translate-x-1/2 lg:-translate-y-1/2"
-        />
-      </div>
+      {/* The eclipse. */}
+      <Eclipse
+        env={env}
+        primary
+        zoom
+        ring={hero.ticker}
+        className="relative z-[2] order-3 mx-auto my-[24vw] aspect-square w-[min(58vw,32svh)] sm:my-[16vw]
+          lg:absolute lg:top-1/2 lg:left-1/2 lg:my-0 lg:w-[var(--d)] lg:-translate-x-1/2 lg:-translate-y-1/2"
+      />
       <ul className="sr-only">
         {hero.ticker.map((t) => (
           <li key={t}>{t}</li>
@@ -143,23 +133,24 @@ function Hero({ env }) {
         <Letters
           word={identity.family.toUpperCase()}
           foil
-          className="wide text-[clamp(2.9rem,min(17.5vw,9svh),5.5rem)] leading-[0.82] font-[850] tracking-[-0.045em] sm:text-[clamp(4rem,17vw,9rem)] lg:text-[length:var(--f)]"
+          className="wide text-[clamp(3.6rem,21vw,6.5rem)] leading-[0.82] font-[850] tracking-[-0.045em] sm:text-[clamp(4rem,17vw,9rem)] lg:text-[length:var(--f)]"
         />
       </div>
 
-      {/* The statement, in the lower left, its foot on the family name's line. */}
+      {/* The statement: under the name on a phone; on a wide screen in the
+          lower left, its foot on the family name's line. */}
       <div
-        className="hero-ui relative z-[3] order-5 mt-6 max-w-[32rem] sm:mt-10 lg:absolute lg:bottom-[calc(50%-var(--d)*0.44-var(--f)*0.82)] lg:left-9 lg:mt-0
+        className="hero-ui relative z-[3] order-5 mt-14 max-w-[32rem] lg:absolute lg:bottom-[calc(50%-var(--d)*0.44-var(--f)*0.82)] lg:left-9 lg:mt-0
           lg:w-[clamp(17.5rem,calc(50vw-var(--d)*0.75-4rem),30rem)]"
       >
-        <p className="hero-fade text-[clamp(1.45rem,1.1rem+1.3vw,2.15rem)] leading-[1.12] lg:text-[clamp(1.35rem,0.4rem+1.6vw,2.15rem)] font-[560] tracking-[-0.02em] text-ivory [font-stretch:108%]">
+        <p className="hero-fade text-[clamp(1.45rem,1.1rem+1.3vw,2.15rem)] leading-[1.12] font-[560] lg:text-[clamp(1.35rem,0.4rem+1.6vw,2.15rem)] tracking-[-0.02em] text-ivory [font-stretch:108%]">
           {scriptAt.line1} <span className="foil font-[700]">{scriptAt.script}</span> {scriptAt.line2}
         </p>
-        <p className="hero-fade mt-3 max-w-[26rem] sm:mt-4 max-lg:[@media(max-height:44rem)]:hidden text-[0.98rem] leading-relaxed text-bone/80">
+        <p className="hero-fade mt-5 max-w-[26rem] text-[0.98rem] leading-relaxed text-bone/80">
           {hero.introGreeting} <span className="text-ivory">{identity.name}</span>, {hero.introRole}
         </p>
 
-        <div className="hero-fade mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="hero-fade mt-8 flex flex-col gap-3 sm:flex-row lg:flex-wrap">
           <Button
             size="lg"
             arrow="down"
@@ -198,8 +189,8 @@ function Hero({ env }) {
         </p>
       )}
 
-      <div className="hero-fade hero-ui absolute inset-x-9 bottom-7 z-[3] hidden items-end justify-between gap-6 lg:flex">
-        <span aria-hidden="true" className="label flex items-center gap-4 text-ash">
+      <div className="hero-fade hero-ui relative z-[3] order-6 mt-12 flex items-end justify-between gap-6 lg:absolute lg:inset-x-9 lg:bottom-7 lg:mt-0">
+        <span aria-hidden="true" className="label hidden items-center gap-4 text-ash sm:flex">
           <span className="relative block h-px w-14 overflow-hidden bg-gold/20">
             <span className="absolute inset-0 origin-left animate-[cue_2.8s_var(--ease-swing)_infinite] bg-gold-lit" />
           </span>
@@ -207,7 +198,7 @@ function Hero({ env }) {
         </span>
         <a
           href={`mailto:${identity.email}`}
-          className="label link-line inline-flex items-center text-bone transition-colors duration-500 hover:text-gold-lit"
+          className="label link-line inline-flex min-h-11 items-center text-bone transition-colors duration-500 hover:text-gold-lit lg:min-h-0"
         >
           {identity.email}
         </a>
