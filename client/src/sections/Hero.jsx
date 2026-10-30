@@ -116,7 +116,7 @@ function Hero({ env }) {
       <div className="hero-given relative z-[1] order-2 mt-4 will-change-transform sm:mt-6 lg:absolute lg:bottom-[calc(50%+var(--d)*0.44)] lg:left-9 lg:mt-0">
         <Letters
           word={identity.given.toUpperCase()}
-          className="wide text-[clamp(3.6rem,21vw,6.5rem)] leading-[0.82] font-[850] tracking-[-0.045em] text-ivory sm:text-[clamp(4rem,17vw,9rem)] lg:text-[length:var(--f)]"
+          className="wide text-[clamp(2.9rem,min(17.5vw,9svh),5.5rem)] leading-[0.82] font-[850] tracking-[-0.045em] text-ivory sm:text-[clamp(4rem,17vw,9rem)] lg:text-[length:var(--f)]"
         />
       </div>
 
@@ -128,7 +128,7 @@ function Hero({ env }) {
           primary
           zoom
           ring={hero.ticker}
-          className="relative z-[2] aspect-square h-[64%] max-h-[min(58vw,22rem)] shrink-0
+          className="relative z-[2] aspect-square h-[52%] max-h-[min(50vw,20rem)] shrink-0
             lg:absolute lg:top-1/2 lg:left-1/2 lg:h-auto lg:max-h-none lg:w-[var(--d)] lg:-translate-x-1/2 lg:-translate-y-1/2"
         />
       </div>
@@ -143,7 +143,7 @@ function Hero({ env }) {
         <Letters
           word={identity.family.toUpperCase()}
           foil
-          className="wide text-[clamp(3.6rem,21vw,6.5rem)] leading-[0.82] font-[850] tracking-[-0.045em] sm:text-[clamp(4rem,17vw,9rem)] lg:text-[length:var(--f)]"
+          className="wide text-[clamp(2.9rem,min(17.5vw,9svh),5.5rem)] leading-[0.82] font-[850] tracking-[-0.045em] sm:text-[clamp(4rem,17vw,9rem)] lg:text-[length:var(--f)]"
         />
       </div>
 
@@ -155,7 +155,7 @@ function Hero({ env }) {
         <p className="hero-fade text-[clamp(1.45rem,1.1rem+1.3vw,2.15rem)] leading-[1.12] lg:text-[clamp(1.35rem,0.4rem+1.6vw,2.15rem)] font-[560] tracking-[-0.02em] text-ivory [font-stretch:108%]">
           {scriptAt.line1} <span className="foil font-[700]">{scriptAt.script}</span> {scriptAt.line2}
         </p>
-        <p className="hero-fade mt-3 max-w-[26rem] sm:mt-4 text-[0.98rem] leading-relaxed text-bone/80">
+        <p className="hero-fade mt-3 max-w-[26rem] sm:mt-4 max-lg:[@media(max-height:44rem)]:hidden text-[0.98rem] leading-relaxed text-bone/80">
           {hero.introGreeting} <span className="text-ivory">{identity.name}</span>, {hero.introRole}
         </p>
 
